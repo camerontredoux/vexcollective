@@ -12,6 +12,18 @@ const links = [
     href: "/api",
     text: "API",
   },
+  {
+    href: "/about",
+    text: "About",
+  },
+  {
+    href: "/discord",
+    text: "Discord",
+  },
+  {
+    href: "/github",
+    text: "GitHub",
+  },
 ];
 
 const Navbar: React.FC = () => {
@@ -26,31 +38,30 @@ const Navbar: React.FC = () => {
             Vex Collective
           </h1>
         </div>
-        <motion.ul layoutId="list" className="hidden xs:flex sm:flex-col gap-4">
+        <ul className="hidden sm:flex sm:flex-col gap-4">
           {links.map((link, index) => (
             <Link key={index} href={link.href} index={index}>
               {link.text}
             </Link>
           ))}
-        </motion.ul>
+        </ul>
         <button
-          className="xs:hidden bg-zinc-800 drop-shadow-lg p-1 rounded-sm text-gray-600"
+          className="sm:hidden bg-zinc-800 drop-shadow-lg p-1 rounded-sm text-white"
           onClick={() => setOpen(!open)}
         >
           <AiOutlineMenu />
         </button>
       </div>
       {open && (
-        <motion.ul
-          layoutId="list-mobile"
-          className="xs:hidden flex sm:flex-col gap-8 text-gray-600 mt-3 ml-1"
-        >
+        <ul className="sm:hidden flex sm:flex-col gap-8 text-gray-600 mt-3 ml-1">
           {links.map((link, index) => (
-            <Link key={index} href={link.href} index={index}>
-              {link.text}
-            </Link>
+            <li key={index}>
+              <a className="hover:text-gray-400" href={link.href}>
+                {link.text}
+              </a>
+            </li>
           ))}
-        </motion.ul>
+        </ul>
       )}
     </>
   );
@@ -67,7 +78,7 @@ const Link: React.FC<LinkProps> = ({ href, children, index }) => {
     <motion.li
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      transition={{ delay: index * 0.3, duration: 1 }}
+      transition={{ delay: index * 0.2, duration: 0.5 }}
     >
       <a className="hover:text-gray-400" href={href}>
         {children}
