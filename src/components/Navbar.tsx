@@ -19,10 +19,12 @@ const Navbar: React.FC = () => {
 
   return (
     <>
-      <div className="flex sm:flex-col justify-between items-center sm:items-start sm:justify-start p-2 rounded-md sm:w-64 text-gray-600">
+      <div className="flex sm:flex-col justify-between items-center sm:items-start sm:justify-start p-2 rounded-md sm:w-60 text-gray-600">
         <div className="flex items-center sm:mb-8">
           <Logo width={40} />
-          <h1 className="ml-2 font-bold uppercase">Vex Collective</h1>
+          <h1 className="ml-2 font-bold uppercase text-gray-500">
+            Vex Collective
+          </h1>
         </div>
         <motion.ul layoutId="list" className="hidden xs:flex sm:flex-col gap-4">
           {links.map((link, index) => (
@@ -67,7 +69,9 @@ const Link: React.FC<LinkProps> = ({ href, children, index }) => {
       animate={{ opacity: 1 }}
       transition={{ delay: index * 0.3, duration: 1 }}
     >
-      <a href={href}>{children}</a>
+      <a className="hover:text-gray-400" href={href}>
+        {children}
+      </a>
     </motion.li>
   );
 };
