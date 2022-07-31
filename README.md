@@ -1,12 +1,12 @@
 <div align="center">
   <br>
-  <br>
   <img src="public/logo.png" width="100">
-  <br>
-  <br>
+  <h3>Vex Collective</h3>
   <h1></h1>
   <br>
 </div>
+
+### What is this?
 
 <br>
 
@@ -18,6 +18,10 @@ Vex Collective is a tool I created to explore the Destiny API and potentially pr
 
 <br>
 
-## Features
+<h1></h1>
+
+<br>
+
+### Features
 
 `TBD`
