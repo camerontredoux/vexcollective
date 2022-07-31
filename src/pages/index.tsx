@@ -12,9 +12,14 @@ const Home: NextPage = () => {
           content="Visualize statistics for your Destiny 2 characters"
         />
       </Head>
-      <div className="flex m-8">
+      <div className="flex flex-col sm:flex-row m-8">
         <Navbar />
-        <div className="bg-black w-full">Example stuff</div>
+        <div className="bg-black w-full rounded-md p-8 flex-1">
+          Example stuff Example stuff Example stuff Example stuff Example stuff
+          Example stuff Example stuff Example stuff Example stuff Example stuff
+          Example stuff Example stuff Example stuff Example stuff Example stuff
+          Example stuff
+        </div>
       </div>
     </>
   );
