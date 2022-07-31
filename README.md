@@ -1,10 +1,9 @@
-<center>
+<div align="center">
   <br>
   <img src="public/logo.png" width="100">
-  <h2>Vex Collective</h2>
+  <h1>Vex Collective</h1>
   <br>
-  <hr>
-</center>
+</div>
 
 <br>
 
