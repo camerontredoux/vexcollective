@@ -20,7 +20,7 @@ const Home: NextPage = () => {
         className="flex flex-col sm:flex-row m-8"
       >
         <Navbar />
-        <div className="bg-black w-full rounded-md p-8 flex-1">
+        <div className="bg-black w-full rounded-md p-8 flex-1 mt-6 sm:mt-0">
           Example stuff Example stuff Example stuff Example stuff Example stuff
           Example stuff Example stuff Example stuff Example stuff Example stuff
           Example stuff Example stuff Example stuff Example stuff Example stuff

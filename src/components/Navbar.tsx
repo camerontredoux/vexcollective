@@ -1,4 +1,6 @@
 import { motion } from "framer-motion";
+import { useState } from "react";
+import { AiOutlineMenu } from "react-icons/ai";
 import Logo from "./Logo";
 
 const links = [
@@ -13,20 +15,42 @@ const links = [
 ];
 
 const Navbar: React.FC = () => {
+  const [open, setOpen] = useState(false);
+
   return (
-    <div className="flex sm:flex-col justify-between sm:justify-start p-2 rounded-md sm:w-64 text-gray-600">
-      <div className="flex items-center mb-8">
-        <Logo width={40} />
-        <h1 className="ml-2 font-bold uppercase">Vex Collective</h1>
+    <>
+      <div className="flex sm:flex-col justify-between items-center sm:items-start sm:justify-start p-2 rounded-md sm:w-64 text-gray-600">
+        <div className="flex items-center sm:mb-8">
+          <Logo width={40} />
+          <h1 className="ml-2 font-bold uppercase">Vex Collective</h1>
+        </div>
+        <motion.ul layoutId="list" className="hidden xs:flex sm:flex-col gap-4">
+          {links.map((link, index) => (
+            <Link key={index} href={link.href} index={index}>
+              {link.text}
+            </Link>
+          ))}
+        </motion.ul>
+        <button
+          className="xs:hidden bg-zinc-800 drop-shadow-lg p-1 rounded-sm text-gray-600"
+          onClick={() => setOpen(!open)}
+        >
+          <AiOutlineMenu />
+        </button>
       </div>
-      <motion.ul layoutId="list" className="flex sm:flex-col gap-2">
-        {links.map((link, index) => (
-          <Link key={index} href={link.href} index={index}>
-            {link.text}
-          </Link>
-        ))}
-      </motion.ul>
-    </div>
+      {open && (
+        <motion.ul
+          layoutId="list-mobile"
+          className="xs:hidden flex sm:flex-col gap-8 text-gray-600 mt-3 ml-1"
+        >
+          {links.map((link, index) => (
+            <Link key={index} href={link.href} index={index}>
+              {link.text}
+            </Link>
+          ))}
+        </motion.ul>
+      )}
+    </>
   );
 };
 
