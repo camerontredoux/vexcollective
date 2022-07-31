@@ -1,7 +1,7 @@
 <div align="center">
   <br>
   <img src="public/logo.png" width="100">
-  <h1>Vex Collective</h1>
+  <hr>
   <br>
 </div>
 
