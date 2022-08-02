@@ -49,7 +49,7 @@ const Home: NextPage = () => {
               </p>
             </div>
           </div>
-          <div className="bg-black w-full rounded-md p-8">
+          <div className="bg-black w-full rounded-md p-8 drop-shadow-md">
             <div>
               <h1 className="text-4xl font-bold">Features</h1>
               <p className="text-xl mt-1">Tools at your disposal</p>
