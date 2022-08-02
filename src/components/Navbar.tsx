@@ -31,9 +31,9 @@ const Navbar: React.FC = () => {
 
   return (
     <>
-      <div className="flex sm:flex-col justify-between items-center sm:items-start sm:justify-start p-2 rounded-md sm:w-60 text-gray-600">
+      <div className="flex sm:flex-col justify-between items-center sm:items-start sm:justify-start p-2 rounded-md sm:w-56 text-gray-600">
         <div className="flex items-center sm:mb-8">
-          <Logo width={40} />
+          <Logo width={30} />
           <h1 className="ml-2 font-bold uppercase text-gray-500">
             Vex Collective
           </h1>
