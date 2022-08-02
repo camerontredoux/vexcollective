@@ -7,3 +7,11 @@
 .feature-item {
   @apply text-sm font-bold text-gray-400 bg-zinc-800 px-2 py-1 rounded-md;
 }
+
+::placeholder {
+  @apply select-none;
+}
+
+picture {
+  @apply select-none;
+}

@@ -3,34 +3,34 @@ import { useState } from "react";
 import { AiOutlineMenu } from "react-icons/ai";
 import Logo from "./Logo";
 
-const links = [
-  {
-    href: "/login",
-    text: "Login",
-  },
-  {
-    href: "/api",
-    text: "API",
-  },
-  {
-    href: "/about",
-    text: "About",
-  },
-];
-
-const socials = [
-  {
-    href: "https://",
-    text: "Discord",
-  },
-  {
-    href: "https://github.com/camerontredoux/vexcollective",
-    text: "GitHub",
-  },
-];
-
 const Navbar: React.FC = () => {
   const [open, setOpen] = useState(false);
+
+  const links = [
+    {
+      href: "/login",
+      text: "Login",
+    },
+    {
+      href: "/api",
+      text: "API",
+    },
+    {
+      href: "/about",
+      text: "About",
+    },
+  ];
+
+  const socials = [
+    {
+      href: "https://",
+      text: "Discord",
+    },
+    {
+      href: "https://github.com/camerontredoux/vexcollective",
+      text: "GitHub",
+    },
+  ];
 
   return (
     <>
