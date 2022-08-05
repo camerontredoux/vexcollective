@@ -2,36 +2,43 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import { useState } from "react";
 import { AiOutlineMenu } from "react-icons/ai";
+import {
+  createEndpoints,
+  destinyAPISchema,
+  OpenAPIKeys,
+} from "../utils/endpoints";
 import Logo from "./Logo";
+
+const links = [
+  {
+    href: "/login",
+    text: "Login",
+  },
+  {
+    href: "/data",
+    text: "Data",
+  },
+  {
+    href: "/about",
+    text: "About",
+  },
+];
+
+const socials = [
+  {
+    href: "https://",
+    text: "Discord",
+  },
+  {
+    href: "https://github.com/camerontredoux/vexcollective",
+    text: "GitHub",
+  },
+];
 
 const Navbar: React.FC = () => {
   const [open, setOpen] = useState(false);
 
-  const links = [
-    {
-      href: "/login",
-      text: "Login",
-    },
-    {
-      href: "/data",
-      text: "Data",
-    },
-    {
-      href: "/about",
-      text: "About",
-    },
-  ];
-
-  const socials = [
-    {
-      href: "https://",
-      text: "Discord",
-    },
-    {
-      href: "https://github.com/camerontredoux/vexcollective",
-      text: "GitHub",
-    },
-  ];
+  const Destiny2Endpoints = createEndpoints("Destiny2");
 
   return (
     <>
@@ -73,6 +80,13 @@ const Navbar: React.FC = () => {
               {link.text}
             </NavLink>
           ))}
+          {Destiny2Endpoints.map((path, index) => {
+            return (
+              <NavLink key={index} href={path} index={index}>
+                {destinyAPISchema.paths[path as OpenAPIKeys].summary}
+              </NavLink>
+            );
+          })}
         </ul>
         <button
           className="sm:hidden bg-zinc-800 drop-shadow-lg p-1 rounded-sm text-white"
