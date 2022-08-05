@@ -18,7 +18,7 @@ export default function Document() {
         />
         <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5" />
       </Head>
-      <body className="scroll-smooth selection:bg-sky-50 selection:text-blue-400 mx-auto max-w-6xl font-inter bg-zinc-900 text-white">
+      <body className="scroll-smooth selection:bg-sky-50 selection:text-blue-400 font-inter bg-zinc-900 text-white max-w-6xl mx-auto">
         <Main />
         <NextScript />
       </body>

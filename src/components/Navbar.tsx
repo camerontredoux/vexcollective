@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import Link from "next/link";
 import { useState } from "react";
 import { AiOutlineMenu } from "react-icons/ai";
 import Logo from "./Logo";
@@ -12,8 +13,8 @@ const Navbar: React.FC = () => {
       text: "Login",
     },
     {
-      href: "/api",
-      text: "API",
+      href: "/data",
+      text: "Data",
     },
     {
       href: "/about",
@@ -35,12 +36,14 @@ const Navbar: React.FC = () => {
   return (
     <>
       <div className="flex sm:flex-col justify-between items-center sm:items-start sm:justify-start p-2 sm:w-56 text-gray-600">
-        <div className="flex items-center sm:mb-8">
-          <Logo width={30} />
-          <h1 className="ml-2 font-bold uppercase text-gray-500">
-            Vex Collective
-          </h1>
-        </div>
+        <Link href="/">
+          <a className="flex items-center sm:mb-8">
+            <Logo width={30} />
+            <h1 className="ml-2 font-bold uppercase text-gray-500">
+              Vex Collective
+            </h1>
+          </a>
+        </Link>
         <ul className="hidden sm:flex sm:flex-col gap-4">
           <motion.li
             initial={{ opacity: 0 }}
@@ -51,9 +54,9 @@ const Navbar: React.FC = () => {
             Getting Started
           </motion.li>
           {links.map((link, index) => (
-            <Link key={index} href={link.href} index={index}>
+            <NavLink key={index} href={link.href} index={index}>
               {link.text}
-            </Link>
+            </NavLink>
           ))}
         </ul>
         <ul className="mt-9 hidden sm:flex sm:flex-col gap-4">
@@ -66,9 +69,9 @@ const Navbar: React.FC = () => {
             Socials
           </motion.li>
           {socials.map((link, index) => (
-            <Link key={index} href={link.href} index={index}>
+            <NavLink key={index} href={link.href} index={index}>
               {link.text}
-            </Link>
+            </NavLink>
           ))}
         </ul>
         <button
@@ -114,20 +117,22 @@ interface LinkProps {
   index: number;
 }
 
-const Link: React.FC<LinkProps> = ({ href, children, index }) => {
+const NavLink: React.FC<LinkProps> = ({ href, children, index }) => {
   return (
     <motion.li
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ delay: index * 0.25, duration: 0.5 }}
     >
-      <motion.a
-        whileHover={{ color: "rgb(115,125,139)" }}
-        transition={{ duration: 0.15, ease: "easeInOut" }}
-        href={href}
-      >
-        {children}
-      </motion.a>
+      <Link href={href}>
+        <motion.a
+          whileHover={{ color: "rgb(115,125,139)" }}
+          transition={{ duration: 0.15, ease: "easeInOut" }}
+          className="cursor-pointer"
+        >
+          {children}
+        </motion.a>
+      </Link>
     </motion.li>
   );
 };

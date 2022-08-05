@@ -47,8 +47,8 @@ const Home: NextPage = () => {
               </button>
             </form>
           </div>
-          <div className="drop-shadow-md bg-center bg-cover bg-[url('/hero-wallpaper.jpg')] w-full rounded-md overflow-hidden">
-            <div className="w-full h-full flex flex-col backdrop-blur-sm p-8 drop-shadow-lg backdrop-brightness-75">
+          <div className="drop-shadow-md bg-black bg-center bg-cover bg-[url('/hero-wallpaper.jpg')] w-full rounded-md">
+            <div className="w-full h-full flex flex-col backdrop-blur-sm p-8 drop-shadow-lg backdrop-brightness-75 rounded-md overflow-hidden">
               <h1 className="text-4xl font-bold">The Vex Collective Mind...</h1>
               <p className="text-xl mt-1">...has some information for you...</p>
               <p className="text-gray-400 mt-10 bg-clip-text text-transparent bg-gradient-to-r from-blue-300 via-sky-300 to-sky-500 font-medium">
@@ -71,7 +71,9 @@ const Home: NextPage = () => {
                     className="cursor-pointer feature-item"
                     key={index}
                   >
-                    {feature}
+                    <span className="bg-clip-text text-transparent bg-gradient-to-br from-blue-300 via-sky-300 to-sky-500">
+                      {feature}
+                    </span>
                   </li>
                 ))}
               </ul>

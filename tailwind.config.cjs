@@ -5,6 +5,7 @@ module.exports = {
     extend: {
       fontFamily: {
         inter: ["Inter", "sans-serif"],
+        ubuntu: ["Ubuntu Mono", "monospace"],
       },
       screens: {
         xs: "425px",

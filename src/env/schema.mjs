@@ -12,6 +12,10 @@ export const serverSchema = z.object({
   NEXTAUTH_URL: z.string().url(),
   DISCORD_CLIENT_ID: z.string(),
   DISCORD_CLIENT_SECRET: z.string(),
+  TRN_API_KEY: z.string(),
+  X_API_KEY: z.string(),
+  OAUTH_CLIENT_ID: z.string(),
+  OAUTH_URL: z.string().url(),
 });
 
 /**
