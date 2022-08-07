@@ -1,7 +1,8 @@
-import { useRouter } from "next/router";
-import { NextPage } from "next/types";
+import { ReactElement } from "react";
 import useSWR from "swr";
 import DataLayout from "../../components/data/DataLayout";
+import Layout from "../../components/layouts/Layout";
+import { NextPageWithLayout } from "../_app";
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
@@ -13,12 +14,8 @@ const endpoints = {
   },
 };
 
-const Endpoint: NextPage = () => {
-  const router = useRouter();
-
-  const endpoint = router.query["endpoint"];
-
-  const { data, isValidating, error } = useSWR(`/api/${endpoint}`, fetcher, {
+const Endpoint: NextPageWithLayout = () => {
+  const { data, isValidating, error } = useSWR(`/api/manifest`, fetcher, {
     revalidateOnFocus: false,
   });
 
@@ -26,8 +23,8 @@ const Endpoint: NextPage = () => {
     return (
       <DataLayout
         data={null}
-        title={endpoint as string}
-        description={"Loading..."}
+        title={"Manifest"}
+        description={endpoints.manifest.description}
       />
     );
   }
@@ -36,8 +33,8 @@ const Endpoint: NextPage = () => {
     return (
       <DataLayout
         data={data}
-        title={endpoints[endpoint].title}
-        description={endpoints[endpoint].description}
+        title={"Manifest"}
+        description={endpoints.manifest.description}
       />
     );
   }
@@ -49,6 +46,10 @@ const Endpoint: NextPage = () => {
       description={"Could not locate the API endpoint"}
     />
   );
+};
+
+Endpoint.getLayout = function getLayout(page: ReactElement) {
+  return <Layout>{page}</Layout>;
 };
 
 export default Endpoint;

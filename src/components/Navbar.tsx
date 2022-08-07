@@ -10,7 +10,7 @@ const links = [
     text: "Login",
   },
   {
-    href: "/data",
+    href: "/data/manifest",
     text: "Data",
   },
   {
@@ -32,6 +32,7 @@ const socials = [
 
 const Navbar: React.FC = () => {
   const [open, setOpen] = useState(false);
+  const [opened, setOpened] = useState(false);
 
   return (
     <>
@@ -75,8 +76,8 @@ const Navbar: React.FC = () => {
           ))}
         </ul>
         <button
-          className="sm:hidden bg-zinc-800 drop-shadow-lg p-1 rounded-sm text-white"
-          onClick={() => setOpen(!open)}
+          className="sm:hidden bg-zinc-800 drop-shadow-lg p-1 rounded-sm text-white hover:bg-gray-mantine-dark"
+          onClick={() => setOpened(true)}
         >
           <AiOutlineMenu />
         </button>

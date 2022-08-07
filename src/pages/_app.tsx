@@ -1,9 +1,15 @@
 // src/pages/_app.tsx
+import {
+  ColorScheme,
+  ColorSchemeProvider,
+  Drawer,
+  MantineProvider,
+} from "@mantine/core";
 import { NextPage } from "next";
 import { SessionProvider } from "next-auth/react";
 import { AppProps } from "next/app";
 import type { AppType } from "next/dist/shared/lib/utils";
-import { ReactElement, ReactNode } from "react";
+import { ReactElement, ReactNode, useState } from "react";
 import "../styles/globals.css";
 
 export type NextPageWithLayout = NextPage & {
@@ -15,11 +21,39 @@ type AppPropsWithLayout = AppProps & {
 };
 
 export default function MyApp2({ Component, pageProps }: AppPropsWithLayout) {
-  const getLayout = Component.getLayout ?? ((page) => page);
+  const [colorScheme, setColorScheme] = useState<ColorScheme>("dark");
+  const toggleColorScheme = (value?: ColorScheme) =>
+    setColorScheme(value || (colorScheme === "dark" ? "light" : "dark"));
+
+  const [opened, setOpened] = useState(false);
+
+  const getLayout = Component.getLayout ?? ((page: ReactElement) => page);
 
   return getLayout(
     <SessionProvider session={pageProps.session}>
-      <Component {...pageProps} />
+      <ColorSchemeProvider
+        colorScheme={colorScheme}
+        toggleColorScheme={toggleColorScheme}
+      >
+        <MantineProvider
+          theme={{
+            colorScheme,
+          }}
+        >
+          <Drawer
+            opened={opened}
+            onClose={() => setOpened(false)}
+            title="Register"
+            padding="lg"
+            size="md"
+            overlayOpacity={0.55}
+            overlayBlur={3}
+          >
+            {/* Drawer content */}
+          </Drawer>
+          <Component {...pageProps} />
+        </MantineProvider>
+      </ColorSchemeProvider>
     </SessionProvider>
   );
 }
@@ -35,14 +69,14 @@ const MyApp: AppType = ({
   );
 };
 
-const getBaseUrl = () => {
-  if (typeof window !== "undefined") {
-    return "";
-  }
-  if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`; // SSR should use vercel url
+// const getBaseUrl = () => {
+//   if (typeof window !== "undefined") {
+//     return "";
+//   }
+//   if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`; // SSR should use vercel url
 
-  return `http://localhost:${process.env.PORT ?? 3000}`; // dev SSR should use localhost
-};
+//   return `http://localhost:${process.env.PORT ?? 3000}`; // dev SSR should use localhost
+// };
 
 // export default withTRPC<AppRouter>({
 //   config({ ctx }) {

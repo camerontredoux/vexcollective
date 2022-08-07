@@ -1,10 +1,6 @@
 import React from "react";
 
-interface Props {
-  width: number;
-}
-
-const Logo: React.FC<Props> = ({ width }) => {
+const Logo: React.FC<{ width: number }> = ({ width }) => {
   return (
     <picture>
       <source srcSet="/logo.png" type="image/webp" />
