@@ -1,5 +1,6 @@
-import { ActionIcon, Modal, TextInput, useMantineTheme } from "@mantine/core";
-import { IconSearch } from "@tabler/icons";
+import { Button, Checkbox, Modal, Space, TextInput } from "@mantine/core";
+import { useDebouncedValue } from "@mantine/hooks";
+import { useRouter } from "next/router";
 import { ReactElement, useState } from "react";
 import Layout from "../components/layouts/Layout";
 import { NextPageWithLayout } from "./_app";
@@ -15,36 +16,68 @@ const features = [
 const Home: NextPageWithLayout = () => {
   const [feature, setFeature] = useState("Radar Charts");
   const [opened, setOpened] = useState(false);
+  const [checked, setChecked] = useState(false);
+  const [account, setAccount] = useState("");
+  const [debounced] = useDebouncedValue(account, 300);
+
+  const router = useRouter();
 
   const rightSection = (
     <div style={{ display: "flex", alignItems: "center" }}>
-      {/* <Button variant="subtle" onClick={() => setOpened(true)} size="xs">
-        <IconSearch></IconSearch>
-      </Button> */}
-      <ActionIcon onClick={() => setOpened(true)} variant="default">
+      <Button
+        px={8}
+        variant="default"
+        onClick={() => setOpened(true)}
+        size="xs"
+      >
+        Options
+      </Button>
+      {/* <ActionIcon onClick={() => setOpened(true)} variant="default">
         <IconSearch size={16}></IconSearch>
-      </ActionIcon>
+      </ActionIcon> */}
     </div>
   );
 
-  const theme = useMantineTheme();
+  const handleExampleAccountChecked = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setChecked(e.target.checked);
+    if (checked) {
+      router.push({ query: {} });
+    } else {
+      router.push({ query: { account: "4611686018480403495" } });
+    }
+  };
 
   return (
     <>
       <Modal
-        title="Search for Player"
+        withCloseButton={false}
         onClose={() => setOpened(false)}
         opened={opened}
       >
-        <TextInput data-autofocus placeholder="Player Name" />
+        <Checkbox
+          checked={checked}
+          onChange={handleExampleAccountChecked}
+          label="Use an example account?"
+          value="example-account"
+        />
+        <Space h={"md"} />
+        <TextInput
+          disabled={checked}
+          data-autofocus
+          placeholder="Player Name"
+        />
       </Modal>
       <div className="w-full rounded-md mt-6 sm:mt-0">
         <TextInput
+          onChange={(e) => setAccount(e.target.value)}
           radius={"sm"}
           size="md"
           placeholder="Cameron#0370"
-          rightSectionWidth={40}
+          rightSectionWidth={75}
           rightSection={rightSection}
+          disabled={checked}
         />
       </div>
       <div className="drop-shadow-md bg-black bg-center bg-cover bg-[url('/hero-wallpaper.jpg')] w-full rounded-md">
