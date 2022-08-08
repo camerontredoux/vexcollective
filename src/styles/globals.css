@@ -19,21 +19,31 @@ picture {
 
 /* width */
 ::-webkit-scrollbar {
-  width: 10px;
-  border-radius: 5px;
-}
-
-/* Track */
-::-webkit-scrollbar-track {
-  background: transparent;
+  width: 8px;
 }
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
   background: #888;
+  border-radius: 5px;
 }
 
-/* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
   background: #555;
+}
+
+details summary {
+  cursor: pointer;
+}
+
+details summary > h1 {
+  display: inline;
+}
+
+details[open] summary {
+  list-style-type: none;
+}
+
+details summary {
+  list-style-type: none;
 }
