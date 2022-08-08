@@ -2,23 +2,28 @@ import { ActionIcon, Select } from "@mantine/core";
 import { IconChevronDown, IconChevronUp } from "@tabler/icons";
 import { AnimatePresence, motion } from "framer-motion";
 import Head from "next/head";
-import { useState } from "react";
-import DataTreeView from "../../components/DataTreeView";
-import { DestinyOpenAPI, OpenAPIKeys } from "../../utils/endpoints";
+import { useRouter } from "next/router";
+import { ReactElement, useState } from "react";
+import DataTreeView from "../components/DataTreeView";
+import Layout from "../components/layouts/Layout";
+import { DestinyOpenAPI, EndpointNames, OpenAPIKeys } from "../utils/endpoints";
+import { NextPageWithLayout } from "./_app";
 
-const fetcher = (url: string) => fetch(url).then((res) => res.json());
-
-interface DataLayoutProps {
-  endpointNames: any[];
-  data: any;
-}
-
-const DataLayout: React.FC<DataLayoutProps> = ({ endpointNames, data }) => {
+const Data: NextPageWithLayout = () => {
   const [value, setValue] = useState<string | null>(null);
   const [hideDescription, setHideDescription] = useState(false);
+  const router = useRouter();
 
-  const handleChange = (val: string | null) => {
+  const [data, setData] = useState<any>(null);
+
+  const handleChange = async (val: string | null) => {
     setValue(val);
+    const response = await fetch("/api/endpoint");
+    const json = await response.json();
+    setData(json);
+    router.push({
+      query: { endpoint: DestinyOpenAPI.paths[val as OpenAPIKeys].summary },
+    });
   };
 
   return (
@@ -35,13 +40,13 @@ const DataLayout: React.FC<DataLayoutProps> = ({ endpointNames, data }) => {
           spellCheck={false}
           radius={"sm"}
           size="md"
-          placeholder={endpointNames[0].label}
+          placeholder={EndpointNames[0]!.label}
           clearable
           maxDropdownHeight={280}
           transition="pop-top-left"
           transitionDuration={80}
           transitionTimingFunction="ease"
-          data={endpointNames}
+          data={EndpointNames}
           value={value}
           onChange={handleChange}
         />
@@ -92,4 +97,8 @@ const DataLayout: React.FC<DataLayoutProps> = ({ endpointNames, data }) => {
   );
 };
 
-export default DataLayout;
+Data.getLayout = function getLayout(page: ReactElement) {
+  return <Layout>{page}</Layout>;
+};
+
+export default Data;

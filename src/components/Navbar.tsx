@@ -10,7 +10,7 @@ const links = [
     text: "Login",
   },
   {
-    href: "/data/manifest",
+    href: "/data",
     text: "Data",
   },
   {
