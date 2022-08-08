@@ -1,5 +1,6 @@
 import { ActionIcon, Select } from "@mantine/core";
 import { IconChevronDown, IconChevronUp } from "@tabler/icons";
+import { AnimatePresence, motion } from "framer-motion";
 import Head from "next/head";
 import { useEffect, useState } from "react";
 import DataTreeView from "../../components/DataTreeView";
@@ -45,6 +46,7 @@ const DataLayout: React.FC<DataLayoutProps> = ({ endpointNames, data }) => {
           onChange={setValue}
         />
       </div>
+
       <div className="drop-shadow-md bg-gray-mantine-light border border-gray-mantine-dark w-full rounded-md">
         <div className="flex flex-col p-8 backdrop-brightness-75 rounded-md">
           {value ? (
@@ -65,12 +67,20 @@ const DataLayout: React.FC<DataLayoutProps> = ({ endpointNames, data }) => {
                 </ActionIcon>
               </div>
               <h2 className="text-base text-gray-500 break-all">{value}</h2>
-              {hideDescription ? null : (
-                <p className="text-sm mt-4 text-gray-400">
-                  {value &&
-                    DestinyOpenAPI.paths[value as OpenAPIKeys].description}
-                </p>
-              )}
+              <AnimatePresence>
+                {!hideDescription && (
+                  <motion.div
+                    className="overflow-hidden text-justify"
+                    initial={{ height: 0 }}
+                    animate={{ height: "auto" }}
+                    exit={{ height: 0 }}
+                  >
+                    <p className="text-sm mt-4 text-gray-400">
+                      {DestinyOpenAPI.paths[value as OpenAPIKeys].description}
+                    </p>
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </>
           ) : (
             <h1 className="text-2xl font-bold break-all">Choose an endpoint</h1>
