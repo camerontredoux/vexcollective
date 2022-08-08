@@ -1,4 +1,5 @@
-import { Select } from "@mantine/core";
+import { ActionIcon, Select } from "@mantine/core";
+import { IconChevronDown, IconChevronUp } from "@tabler/icons";
 import Head from "next/head";
 import { useEffect, useState } from "react";
 import DataTreeView from "../../components/DataTreeView";
@@ -13,6 +14,7 @@ interface DataLayoutProps {
 
 const DataLayout: React.FC<DataLayoutProps> = ({ endpointNames, data }) => {
   const [value, setValue] = useState<string | null>(null);
+  const [hideDescription, setHideDescription] = useState(false);
 
   useEffect(() => {
     console.log(DestinyOpenAPI.paths[value as OpenAPIKeys]);
@@ -46,18 +48,30 @@ const DataLayout: React.FC<DataLayoutProps> = ({ endpointNames, data }) => {
       <div className="drop-shadow-md bg-gray-mantine-light border border-gray-mantine-dark w-full rounded-md">
         <div className="flex flex-col p-8 backdrop-brightness-75 rounded-md">
           {value ? (
-            <details>
-              <summary>
-                <h1 className="text-2xl font-bold break-all">
+            <>
+              <div className="flex justify-between">
+                <h1 className="text-2xl font-bold break-all mr-4">
                   {DestinyOpenAPI.paths[value as OpenAPIKeys].summary}
                 </h1>
-                <h2 className="text-base text-gray-500 break-all">{value}</h2>
-              </summary>
-              <p className="text-sm mt-4 text-gray-400">
-                {value &&
-                  DestinyOpenAPI.paths[value as OpenAPIKeys].description}
-              </p>
-            </details>
+                <ActionIcon
+                  onClick={() => setHideDescription(!hideDescription)}
+                  variant="default"
+                >
+                  {hideDescription ? (
+                    <IconChevronDown size={16} />
+                  ) : (
+                    <IconChevronUp size={16} />
+                  )}
+                </ActionIcon>
+              </div>
+              <h2 className="text-base text-gray-500 break-all">{value}</h2>
+              {hideDescription ? null : (
+                <p className="text-sm mt-4 text-gray-400">
+                  {value &&
+                    DestinyOpenAPI.paths[value as OpenAPIKeys].description}
+                </p>
+              )}
+            </>
           ) : (
             <h1 className="text-2xl font-bold break-all">Choose an endpoint</h1>
           )}
