@@ -19,7 +19,7 @@ export default class Bungie {
     };
 
     if (body) {
-      init.body = JSON.stringify(body);
+      init.body = body;
     }
 
     return await fetch(`${this.basePath}/${endpoint}`, init);
