@@ -1,9 +1,7 @@
 // src/pages/_app.tsx
 import { MantineProvider } from "@mantine/core";
 import { NextPage } from "next";
-import { SessionProvider } from "next-auth/react";
 import { AppProps } from "next/app";
-import type { AppType } from "next/dist/shared/lib/utils";
 import Head from "next/head";
 import { ReactElement, ReactNode, useState } from "react";
 import "../styles/globals.css";
@@ -22,34 +20,21 @@ export default function MyApp2({ Component, pageProps }: AppPropsWithLayout) {
   const getLayout = Component.getLayout ?? ((page: ReactElement) => page);
 
   return (
-    <SessionProvider session={pageProps.session}>
-      <MantineProvider
-        theme={{
-          colorScheme: "dark",
-          breakpoints: {
-            xs: 640,
-          },
-        }}
-      >
-        <Head>
-          <title>Vex Collective</title>
-        </Head>
-        {getLayout(<Component {...pageProps} />)}
-      </MantineProvider>
-    </SessionProvider>
+    <MantineProvider
+      theme={{
+        colorScheme: "dark",
+        breakpoints: {
+          xs: 640,
+        },
+      }}
+    >
+      <Head>
+        <title>Vex Collective</title>
+      </Head>
+      {getLayout(<Component {...pageProps} />)}
+    </MantineProvider>
   );
 }
-
-const MyApp: AppType = ({
-  Component,
-  pageProps: { session, ...pageProps },
-}) => {
-  return (
-    <SessionProvider session={session}>
-      <Component {...pageProps} />
-    </SessionProvider>
-  );
-};
 
 // const getBaseUrl = () => {
 //   if (typeof window !== "undefined") {
