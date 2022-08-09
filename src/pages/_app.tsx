@@ -26,6 +26,9 @@ export default function MyApp2({ Component, pageProps }: AppPropsWithLayout) {
       <MantineProvider
         theme={{
           colorScheme: "dark",
+          breakpoints: {
+            xs: 640,
+          },
         }}
       >
         <Head>

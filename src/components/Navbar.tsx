@@ -1,7 +1,13 @@
+import {
+  Burger,
+  Drawer,
+  MediaQuery,
+  UnstyledButton,
+  useMantineTheme,
+} from "@mantine/core";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { useState } from "react";
-import { AiOutlineMenu } from "react-icons/ai";
 import Logo from "./Logo";
 
 const links = [
@@ -31,15 +37,16 @@ const socials = [
 ];
 
 const Navbar: React.FC = () => {
-  const [open, setOpen] = useState(false);
   const [opened, setOpened] = useState(false);
+
+  const theme = useMantineTheme();
 
   return (
     <>
-      <div className="flex sm:flex-col justify-between items-center sm:items-start sm:justify-start p-2 sm:w-56 text-gray-600">
+      <div className="flex sm:flex-col justify-between items-center sm:items-start sm:justify-start py-2 sm:w-56 text-gray-600">
         <Link href="/">
           <a className="flex items-center sm:mb-8">
-            <Logo width={30} />
+            <Logo width={27} />
             <h1 className="ml-2 font-bold uppercase text-gray-500">
               Vex Collective
             </h1>
@@ -75,39 +82,62 @@ const Navbar: React.FC = () => {
             </NavLink>
           ))}
         </ul>
-        <button
-          className="sm:hidden bg-zinc-800 drop-shadow-lg p-1 rounded-sm text-white hover:bg-gray-mantine-dark"
-          onClick={() => setOpened(true)}
-        >
-          <AiOutlineMenu />
-        </button>
+        <MediaQuery largerThan="xs" styles={{ display: "none" }}>
+          <Burger
+            color={theme.colors.gray[5]}
+            size={14}
+            opened={opened}
+            onClick={() => setOpened(true)}
+          />
+        </MediaQuery>
       </div>
-      {open && (
-        <ul className="sm:hidden flex sm:flex-col gap-8 text-gray-600 mt-3 ml-1">
-          {links.map((link, index) => (
-            <li key={index}>
-              <motion.a
-                whileHover={{ color: "rgb(115,125,139)" }}
-                transition={{ duration: 0.15, ease: "easeInOut" }}
-                href={link.href}
-              >
-                {link.text}
-              </motion.a>
-            </li>
-          ))}
-          {socials.map((link, index) => (
-            <li key={index}>
-              <motion.a
-                whileHover={{ color: "rgb(115,125,139)" }}
-                transition={{ duration: 0.15, ease: "easeInOut" }}
-                href={link.href}
-              >
-                {link.text}
-              </motion.a>
-            </li>
-          ))}
-        </ul>
-      )}
+
+      <MediaQuery largerThan="xs" styles={{ display: "none" }}>
+        <Drawer
+          title={
+            <Link href="/">
+              <a className="flex items-center sm:mb-8">
+                <Logo width={27} />
+                <h1 className="ml-2 font-bold uppercase text-gray-500">
+                  Vex Collective
+                </h1>
+              </a>
+            </Link>
+          }
+          overlayBlur={3}
+          padding="lg"
+          size="md"
+          opened={opened}
+          onClose={() => setOpened(false)}
+        >
+          <ul className="flex flex-col gap-1">
+            {links.map((link, index) => (
+              <li key={index}>
+                <Link href={link.href}>
+                  <UnstyledButton
+                    onClick={() => setOpened(false)}
+                    className="unstyled-btn"
+                  >
+                    <a>{link.text}</a>
+                  </UnstyledButton>
+                </Link>
+              </li>
+            ))}
+            {socials.map((link, index) => (
+              <li key={index}>
+                <Link href={link.href}>
+                  <UnstyledButton
+                    onClick={() => setOpened(false)}
+                    className="unstyled-btn"
+                  >
+                    <a>{link.text}</a>
+                  </UnstyledButton>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </Drawer>
+      </MediaQuery>
     </>
   );
 };

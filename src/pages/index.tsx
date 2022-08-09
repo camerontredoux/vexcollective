@@ -33,7 +33,7 @@ const Home: NextPageWithLayout = () => {
   const rightSection = (
     <div style={{ display: "flex", gap: "5px", alignItems: "center" }}>
       <ActionIcon>
-        <IconSearch color={theme.colors.blue[3]} size={16} />
+        <IconSearch color={theme.colors.gray[4]} size={16} />
       </ActionIcon>
       <ActionIcon variant="default" onClick={() => setOpened(true)}>
         <IconSettings color={theme.colors.gray[4]} size={18} />

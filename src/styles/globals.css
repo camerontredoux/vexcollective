@@ -9,6 +9,10 @@
   @apply text-sm font-bold bg-zinc-800 px-2 py-1 rounded-md;
 }
 
+.unstyled-btn {
+  @apply font-inter w-full hover:bg-gray-mantine-light p-2 rounded-md;
+}
+
 ::placeholder {
   @apply select-none;
 }
