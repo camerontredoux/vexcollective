@@ -1,12 +1,12 @@
 import {
   ActionIcon,
-  Checkbox,
+  Code,
   Modal,
-  Space,
+  Switch,
   TextInput,
   useMantineTheme,
 } from "@mantine/core";
-import { IconSettings } from "@tabler/icons";
+import { IconSearch, IconSettings } from "@tabler/icons";
 import { useRouter } from "next/router";
 import { ReactElement, useState } from "react";
 import Layout from "../components/layouts/Layout";
@@ -31,20 +31,20 @@ const Home: NextPageWithLayout = () => {
   const router = useRouter();
 
   const rightSection = (
-    <div style={{ display: "flex", alignItems: "center" }}>
-      <ActionIcon variant="default" onClick={() => setOpened(true)}>
-        <IconSettings color={theme.colors.gray[5]} size={18} />
+    <div style={{ display: "flex", gap: "5px", alignItems: "center" }}>
+      <ActionIcon>
+        <IconSearch color={theme.colors.blue[3]} size={16} />
       </ActionIcon>
-      {/* <ActionIcon onClick={() => setOpened(true)} variant="default">
-        <IconSearch size={16}></IconSearch>
-      </ActionIcon> */}
+      <ActionIcon variant="default" onClick={() => setOpened(true)}>
+        <IconSettings color={theme.colors.gray[4]} size={18} />
+      </ActionIcon>
     </div>
   );
 
   const handleExampleAccountChecked = (
     e: React.ChangeEvent<HTMLInputElement>
   ) => {
-    setChecked(e.target.checked);
+    setChecked(e.currentTarget.checked);
     if (checked) {
       router.push({ query: {} });
     } else {
@@ -59,18 +59,16 @@ const Home: NextPageWithLayout = () => {
         onClose={() => setOpened(false)}
         opened={opened}
       >
-        <Checkbox
-          checked={checked}
-          onChange={handleExampleAccountChecked}
-          label="Use an example account?"
-          value="example-account"
-        />
-        <Space h={"md"} />
-        <TextInput
-          disabled={checked}
-          data-autofocus
-          placeholder="Player Name"
-        />
+        <div className="flex items-center justify-between">
+          <Switch
+            checked={checked}
+            onChange={handleExampleAccountChecked}
+            label="Use an example account?"
+          />
+          <Code className="text-sm" ml={10}>
+            Cameron#0370
+          </Code>
+        </div>
       </Modal>
       <div className="w-full rounded-md mt-6 sm:mt-0">
         <TextInput
@@ -78,7 +76,7 @@ const Home: NextPageWithLayout = () => {
           radius={"sm"}
           size="md"
           placeholder="Cameron#0370"
-          rightSectionWidth={45}
+          rightSectionWidth={75}
           rightSection={rightSection}
           disabled={checked}
         />

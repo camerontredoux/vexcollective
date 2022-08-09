@@ -1,9 +1,10 @@
 // src/pages/_app.tsx
-import { Drawer, MantineProvider } from "@mantine/core";
+import { MantineProvider } from "@mantine/core";
 import { NextPage } from "next";
 import { SessionProvider } from "next-auth/react";
 import { AppProps } from "next/app";
 import type { AppType } from "next/dist/shared/lib/utils";
+import Head from "next/head";
 import { ReactElement, ReactNode, useState } from "react";
 import "../styles/globals.css";
 
@@ -27,17 +28,9 @@ export default function MyApp2({ Component, pageProps }: AppPropsWithLayout) {
           colorScheme: "dark",
         }}
       >
-        <Drawer
-          opened={opened}
-          onClose={() => setOpened(false)}
-          title="Register"
-          padding="lg"
-          size="md"
-          overlayOpacity={0.55}
-          overlayBlur={3}
-        >
-          {/* Drawer content */}
-        </Drawer>
+        <Head>
+          <title>Vex Collective</title>
+        </Head>
         {getLayout(<Component {...pageProps} />)}
       </MantineProvider>
     </SessionProvider>

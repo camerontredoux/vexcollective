@@ -1,47 +1,54 @@
+import { DestinyOpenAPI, EndpointNames, OpenAPIKeys } from "@/utils/endpoints";
+import { useDataStore } from "@/utils/stores";
 import { ActionIcon, Select } from "@mantine/core";
 import { IconChevronDown, IconChevronUp } from "@tabler/icons";
 import { AnimatePresence, motion } from "framer-motion";
-import Head from "next/head";
-import { useState } from "react";
-import DataTreeView from "../../components/DataTreeView";
-import { DestinyOpenAPI, OpenAPIKeys } from "../../utils/endpoints";
+import { useRouter } from "next/router";
+import React, { useState } from "react";
 
-const fetcher = (url: string) => fetch(url).then((res) => res.json());
-
-interface DataLayoutProps {
-  endpointNames: any[];
-  data: any;
-}
-
-const DataLayout: React.FC<DataLayoutProps> = ({ endpointNames, data }) => {
+const DataLayout: React.FC<{ children: React.ReactElement }> = ({
+  children,
+}) => {
   const [value, setValue] = useState<string | null>(null);
   const [hideDescription, setHideDescription] = useState(false);
+  const router = useRouter();
 
-  const handleChange = (val: string | null) => {
+  const setData = useDataStore((state) => state.setData);
+
+  const handleChange = async (val: string | null) => {
     setValue(val);
+
+    if (!val) {
+      setData(null);
+      return;
+    }
+
+    const response = await fetch("/api/endpoint");
+    const json = await response.json();
+    setData(json);
+
+    if (val) {
+      router.push({
+        pathname: "/data/[endpoint]",
+        query: { endpoint: DestinyOpenAPI.paths[val as OpenAPIKeys].summary },
+      });
+    }
   };
 
   return (
     <>
-      <Head>
-        <title>Vex Collective</title>
-        <meta
-          name="description"
-          content="Visualize statistics for your Destiny 2 characters"
-        />
-      </Head>
       <div className="sm:mt-0 mt-6">
         <Select
           spellCheck={false}
           radius={"sm"}
           size="md"
-          placeholder={endpointNames[0].label}
+          placeholder={EndpointNames[0]!.label}
           clearable
           maxDropdownHeight={280}
           transition="pop-top-left"
           transitionDuration={80}
           transitionTimingFunction="ease"
-          data={endpointNames}
+          data={EndpointNames}
           value={value}
           onChange={handleChange}
         />
@@ -87,7 +94,7 @@ const DataLayout: React.FC<DataLayoutProps> = ({ endpointNames, data }) => {
           )}
         </div>
       </div>
-      {data && <DataTreeView data={data} />}
+      {children}
     </>
   );
 };
