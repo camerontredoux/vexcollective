@@ -1,5 +1,12 @@
-import { Button, Checkbox, Modal, Space, TextInput } from "@mantine/core";
-import { useDebouncedValue } from "@mantine/hooks";
+import {
+  ActionIcon,
+  Checkbox,
+  Modal,
+  Space,
+  TextInput,
+  useMantineTheme,
+} from "@mantine/core";
+import { IconSettings } from "@tabler/icons";
 import { useRouter } from "next/router";
 import { ReactElement, useState } from "react";
 import Layout from "../components/layouts/Layout";
@@ -18,20 +25,16 @@ const Home: NextPageWithLayout = () => {
   const [opened, setOpened] = useState(false);
   const [checked, setChecked] = useState(false);
   const [account, setAccount] = useState("");
-  const [debounced] = useDebouncedValue(account, 300);
+
+  const theme = useMantineTheme();
 
   const router = useRouter();
 
   const rightSection = (
     <div style={{ display: "flex", alignItems: "center" }}>
-      <Button
-        px={8}
-        variant="default"
-        onClick={() => setOpened(true)}
-        size="xs"
-      >
-        Options
-      </Button>
+      <ActionIcon variant="default" onClick={() => setOpened(true)}>
+        <IconSettings color={theme.colors.gray[5]} size={18} />
+      </ActionIcon>
       {/* <ActionIcon onClick={() => setOpened(true)} variant="default">
         <IconSearch size={16}></IconSearch>
       </ActionIcon> */}
@@ -75,7 +78,7 @@ const Home: NextPageWithLayout = () => {
           radius={"sm"}
           size="md"
           placeholder="Cameron#0370"
-          rightSectionWidth={75}
+          rightSectionWidth={45}
           rightSection={rightSection}
           disabled={checked}
         />
