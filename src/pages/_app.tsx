@@ -1,10 +1,5 @@
 // src/pages/_app.tsx
-import {
-  ColorScheme,
-  ColorSchemeProvider,
-  Drawer,
-  MantineProvider,
-} from "@mantine/core";
+import { Drawer, MantineProvider } from "@mantine/core";
 import { NextPage } from "next";
 import { SessionProvider } from "next-auth/react";
 import { AppProps } from "next/app";
@@ -21,39 +16,30 @@ type AppPropsWithLayout = AppProps & {
 };
 
 export default function MyApp2({ Component, pageProps }: AppPropsWithLayout) {
-  const [colorScheme, setColorScheme] = useState<ColorScheme>("dark");
-  const toggleColorScheme = (value?: ColorScheme) =>
-    setColorScheme(value || (colorScheme === "dark" ? "light" : "dark"));
-
   const [opened, setOpened] = useState(false);
 
   const getLayout = Component.getLayout ?? ((page: ReactElement) => page);
 
-  return getLayout(
+  return (
     <SessionProvider session={pageProps.session}>
-      <ColorSchemeProvider
-        colorScheme={colorScheme}
-        toggleColorScheme={toggleColorScheme}
+      <MantineProvider
+        theme={{
+          colorScheme: "dark",
+        }}
       >
-        <MantineProvider
-          theme={{
-            colorScheme,
-          }}
+        <Drawer
+          opened={opened}
+          onClose={() => setOpened(false)}
+          title="Register"
+          padding="lg"
+          size="md"
+          overlayOpacity={0.55}
+          overlayBlur={3}
         >
-          <Drawer
-            opened={opened}
-            onClose={() => setOpened(false)}
-            title="Register"
-            padding="lg"
-            size="md"
-            overlayOpacity={0.55}
-            overlayBlur={3}
-          >
-            {/* Drawer content */}
-          </Drawer>
-          <Component {...pageProps} />
-        </MantineProvider>
-      </ColorSchemeProvider>
+          {/* Drawer content */}
+        </Drawer>
+        {getLayout(<Component {...pageProps} />)}
+      </MantineProvider>
     </SessionProvider>
   );
 }

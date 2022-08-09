@@ -4,10 +4,14 @@ import { AnimatePresence, motion } from "framer-motion";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { ReactElement, useState } from "react";
-import DataTreeView from "../components/DataTreeView";
-import Layout from "../components/layouts/Layout";
-import { DestinyOpenAPI, EndpointNames, OpenAPIKeys } from "../utils/endpoints";
-import { NextPageWithLayout } from "./_app";
+import DataTreeView from "../../components/DataTreeView";
+import Layout from "../../components/layouts/Layout";
+import {
+  DestinyOpenAPI,
+  EndpointNames,
+  OpenAPIKeys,
+} from "../../utils/endpoints";
+import { NextPageWithLayout } from "../_app";
 
 const Data: NextPageWithLayout = () => {
   const [value, setValue] = useState<string | null>(null);
@@ -21,7 +25,11 @@ const Data: NextPageWithLayout = () => {
     const response = await fetch("/api/endpoint");
     const json = await response.json();
     setData(json);
+    // router.push({
+    //   query: { endpoint: DestinyOpenAPI.paths[val as OpenAPIKeys].summary },
+    // });
     router.push({
+      pathname: "/data/[endpoint]",
       query: { endpoint: DestinyOpenAPI.paths[val as OpenAPIKeys].summary },
     });
   };
