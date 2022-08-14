@@ -10,7 +10,7 @@
 }
 
 .unstyled-btn {
-  @apply font-inter w-full hover:bg-gray-mantine-light p-2 rounded-md;
+  @apply font-inter text-center w-full hover:bg-gray-mantine-light p-2 rounded-md;
 }
 
 ::placeholder {
@@ -34,20 +34,4 @@ picture {
 
 ::-webkit-scrollbar-thumb:hover {
   background: #555;
-}
-
-details summary {
-  cursor: pointer;
-}
-
-details summary > h1 {
-  display: inline;
-}
-
-details[open] summary {
-  list-style-type: none;
-}
-
-details summary {
-  list-style-type: none;
 }

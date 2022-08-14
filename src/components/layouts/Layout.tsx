@@ -1,10 +1,7 @@
 import { motion } from "framer-motion";
-import { useState } from "react";
 import Navbar from "../Navbar";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
-  const [opened, setOpened] = useState(false);
-
   return (
     <motion.div
       initial={{ opacity: 0 }}

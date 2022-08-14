@@ -12,12 +12,12 @@ import Logo from "./Logo";
 
 const links = [
   {
-    href: "/login",
-    text: "Login",
+    href: "/data",
+    text: "Data Explorer",
   },
   {
-    href: "/data",
-    text: "Data",
+    href: "/authorize",
+    text: "Authorize",
   },
   {
     href: "/about",

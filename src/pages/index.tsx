@@ -8,8 +8,7 @@ import {
 } from "@mantine/core";
 import { IconSearch, IconSettings } from "@tabler/icons";
 import { useRouter } from "next/router";
-import { ReactElement, useState } from "react";
-import Layout from "../components/layouts/Layout";
+import { useState } from "react";
 import { NextPageWithLayout } from "./_app";
 
 const features = [
@@ -120,10 +119,6 @@ const Home: NextPageWithLayout = () => {
       </div>
     </>
   );
-};
-
-Home.getLayout = function getLayout(page: ReactElement) {
-  return <Layout>{page}</Layout>;
 };
 
 export default Home;

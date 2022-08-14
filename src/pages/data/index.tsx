@@ -1,6 +1,5 @@
 import { ReactElement } from "react";
 import DataLayout from "../../components/layouts/DataLayout";
-import Layout from "../../components/layouts/Layout";
 import { NextPageWithLayout } from "../_app";
 
 const Data: NextPageWithLayout = () => {
@@ -8,11 +7,7 @@ const Data: NextPageWithLayout = () => {
 };
 
 Data.getLayout = function getLayout(page: ReactElement) {
-  return (
-    <Layout>
-      <DataLayout>{page}</DataLayout>
-    </Layout>
-  );
+  return <DataLayout>{page}</DataLayout>;
 };
 
 export default Data;
