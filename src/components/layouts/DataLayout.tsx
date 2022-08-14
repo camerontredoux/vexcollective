@@ -1,7 +1,7 @@
 import { DestinyOpenAPI, EndpointNames, OpenAPIKeys } from "@/utils/endpoints";
 import { useDataStore } from "@/utils/stores";
 import { trpc } from "@/utils/trpc";
-import { ActionIcon, Select } from "@mantine/core";
+import { ActionIcon, Loader, Select } from "@mantine/core";
 import { IconChevronDown, IconChevronUp } from "@tabler/icons";
 import { AnimatePresence, motion } from "framer-motion";
 import { useRouter } from "next/router";
@@ -14,7 +14,7 @@ const DataLayout: React.FC<{ children: React.ReactElement }> = ({
   const [hideDescription, setHideDescription] = useState(false);
   const router = useRouter();
 
-  const data = trpc.useMutation("destiny.manifest");
+  const { data, mutate, isLoading } = trpc.useMutation("destiny.manifest");
 
   const setData = useDataStore((state) => state.setData);
 
@@ -26,7 +26,7 @@ const DataLayout: React.FC<{ children: React.ReactElement }> = ({
       return;
     }
 
-    data.mutate();
+    mutate();
 
     if (val) {
       router.push({
@@ -37,13 +37,14 @@ const DataLayout: React.FC<{ children: React.ReactElement }> = ({
   };
 
   useEffect(() => {
-    setData(data.data?.manifest);
-  }, [data.data, setData]);
+    setData(data?.manifest);
+  }, [data, setData]);
 
   return (
     <>
       <div className="sm:mt-0 mt-6">
         <Select
+          rightSection={isLoading ? <Loader size="xs" /> : null}
           spellCheck={false}
           radius={"sm"}
           size="md"
