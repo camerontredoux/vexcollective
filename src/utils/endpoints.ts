@@ -1,27 +1,29 @@
-import { OpenAPIObject, ParameterObject, PathItemObject } from "openapi3-ts";
+import {
+  isSchemaObject,
+  OpenAPIObject,
+  ParameterObject,
+  PathItemObject,
+} from "openapi3-ts";
 import _ from "underscore";
 import openapi from "../schemas/openapi.json";
 
-export type Tag = "User" | "Content" | "GroupV2" | "Destiny2" | "Trending";
+/*
+A lot of this code is inspired by DestinyItemManager's bungie-api-ts library.
+*/
 
-export type OpenAPIKeys = keyof typeof openapi.paths;
+export const BungieAPI = openapi as OpenAPIObject;
 
-export type OpenAPI = {
-  [key in keyof typeof openapi]: typeof openapi[key];
-};
+const pathPairs = _.pairs(BungieAPI.paths) as [string, PathItemObject][];
 
-export const openapiObject = openapi as OpenAPIObject;
+const Destiny2Paths = pathPairs.filter(([path, pathItem]) =>
+  pathItem.summary?.startsWith("Destiny2")
+);
 
-const pathPairs = _.pairs(openapiObject.paths) as [string, PathItemObject][];
-
-export const pathDefinitions = pathPairs.map(([path, desc]) => {
-  const method = desc.get ? "GET" : "POST";
+export const x = Destiny2Paths.map(([path, desc]) => {
   const methodObj = (desc.get ?? desc.post)!;
   const params = (methodObj.parameters || []) as ParameterObject[];
 
   return {
-    path,
-    method,
     params,
     desc,
     label: desc.summary!,
@@ -30,67 +32,25 @@ export const pathDefinitions = pathPairs.map(([path, desc]) => {
   };
 });
 
+export const pathDefinitions = _.sortBy(x, "group");
+
+console.log(pathDefinitions);
+
 export const PathDefinitions = _.reduce(
   pathDefinitions,
   (map, obj) => {
-    map[obj.path] = obj;
+    map[obj.value] = obj;
     return map;
   },
   {} as { [key: string]: typeof pathDefinitions[0] }
 );
 
-console.dir(PathDefinitions);
+export const getParamType = (param: ParameterObject) => {
+  if (isSchemaObject(param.schema!)) {
+    return param.schema.type;
+  }
+};
 
 const tags = _.groupBy(pathPairs, ([path, desc]) => {
   return (desc.get || desc.post)!.tags![0]!;
 });
-
-export const DestinyOpenAPI: OpenAPI = openapi;
-
-const createEndpoints = (tag: Tag) => {
-  return Object.keys(DestinyOpenAPI.paths).filter((endpoint) =>
-    DestinyOpenAPI.paths[endpoint as OpenAPIKeys].summary.startsWith(tag)
-  );
-};
-
-const createData = (endpoint: OpenAPIKeys, group: string) => {
-  return {
-    label: DestinyOpenAPI.paths[endpoint].summary,
-    value: endpoint,
-    group,
-  };
-};
-
-const Destiny2 = createEndpoints("Destiny2");
-const User = createEndpoints("User");
-const Content = createEndpoints("Content");
-const GroupV2 = createEndpoints("GroupV2");
-const Trending = createEndpoints("Trending");
-
-const Destiny2Data = Destiny2.map((endpoint) =>
-  createData(endpoint as OpenAPIKeys, "Destiny2")
-);
-
-const UserData = User.map((endpoint) =>
-  createData(endpoint as OpenAPIKeys, "User")
-);
-
-const ContentData = Content.map((endpoint) =>
-  createData(endpoint as OpenAPIKeys, "Content")
-);
-
-const GroupV2Data = GroupV2.map((endpoint) =>
-  createData(endpoint as OpenAPIKeys, "GroupV2")
-);
-
-const TrendingData = Trending.map((endpoint) =>
-  createData(endpoint as OpenAPIKeys, "Trending")
-);
-
-export const EndpointNames = [
-  ...Destiny2Data,
-  ...UserData,
-  ...ContentData,
-  ...GroupV2Data,
-  ...TrendingData,
-];
