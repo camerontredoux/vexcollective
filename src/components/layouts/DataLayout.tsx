@@ -1,7 +1,11 @@
-import { DestinyOpenAPI, EndpointNames, OpenAPIKeys } from "@/utils/endpoints";
+import {
+  EndpointNames,
+  PathDefinitions,
+  pathDefinitions,
+} from "@/utils/endpoints";
 import { useDataStore } from "@/utils/stores";
 import { trpc } from "@/utils/trpc";
-import { ActionIcon, Loader, Select } from "@mantine/core";
+import { ActionIcon, Loader, Select, Text, TextInput } from "@mantine/core";
 import { IconChevronDown, IconChevronUp } from "@tabler/icons";
 import { AnimatePresence, motion } from "framer-motion";
 import { useRouter } from "next/router";
@@ -15,6 +19,7 @@ const DataLayout: React.FC<{ children: React.ReactElement }> = ({
   const router = useRouter();
 
   const { data, mutate, isLoading } = trpc.useMutation("destiny.manifest");
+  const entity = trpc.useMutation("destiny.entityDefinition");
 
   const setData = useDataStore((state) => state.setData);
 
@@ -27,13 +32,17 @@ const DataLayout: React.FC<{ children: React.ReactElement }> = ({
     }
 
     mutate();
+    entity.mutate({
+      entityType: "DestinyNodeStepSummaryDefinition",
+      hashIdentifier: 19519556,
+    });
 
-    if (val) {
-      router.push({
-        pathname: "/data/[endpoint]",
-        query: { endpoint: DestinyOpenAPI.paths[val as OpenAPIKeys].summary },
-      });
-    }
+    // if (val) {
+    //   router.push({
+    //     pathname: "/data/[endpoint]",
+    //     query: { endpoint: DestinyOpenAPI.paths[val as OpenAPIKeys].summary },
+    //   });
+    // }
   };
 
   useEffect(() => {
@@ -54,7 +63,7 @@ const DataLayout: React.FC<{ children: React.ReactElement }> = ({
           transition="pop-top-left"
           transitionDuration={80}
           transitionTimingFunction="ease"
-          data={EndpointNames}
+          data={pathDefinitions}
           value={value}
           onChange={handleChange}
         />
@@ -65,7 +74,7 @@ const DataLayout: React.FC<{ children: React.ReactElement }> = ({
           <div className="flex flex-col p-8 backdrop-brightness-75 rounded-md">
             <div className="flex justify-between">
               <h1 className="text-2xl font-bold break-all mr-4">
-                {DestinyOpenAPI.paths[value as OpenAPIKeys].summary}
+                {PathDefinitions[value]?.label}
               </h1>
               <ActionIcon
                 onClick={() => setHideDescription(!hideDescription)}
@@ -87,9 +96,31 @@ const DataLayout: React.FC<{ children: React.ReactElement }> = ({
                   animate={{ height: "auto" }}
                   exit={{ height: 0 }}
                 >
-                  <p className="text-sm mt-4 text-gray-400">
-                    {DestinyOpenAPI.paths[value as OpenAPIKeys].description}
+                  <p className="text-sm mt-4 text-gray-400 pb-4 border-b border-gray-mantine-dark">
+                    {PathDefinitions[value]?.desc.description}
                   </p>
+
+                  {PathDefinitions[value]!.params.length > 0 && (
+                    <>
+                      <h2 className="text-lg mt-2 mb-2">Parameters</h2>
+                      <div className="flex gap-2">
+                        {PathDefinitions[value]?.params.map((param) => {
+                          return (
+                            <div
+                              key={param.name}
+                              className="flex flex-col w-full"
+                            >
+                              <TextInput
+                                required={param.required}
+                                label={param.name}
+                              />
+                              <Text size="xs">{param.description}</Text>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </>
+                  )}
                 </motion.div>
               )}
             </AnimatePresence>
