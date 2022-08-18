@@ -74,7 +74,16 @@ const Endpoint: NextPageWithLayout = () => {
 
                   {PathDefinitions[value]!.params.length > 0 && (
                     <>
-                      <h2 className="text-lg mt-4 mb-2">Parameters</h2>
+                      <div className="flex items-center mt-4 mb-2">
+                        <h2 className="text-lg mr-2">Parameters</h2>
+                        <p className="flex items-center text-xs mt-1 text-gray-400">
+                          Click
+                          <span className="cursor-pointer mx-1 hover:text-gray-200">
+                            <Icon3dCubeSphere size={18} strokeWidth={1.5} />
+                          </span>
+                          for more info.
+                        </p>
+                      </div>
                       <div className="flex flex-col gap-2">
                         {PathDefinitions[value]?.params.map((param, index) => {
                           return <ParameterInput param={param} key={index} />;
