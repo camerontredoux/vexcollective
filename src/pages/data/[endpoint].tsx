@@ -3,10 +3,15 @@ import DataLayout from "@/components/layouts/DataLayout";
 import { getParamType, PathDefinitions } from "@/utils/endpoints";
 import { useDataStore } from "@/utils/stores";
 import { trpc } from "@/utils/trpc";
-import { ActionIcon, TextInput } from "@mantine/core";
-import { IconChevronDown, IconChevronUp } from "@tabler/icons";
+import { ActionIcon, Collapse, TextInput } from "@mantine/core";
+import {
+  Icon3dCubeSphere,
+  IconChevronDown,
+  IconChevronUp,
+} from "@tabler/icons";
 import { AnimatePresence, motion } from "framer-motion";
 import { useRouter } from "next/router";
+import { ParameterObject } from "openapi3-ts";
 import { useEffect, useState } from "react";
 import { NextPageWithLayout } from "../_app";
 
@@ -71,22 +76,8 @@ const Endpoint: NextPageWithLayout = () => {
                     <>
                       <h2 className="text-lg mt-4 mb-2">Parameters</h2>
                       <div className="flex flex-col gap-2">
-                        {PathDefinitions[value]?.params.map((param) => {
-                          return (
-                            <div
-                              key={param.name}
-                              className="flex flex-col gap-2 w-full"
-                            >
-                              <TextInput
-                                required={param.required}
-                                label={param.name}
-                                placeholder={getParamType(param)}
-                              />
-                              <div className="text-start text-sm">
-                                {param.description}
-                              </div>
-                            </div>
-                          );
+                        {PathDefinitions[value]?.params.map((param, index) => {
+                          return <ParameterInput param={param} key={index} />;
                         })}
                       </div>
                     </>
@@ -99,6 +90,28 @@ const Endpoint: NextPageWithLayout = () => {
       )}
       {data && <DataTreeView data={data} />}
     </>
+  );
+};
+
+const ParameterInput: React.FC<{ param: ParameterObject }> = ({ param }) => {
+  const [opened, setOpened] = useState(false);
+
+  return (
+    <div key={param.name} className="flex flex-col gap-2 w-full">
+      <TextInput
+        rightSection={
+          <ActionIcon onClick={() => setOpened((o) => !o)}>
+            <Icon3dCubeSphere size={18} strokeWidth={1.5} />
+          </ActionIcon>
+        }
+        required={param.required}
+        label={param.name}
+        placeholder={getParamType(param)}
+      />
+      <Collapse in={opened}>
+        <div className="text-start text-sm">{param.description}</div>
+      </Collapse>
+    </div>
   );
 };
 
