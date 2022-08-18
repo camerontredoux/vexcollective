@@ -3,7 +3,7 @@ import {
   OpenAPIObject,
   ParameterObject,
   PathItemObject,
-} from "openapi3-ts";
+} from "openapi3-ts/dist/mjs";
 import _ from "underscore";
 import openapi from "../schemas/openapi.json";
 
@@ -26,15 +26,14 @@ export const x = Destiny2Paths.map(([path, desc]) => {
   return {
     params,
     desc,
+    path,
     label: desc.summary!,
-    value: path,
+    value: desc.summary!,
     group: methodObj.tags![0] || "Core",
   };
 });
 
 export const pathDefinitions = _.sortBy(x, "group");
-
-console.log(pathDefinitions);
 
 export const PathDefinitions = _.reduce(
   pathDefinitions,
@@ -45,6 +44,7 @@ export const PathDefinitions = _.reduce(
   {} as { [key: string]: typeof pathDefinitions[0] }
 );
 
+console.log(PathDefinitions);
 export const getParamType = (param: ParameterObject) => {
   if (isSchemaObject(param.schema!)) {
     return param.schema.type;

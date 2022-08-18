@@ -6,13 +6,18 @@ import { trpc } from "@/utils/trpc";
 import { ActionIcon, TextInput } from "@mantine/core";
 import { IconChevronDown, IconChevronUp } from "@tabler/icons";
 import { AnimatePresence, motion } from "framer-motion";
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { NextPageWithLayout } from "../_app";
 
 const Endpoint: NextPageWithLayout = () => {
   const [hideDescription, setHideDescription] = useState(false);
+  const router = useRouter();
+
+  const { endpoint } = router.query;
 
   const value = useDataStore((state) => state.value);
+  const setValue = useDataStore((state) => state.setValue);
 
   const { data, mutate, isLoading } = trpc.useMutation("destiny.manifest");
   const entity = trpc.useMutation("destiny.entityDefinition");
@@ -21,7 +26,11 @@ const Endpoint: NextPageWithLayout = () => {
 
   useEffect(() => {
     setData(data?.manifest);
-  }, [data, setData]);
+  }, [data, setData, value]);
+
+  useEffect(() => {
+    setValue(endpoint as string);
+  }, [endpoint, setValue]);
 
   return (
     <>
@@ -43,7 +52,9 @@ const Endpoint: NextPageWithLayout = () => {
                 )}
               </ActionIcon>
             </div>
-            <h2 className="text-base text-gray-500 break-all">{value}</h2>
+            <h2 className="text-base text-gray-500 break-all">
+              {PathDefinitions[value as string]?.path}
+            </h2>
             <AnimatePresence>
               {!hideDescription && (
                 <motion.div
