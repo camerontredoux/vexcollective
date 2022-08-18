@@ -3,7 +3,7 @@ import {
   OpenAPIObject,
   ParameterObject,
   PathItemObject,
-} from "openapi3-ts/dist/mjs";
+} from "openapi3-ts";
 import _ from "underscore";
 import openapi from "../schemas/openapi.json";
 
