@@ -18,6 +18,6 @@ export default class Bungie {
       init.body = body;
     }
 
-    return await fetch(`${this.basePath}/${endpoint}`, init);
+    return await fetch(`${this.basePath}${endpoint}`, init);
   }
 }

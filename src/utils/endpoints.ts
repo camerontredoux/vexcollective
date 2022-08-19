@@ -3,6 +3,10 @@ import {
   OpenAPIObject,
   ParameterObject,
   PathItemObject,
+  ReferenceObject,
+  RequestBodyObject,
+  SchemaObject,
+  SchemasObject,
 } from "openapi3-ts";
 import _ from "underscore";
 import openapi from "../schemas/openapi.json";
@@ -20,11 +24,27 @@ const Destiny2Paths = pathPairs.filter(([path, pathItem]) =>
 );
 
 export const x = Destiny2Paths.map(([path, desc]) => {
+  const method = desc.get ? "GET" : "POST";
   const methodObj = (desc.get ?? desc.post)!;
   const params = (methodObj.parameters || []) as ParameterObject[];
+  const requestBody = methodObj.requestBody as RequestBodyObject;
+
+  const ref = (
+    requestBody?.content["application/json"]!.schema as ReferenceObject
+  )?.$ref;
+
+  const refName = ref?.slice(ref.lastIndexOf("/") + 1);
+  const refObject = BungieAPI.components?.schemas![refName]! as SchemasObject;
+
+  const properties = _.pairs(refObject?.properties!) as [
+    string,
+    SchemaObject
+  ][];
 
   return {
+    method,
     params,
+    properties,
     desc,
     path,
     label: desc.summary!,
@@ -44,13 +64,8 @@ export const PathDefinitions = _.reduce(
   {} as { [key: string]: typeof pathDefinitions[0] }
 );
 
-console.log(PathDefinitions);
 export const getParamType = (param: ParameterObject) => {
   if (isSchemaObject(param.schema!)) {
     return param.schema.type;
   }
 };
-
-const tags = _.groupBy(pathPairs, ([path, desc]) => {
-  return (desc.get || desc.post)!.tags![0]!;
-});
