@@ -1,12 +1,13 @@
 export default class Bungie {
   private apiKey: string;
   private basePath: string = "https://www.bungie.net/Platform";
+  private carnageReportPath: string = "https://stats.bungie.net/Platform";
 
   constructor(apiKey: string) {
     this.apiKey = apiKey;
   }
 
-  async fetchAPI(endpoint: string, body?: any): Promise<any> {
+  async fetchAPI(endpoint: string, pcgr: boolean, body?: any): Promise<any> {
     const init: RequestInit = {
       headers: {
         "X-API-Key": this.apiKey,
@@ -18,6 +19,8 @@ export default class Bungie {
       init.body = body;
     }
 
-    return await fetch(`${this.basePath}${endpoint}`, init);
+    const url = `${pcgr ? this.carnageReportPath : this.basePath}${endpoint}`;
+
+    return await fetch(url, init);
   }
 }

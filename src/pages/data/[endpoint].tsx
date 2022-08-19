@@ -32,10 +32,6 @@ const Endpoint: NextPageWithLayout = () => {
   const setData = useDataStore((state) => state.setData);
   const data = useDataStore((state) => state.data);
 
-  // useEffect(() => {
-  //   setData(data?.manifest);
-  // }, [data, setData, value]);
-
   useEffect(() => {
     setValue(endpoint as string);
     setData(null);
@@ -52,7 +48,11 @@ const Endpoint: NextPageWithLayout = () => {
     }
 
     if (currentPath) {
-      getBungieMutation.mutate({ path: currentPath });
+      getBungieMutation.mutate({
+        path: currentPath,
+        method: PathDefinitions[endpoint as string]?.method!,
+        pcgr: (value as string) === "Destiny2.GetPostGameCarnageReport",
+      });
     }
   };
 
