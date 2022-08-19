@@ -102,7 +102,6 @@ const Endpoint: NextPageWithLayout = () => {
               </span>
               {PathDefinitions[value as string]?.path}
             </h2>
-            <pre>{JSON.stringify(params, null, 2)}</pre>
             <AnimatePresence>
               {!hideDescription && (
                 <motion.div
