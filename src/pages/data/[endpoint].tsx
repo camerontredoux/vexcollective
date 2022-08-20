@@ -47,6 +47,12 @@ const Endpoint: NextPageWithLayout = () => {
       });
     }
 
+    if (queries) {
+      _.forEach(Object.entries(queries), ([key, value]) => {
+        currentPath += `?${key}=${value}`;
+      });
+    }
+
     if (currentPath) {
       const input = {
         path: currentPath,
@@ -62,13 +68,11 @@ const Endpoint: NextPageWithLayout = () => {
     }
   };
 
-  const [path, setPath] = useState("");
   const [params, setParams] = useState<{ [key: string]: string } | null>(null);
   const [body, setBody] = useState<{ [key: string]: string } | null>(null);
-
-  useEffect(() => {
-    setPath(PathDefinitions[value as string]?.path!);
-  }, [value]);
+  const [queries, setQueries] = useState<{ [key: string]: string } | null>(
+    null
+  );
 
   useEffect(() => {
     setData(getBungieMutation.data?.json);
@@ -140,6 +144,7 @@ const Endpoint: NextPageWithLayout = () => {
                               setParams={setParams}
                               param={param}
                               key={index}
+                              setQueries={setQueries}
                             />
                           );
                         })}
@@ -160,6 +165,7 @@ const Endpoint: NextPageWithLayout = () => {
                         </p>
                       </div>
                       <div className="flex flex-col gap-2">
+                        <pre>{JSON.stringify(body, null, 2)}</pre>
                         {PathDefinitions[value]!.properties.map((param) => {
                           return (
                             <RequestBodyInput
@@ -186,7 +192,8 @@ const Endpoint: NextPageWithLayout = () => {
 const ParameterInput: React.FC<{
   param: ParameterObject;
   setParams: Dispatch<SetStateAction<{ [key: string]: string } | null>>;
-}> = ({ param, setParams }) => {
+  setQueries: Dispatch<SetStateAction<{ [key: string]: string } | null>>;
+}> = ({ param, setParams, setQueries }) => {
   const [opened, setOpened] = useState(false);
   const [value, setValue] = useState("");
   const [debounced] = useDebouncedValue(value, 200);
@@ -196,8 +203,12 @@ const ParameterInput: React.FC<{
   };
 
   useEffect(() => {
-    setParams((old: any) => ({ ...old, [param.name]: debounced }));
-  }, [debounced, param.name, setParams]);
+    if (param.in === "path") {
+      setParams((old: any) => ({ ...old, [param.name]: debounced }));
+    } else {
+      setQueries((old: any) => ({ ...old, [param.name]: debounced }));
+    }
+  }, [debounced, param, setParams, setQueries]);
 
   return (
     <div className="flex flex-col gap-2 w-full">

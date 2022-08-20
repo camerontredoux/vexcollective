@@ -16,7 +16,7 @@ export default class Bungie {
 
     if (body) {
       init.method = "POST";
-      init.body = body;
+      init.body = JSON.stringify(body);
     }
 
     const url = `${pcgr ? this.carnageReportPath : this.basePath}${endpoint}`;
