@@ -48,16 +48,23 @@ const Endpoint: NextPageWithLayout = () => {
     }
 
     if (currentPath) {
-      getBungieMutation.mutate({
+      const input = {
         path: currentPath,
         method: PathDefinitions[endpoint as string]?.method!,
         pcgr: (value as string) === "Destiny2.GetPostGameCarnageReport",
-      });
+      };
+
+      if (PathDefinitions[endpoint as string]?.method === "GET") {
+        getBungieMutation.mutate(input);
+      } else {
+        getBungieMutation.mutate({ ...input, body });
+      }
     }
   };
 
   const [path, setPath] = useState("");
   const [params, setParams] = useState<{ [key: string]: string } | null>(null);
+  const [body, setBody] = useState<{ [key: string]: string } | null>(null);
 
   useEffect(() => {
     setPath(PathDefinitions[value as string]?.path!);
@@ -130,10 +137,7 @@ const Endpoint: NextPageWithLayout = () => {
                         {PathDefinitions[value]?.params.map((param, index) => {
                           return (
                             <ParameterInput
-                              params={params}
                               setParams={setParams}
-                              path={path}
-                              setPath={setPath}
                               param={param}
                               key={index}
                             />
@@ -159,8 +163,8 @@ const Endpoint: NextPageWithLayout = () => {
                         {PathDefinitions[value]!.properties.map((param) => {
                           return (
                             <RequestBodyInput
-                              name={param[0]}
-                              param={param[1]}
+                              param={param}
+                              setBody={setBody}
                               key={param[0]}
                             />
                           );
@@ -181,17 +185,11 @@ const Endpoint: NextPageWithLayout = () => {
 
 const ParameterInput: React.FC<{
   param: ParameterObject;
-  path: string;
-  setPath: Dispatch<SetStateAction<string>>;
-  params: { [key: string]: string } | null;
   setParams: Dispatch<SetStateAction<{ [key: string]: string } | null>>;
-}> = ({ param, path, setPath, params, setParams }) => {
-  const oldPath = path;
-
+}> = ({ param, setParams }) => {
   const [opened, setOpened] = useState(false);
   const [value, setValue] = useState("");
   const [debounced] = useDebouncedValue(value, 200);
-  const [locked, setLocked] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValue(e.target.value);
@@ -204,7 +202,6 @@ const ParameterInput: React.FC<{
   return (
     <div className="flex flex-col gap-2 w-full">
       <TextInput
-        disabled={locked}
         rightSection={
           <ActionIcon onClick={() => setOpened((o) => !o)}>
             <Icon3dCubeSphere size={18} strokeWidth={1.5} />
@@ -222,29 +219,43 @@ const ParameterInput: React.FC<{
   );
 };
 
-const RequestBodyInput: React.FC<{ param: SchemaObject; name: string }> = ({
-  param,
-  name,
-}) => {
+const RequestBodyInput: React.FC<{
+  param: [string, SchemaObject];
+  setBody: Dispatch<SetStateAction<{ [key: string]: string } | null>>;
+}> = ({ param, setBody }) => {
   const [opened, setOpened] = useState(false);
+  const [value, setValue] = useState("");
+  const [debounced] = useDebouncedValue(value, 200);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setValue(e.target.value);
+  };
+
+  useEffect(() => {
+    setBody((old: any) => ({ ...old, [param[0]]: debounced }));
+  }, [debounced, setBody, param]);
+
+  const name = param[0];
+  const schema = param[1];
 
   return (
     <div className="flex flex-col gap-2 w-full">
       <TextInput
         rightSection={
-          param.description && (
+          schema.description && (
             <ActionIcon onClick={() => setOpened((o) => !o)}>
               <Icon3dCubeSphere size={18} strokeWidth={1.5} />
             </ActionIcon>
           )
         }
-        required={param.required ? true : false}
+        onChange={handleChange}
+        required={schema.required ? true : false}
         label={name}
-        placeholder={param.type}
+        placeholder={schema.type}
       />
-      {param.description && (
+      {schema.description && (
         <Collapse in={opened}>
-          <div className="text-start text-sm">{param.description}</div>
+          <div className="text-start text-sm">{schema.description}</div>
         </Collapse>
       )}
     </div>

@@ -12,7 +12,7 @@ import _ from "underscore";
 import openapi from "../schemas/openapi.json";
 
 /*
-A lot of this code is inspired by DestinyItemManager's bungie-api-ts library.
+A lot of this code is inspired by DestinyItemManager's bungie-api-ts library, but I wanted to figure it out myself.
 */
 
 export const BungieAPI = openapi as OpenAPIObject;

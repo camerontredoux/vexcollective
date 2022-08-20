@@ -9,9 +9,17 @@ export const destinyRouter = createRouter().mutation("get", {
     path: z.string(),
     method: z.string(),
     pcgr: z.boolean(),
+    body: z.any().nullable(),
   }),
   async resolve({ input }) {
-    const data = await BungieAPI.fetchAPI(input.path, input.pcgr);
+    let data;
+
+    if (input.body) {
+      data = await BungieAPI.fetchAPI(input.path, input.pcgr, input.body);
+    } else {
+      data = await BungieAPI.fetchAPI(input.path, input.pcgr);
+    }
+
     const json = await data.json();
 
     return {
