@@ -165,7 +165,6 @@ const Endpoint: NextPageWithLayout = () => {
                         </p>
                       </div>
                       <div className="flex flex-col gap-2">
-                        <pre>{JSON.stringify(body, null, 2)}</pre>
                         {PathDefinitions[value]!.properties.map((param) => {
                           return (
                             <RequestBodyInput
