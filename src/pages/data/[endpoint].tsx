@@ -3,7 +3,7 @@ import DataLayout from "@/components/layouts/DataLayout";
 import { getParamType, PathDefinitions } from "@/utils/endpoints";
 import { useDataStore } from "@/utils/stores";
 import { trpc } from "@/utils/trpc";
-import { ActionIcon, Collapse, TextInput } from "@mantine/core";
+import { ActionIcon, Collapse, Loader, TextInput } from "@mantine/core";
 import { useDebouncedValue } from "@mantine/hooks";
 import {
   Icon3dCubeSphere,
@@ -183,7 +183,13 @@ const Endpoint: NextPageWithLayout = () => {
           </div>
         </div>
       )}
-      {data && <DataTreeView data={data} />}
+      {getBungieMutation.isLoading ? (
+        <div className="flex justify-center">
+          <Loader />
+        </div>
+      ) : data ? (
+        <DataTreeView data={data} />
+      ) : null}
     </>
   );
 };
