@@ -1,13 +1,13 @@
 import {
   ActionIcon,
+  Alert,
+  Button,
   Code,
-  Modal,
-  Switch,
   TextInput,
   useMantineTheme,
 } from "@mantine/core";
-import { IconSearch, IconSettings } from "@tabler/icons";
-import { useRouter } from "next/router";
+import { IconAlertCircle, IconSearch } from "@tabler/icons";
+import Link from "next/link";
 import { useState } from "react";
 import { NextPageWithLayout } from "./_app";
 
@@ -27,58 +27,40 @@ const Home: NextPageWithLayout = () => {
 
   const theme = useMantineTheme();
 
-  const router = useRouter();
-
-  const rightSection = (
-    <div style={{ display: "flex", gap: "5px", alignItems: "center" }}>
-      <ActionIcon>
-        <IconSearch color={theme.colors.gray[4]} size={16} />
-      </ActionIcon>
-      <ActionIcon variant="default" onClick={() => setOpened(true)}>
-        <IconSettings color={theme.colors.gray[4]} size={18} />
-      </ActionIcon>
-    </div>
-  );
-
-  const handleExampleAccountChecked = (
-    e: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    setChecked(e.currentTarget.checked);
-    if (checked) {
-      router.push({ query: {} });
-    } else {
-      router.push({ query: { account: "4611686018480403495" } });
-    }
-  };
-
   return (
     <>
-      <Modal
-        withCloseButton={false}
-        onClose={() => setOpened(false)}
-        opened={opened}
-      >
-        <div className="flex items-center justify-between">
-          <Switch
-            checked={checked}
-            onChange={handleExampleAccountChecked}
-            label="Use an example account?"
-          />
-          <Code className="text-sm" ml={10}>
-            Cameron#0370
-          </Code>
-        </div>
-      </Modal>
       <div className="w-full rounded-md mt-6 sm:mt-0">
         <TextInput
           onChange={(e) => setAccount(e.target.value)}
           radius={"sm"}
           size="md"
           placeholder="Cameron#0370"
-          rightSectionWidth={75}
-          rightSection={rightSection}
+          rightSectionWidth={45}
+          rightSection={
+            <ActionIcon>
+              <IconSearch color={theme.colors.gray[4]} size={16} />
+            </ActionIcon>
+          }
           disabled={checked}
         />
+      </div>
+      <div>
+        <Alert
+          icon={<IconAlertCircle size={18} />}
+          title="Attention!"
+          color="indigo"
+        >
+          <p className="mb-2">
+            If you don&apos;t have an account, you can either search for{" "}
+            <Code className="text-sm" color="indigo">
+              Cameron#0370
+            </Code>{" "}
+            or press the button below.
+          </p>
+          <Button className="mb-1" color="indigo" variant="outline" size="xs">
+            <Link href={"/stats/4611686018480403495"}>Search</Link>
+          </Button>
+        </Alert>
       </div>
       <div className="drop-shadow-md bg-black bg-center bg-cover bg-[url('/hero-wallpaper.jpg')] w-full rounded-md">
         <div className="w-full h-full flex flex-col backdrop-blur-sm p-8 drop-shadow-lg backdrop-brightness-75 rounded-md overflow-hidden">
