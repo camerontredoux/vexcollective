@@ -1,3 +1,4 @@
+import { trpc } from "@/utils/trpc";
 import {
   ActionIcon,
   Alert,
@@ -8,6 +9,7 @@ import {
 } from "@mantine/core";
 import { IconAlertCircle, IconSearch } from "@tabler/icons";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import { useState } from "react";
 import { NextPageWithLayout } from "./_app";
 
@@ -21,11 +23,28 @@ const features = [
 
 const Home: NextPageWithLayout = () => {
   const [feature, setFeature] = useState("Radar Charts");
-  const [opened, setOpened] = useState(false);
-  const [checked, setChecked] = useState(false);
   const [account, setAccount] = useState("");
 
+  const profileMutation = trpc.useMutation("destiny.profile");
+
   const theme = useMantineTheme();
+  const router = useRouter();
+
+  const handleSearch = async () => {
+    if (account) {
+      const [displayName, displayNameCode] = account.split("#");
+
+      if (displayName && displayNameCode) {
+        // profileMutation.mutate({ displayCode, displayName });
+        const { json } = await profileMutation.mutateAsync({
+          displayNameCode,
+          displayName,
+        });
+
+        console.log(json.Response);
+      }
+    }
+  };
 
   return (
     <>
@@ -37,11 +56,10 @@ const Home: NextPageWithLayout = () => {
           placeholder="Cameron#0370"
           rightSectionWidth={45}
           rightSection={
-            <ActionIcon>
+            <ActionIcon onClick={handleSearch}>
               <IconSearch color={theme.colors.gray[4]} size={16} />
             </ActionIcon>
           }
-          disabled={checked}
         />
       </div>
       <div>
