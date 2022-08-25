@@ -28,7 +28,7 @@ const Home: NextPageWithLayout = () => {
   const [account, setAccount] = useState("");
   const [membershipType, setMembershipType] = useState("1");
 
-  const profileMutation = trpc.useMutation("destiny.profile");
+  const searchMutation = trpc.useMutation("destiny.search");
 
   const theme = useMantineTheme();
   const router = useRouter();
@@ -40,13 +40,17 @@ const Home: NextPageWithLayout = () => {
       const [displayName, displayNameCode] = account.split("#");
 
       if (displayName && displayNameCode) {
-        const { json } = await profileMutation.mutateAsync({
+        const { json } = await searchMutation.mutateAsync({
           displayNameCode,
           displayName,
           membershipType,
         });
 
-        console.log(json.Response);
+        if (json.Response.length > 0) {
+          router.push(
+            `/stats/${membershipType}/${json.Response[0].membershipId}`
+          );
+        }
       }
     }
   };
@@ -97,7 +101,7 @@ const Home: NextPageWithLayout = () => {
             or press the button below.
           </p>
           <Button className="mb-1" color="indigo" variant="outline" size="xs">
-            <Link href={"/stats/4611686018480403495"}>Search</Link>
+            <Link href={"/stats/3/4611686018480403495"}>Search</Link>
           </Button>
         </Alert>
       </div>

@@ -28,7 +28,7 @@ export const destinyRouter = createRouter()
       };
     },
   })
-  .mutation("profile", {
+  .mutation("search", {
     input: z.object({
       displayName: z.string(),
       displayNameCode: z.string(),
@@ -39,6 +39,24 @@ export const destinyRouter = createRouter()
         `/Destiny2/SearchDestinyPlayerByBungieName/${membershipType}/`,
         false,
         { displayName, displayNameCode }
+      );
+
+      const json = await data.json();
+
+      return {
+        json,
+      };
+    },
+  })
+  .query("profile", {
+    input: z.object({
+      membershipType: z.string().nullish(),
+      membershipId: z.string().nullish(),
+    }),
+    async resolve({ input: { membershipType, membershipId } }) {
+      const data = await BungieAPI.fetchAPI(
+        `/Destiny2/${membershipType}/Profile/${membershipId}?components=100,200`,
+        false
       );
 
       const json = await data.json();
