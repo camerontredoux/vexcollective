@@ -4,6 +4,7 @@ import {
   Alert,
   Button,
   Code,
+  SegmentedControl,
   TextInput,
   useMantineTheme,
 } from "@mantine/core";
@@ -11,6 +12,7 @@ import { IconAlertCircle, IconSearch } from "@tabler/icons";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useState } from "react";
+import { RiPlaystationLine, RiSteamLine, RiXboxLine } from "react-icons/ri";
 import { NextPageWithLayout } from "./_app";
 
 const features = [
@@ -24,21 +26,24 @@ const features = [
 const Home: NextPageWithLayout = () => {
   const [feature, setFeature] = useState("Radar Charts");
   const [account, setAccount] = useState("");
+  const [membershipType, setMembershipType] = useState("1");
 
   const profileMutation = trpc.useMutation("destiny.profile");
 
   const theme = useMantineTheme();
   const router = useRouter();
 
-  const handleSearch = async () => {
+  const handleSearch = async (e: React.FormEvent) => {
+    e.preventDefault();
+
     if (account) {
       const [displayName, displayNameCode] = account.split("#");
 
       if (displayName && displayNameCode) {
-        // profileMutation.mutate({ displayCode, displayName });
         const { json } = await profileMutation.mutateAsync({
           displayNameCode,
           displayName,
+          membershipType,
         });
 
         console.log(json.Response);
@@ -46,21 +51,37 @@ const Home: NextPageWithLayout = () => {
     }
   };
 
+  const rightSection = (
+    <div style={{ display: "flex", gap: "5px", alignItems: "center" }}>
+      <SegmentedControl
+        size="xs"
+        onChange={setMembershipType}
+        value={membershipType}
+        data={[
+          { label: <RiXboxLine size={18} />, value: "1" },
+          { label: <RiPlaystationLine size={18} />, value: "2" },
+          { label: <RiSteamLine size={18} />, value: "3" },
+        ]}
+      />
+      <ActionIcon type="submit">
+        <IconSearch color={theme.colors.gray[4]} size={16} />
+      </ActionIcon>
+    </div>
+  );
+
   return (
     <>
       <div className="w-full rounded-md mt-6 sm:mt-0">
-        <TextInput
-          onChange={(e) => setAccount(e.target.value)}
-          radius={"sm"}
-          size="md"
-          placeholder="Cameron#0370"
-          rightSectionWidth={45}
-          rightSection={
-            <ActionIcon onClick={handleSearch}>
-              <IconSearch color={theme.colors.gray[4]} size={16} />
-            </ActionIcon>
-          }
-        />
+        <form onSubmit={handleSearch}>
+          <TextInput
+            onChange={(e) => setAccount(e.target.value)}
+            radius={"sm"}
+            size="md"
+            placeholder="Cameron#0370"
+            rightSectionWidth={145}
+            rightSection={rightSection}
+          />
+        </form>
       </div>
       <div>
         <Alert

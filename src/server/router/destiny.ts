@@ -32,10 +32,11 @@ export const destinyRouter = createRouter()
     input: z.object({
       displayName: z.string(),
       displayNameCode: z.string(),
+      membershipType: z.string(),
     }),
-    async resolve({ input: { displayName, displayNameCode } }) {
+    async resolve({ input: { displayName, displayNameCode, membershipType } }) {
       const data = await BungieAPI.fetchAPI(
-        "/Destiny2/SearchDestinyPlayerByBungieName/-1/",
+        `/Destiny2/SearchDestinyPlayerByBungieName/${membershipType}/`,
         false,
         { displayName, displayNameCode }
       );
