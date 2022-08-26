@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 
-import { partialManifest } from "@/utils/definitions";
+import { characterManifest } from "@/utils/definitions";
 import { MembershipTypeIcon } from "@/utils/stats/profile";
 import {
   Avatar,
@@ -13,7 +13,7 @@ import {
   Tooltip,
 } from "@mantine/core";
 import { DestinyManifestSlice } from "bungie-api-ts/destiny2/manifest";
-import { DateTime } from "luxon";
+import { DateTime, Duration } from "luxon";
 import { useEffect, useState } from "react";
 import { GiDiamonds } from "react-icons/gi";
 import _ from "underscore";
@@ -29,12 +29,13 @@ const ProfileCard: React.FC<{
       | "DestinyRaceDefinition"
       | "DestinyClassDefinition"
       | "DestinyStatDefinition"
+      | "DestinyRecordDefinition"
     )[]
   > | null>(null);
 
   useEffect(() => {
     (async () => {
-      const definitions = await partialManifest();
+      const definitions = await characterManifest();
       setDefns(definitions);
     })();
   }, []);
@@ -97,12 +98,12 @@ const ProfileCard: React.FC<{
                           width={200}
                           withArrow
                           closeDelay={50}
-                          openDelay={0}
+                          openDelay={250}
                         >
                           <HoverCard.Target>
                             <div
                               key={index}
-                              className="flex gap-1 items-center"
+                              className="flex gap-1 items-center cursor-pointer"
                             >
                               <img
                                 width={25}
@@ -116,12 +117,20 @@ const ProfileCard: React.FC<{
                             </div>
                           </HoverCard.Target>
                           <HoverCard.Dropdown>
-                            <Text weight={400}>
-                              {
-                                defns!.DestinyStatDefinition[Number(key)]
-                                  ?.displayProperties.description
-                              }
-                            </Text>
+                            <Group>
+                              <Text weight={700}>
+                                {
+                                  defns!.DestinyStatDefinition[Number(key)]
+                                    ?.displayProperties.name
+                                }
+                              </Text>
+                              <Text weight={400}>
+                                {
+                                  defns!.DestinyStatDefinition[Number(key)]
+                                    ?.displayProperties.description
+                                }
+                              </Text>
+                            </Group>
                           </HoverCard.Dropdown>
                         </HoverCard>
                       );
@@ -131,11 +140,51 @@ const ProfileCard: React.FC<{
               </Text>
 
               <Group mt="md" spacing="xl">
+                {char.titleRecordHash && (
+                  <Text size="sm">
+                    <HoverCard
+                      width={200}
+                      withArrow
+                      closeDelay={50}
+                      openDelay={0}
+                    >
+                      <HoverCard.Target>
+                        <div className="flex gap-1 items-center">
+                          <img
+                            width={25}
+                            alt="test"
+                            src={`https://bungie.net${
+                              defns!.DestinyRecordDefinition[
+                                char.titleRecordHash
+                              ]?.displayProperties.icon
+                            }`}
+                          />
+                          <b className="ml-1">
+                            {
+                              defns!.DestinyRecordDefinition[
+                                char.titleRecordHash
+                              ]?.displayProperties.name
+                            }
+                          </b>
+                        </div>
+                      </HoverCard.Target>
+                      <HoverCard.Dropdown>
+                        <Text weight={400}>
+                          {
+                            defns!.DestinyRecordDefinition[char.titleRecordHash]
+                              ?.displayProperties.description
+                          }
+                        </Text>
+                      </HoverCard.Dropdown>
+                    </HoverCard>
+                  </Text>
+                )}
                 <Text size="sm">
-                  <b>0</b> Following
-                </Text>
-                <Text size="sm">
-                  <b>1,174</b> Followers
+                  <b>
+                    {Duration.fromObject({ minutes: char.minutesPlayedTotal })
+                      .shiftTo("hour", "minutes")
+                      .toHuman()}
+                  </b>
                 </Text>
               </Group>
             </HoverCard.Dropdown>

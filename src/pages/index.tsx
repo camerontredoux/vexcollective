@@ -1,5 +1,5 @@
 import SearchLayout from "@/components/layouts/SearchLayout";
-import { Alert, Button, Code } from "@mantine/core";
+import { Alert, Button } from "@mantine/core";
 import { IconAlertCircle } from "@tabler/icons";
 import Link from "next/link";
 import { useState } from "react";
@@ -25,17 +25,31 @@ const Home: NextPageWithLayout = () => {
           color="indigo"
         >
           <p className="mb-2">
-            If you don&apos;t have an account, you can either search for{" "}
-            <Code className="text-sm" color="indigo">
-              Cameron#0370
-            </Code>{" "}
-            or press the button below.
+            If you don&apos;t have an account, you can click the buttons below
+            to see some examples.
           </p>
-          <Link href={"/stats/3/4611686018480403495"}>
-            <Button className="mb-1" color="indigo" variant="outline" size="xs">
-              Search
-            </Button>
-          </Link>
+          <div className="flex gap-2">
+            <Link href={"/stats/3/4611686018480403495"}>
+              <Button
+                className="mb-1"
+                color="indigo"
+                variant="outline"
+                size="xs"
+              >
+                Cameron#0370
+              </Button>
+            </Link>
+            <Link href={"/stats/3/4611686018468168710"}>
+              <Button
+                className="mb-1"
+                color="indigo"
+                variant="outline"
+                size="xs"
+              >
+                Wigot#5660
+              </Button>
+            </Link>
+          </div>
         </Alert>
       </div>
       <div className="drop-shadow-md bg-black bg-center bg-cover bg-[url('/hero-wallpaper.jpg')] w-full rounded-md">

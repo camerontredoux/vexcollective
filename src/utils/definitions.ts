@@ -10,7 +10,7 @@ const httpClient = async (config: HttpClientConfig) => {
     .catch((e) => console.log(e));
 };
 
-export const partialManifest = async () => {
+export const characterManifest = async () => {
   const manifest = (await getDestinyManifest(httpClient)).Response;
 
   const partialManifest = await getDestinyManifestSlice(httpClient, {
@@ -19,6 +19,7 @@ export const partialManifest = async () => {
       "DestinyRaceDefinition",
       "DestinyClassDefinition",
       "DestinyStatDefinition",
+      "DestinyRecordDefinition",
     ],
     language: "en",
   });
