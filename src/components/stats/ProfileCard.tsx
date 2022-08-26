@@ -1,6 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
 
-import { characterManifest } from "@/utils/definitions";
 import { MembershipTypeIcon } from "@/utils/stats/profile";
 import {
   Avatar,
@@ -12,9 +11,7 @@ import {
   Text,
   Tooltip,
 } from "@mantine/core";
-import { DestinyManifestSlice } from "bungie-api-ts/destiny2/manifest";
 import { DateTime, Duration } from "luxon";
-import { useEffect, useState } from "react";
 import { GiDiamonds } from "react-icons/gi";
 import _ from "underscore";
 import DataTreeView from "../DataTreeView";
@@ -24,24 +21,8 @@ const ProfileCard: React.FC<{
   characters: any;
   manifest: any;
 }> = ({ profile, characters, manifest }) => {
-  const [defns, setDefns] = useState<DestinyManifestSlice<
-    (
-      | "DestinyRaceDefinition"
-      | "DestinyClassDefinition"
-      | "DestinyStatDefinition"
-      | "DestinyRecordDefinition"
-    )[]
-  > | null>(null);
-
-  useEffect(() => {
-    (async () => {
-      const definitions = await characterManifest();
-      setDefns(definitions);
-    })();
-  }, []);
-
   const charactersData: React.ReactNode[] = _.map(characters, (char) => {
-    if (defns) {
+    if (manifest) {
       return (
         <div key={char.characterId}>
           <HoverCard width={400} withArrow openDelay={100} closeDelay={100}>
@@ -67,9 +48,10 @@ const ProfileCard: React.FC<{
                       sx={{ lineHeight: 1 }}
                     >
                       <div className="flex">
-                        {defns &&
-                          defns.DestinyClassDefinition[char.classHash]
-                            ?.displayProperties.name}
+                        {
+                          manifest.DestinyClassDefinition[char.classHash]
+                            ?.displayProperties.name
+                        }
                         <span className="flex ml-2 text-orange-300 drop-shadow-md">
                           <GiDiamonds /> {char.light}
                         </span>
@@ -81,9 +63,10 @@ const ProfileCard: React.FC<{
                       weight={400}
                       sx={{ lineHeight: 1 }}
                     >
-                      {defns &&
-                        defns.DestinyRaceDefinition[char.raceHash]
-                          ?.genderedRaceNamesByGenderHash[char.genderHash]}
+                      {
+                        manifest.DestinyRaceDefinition[char.raceHash]
+                          ?.genderedRaceNamesByGenderHash[char.genderHash]
+                      }
                     </Text>
                   </Stack>
                 </BackgroundImage>
@@ -107,7 +90,7 @@ const ProfileCard: React.FC<{
                                 width={25}
                                 alt="test"
                                 src={`https://bungie.net${
-                                  defns!.DestinyStatDefinition[Number(key)]
+                                  manifest.DestinyStatDefinition[Number(key)]
                                     ?.displayProperties.icon
                                 }`}
                               />{" "}
@@ -118,13 +101,13 @@ const ProfileCard: React.FC<{
                             <Group>
                               <Text weight={700}>
                                 {
-                                  defns!.DestinyStatDefinition[Number(key)]
+                                  manifest.DestinyStatDefinition[Number(key)]
                                     ?.displayProperties.name
                                 }
                               </Text>
                               <Text weight={400}>
                                 {
-                                  defns!.DestinyStatDefinition[Number(key)]
+                                  manifest.DestinyStatDefinition[Number(key)]
                                     ?.displayProperties.description
                                 }
                               </Text>
@@ -152,14 +135,14 @@ const ProfileCard: React.FC<{
                             width={25}
                             alt="test"
                             src={`https://bungie.net${
-                              defns!.DestinyRecordDefinition[
+                              manifest.DestinyRecordDefinition[
                                 char.titleRecordHash
                               ]?.displayProperties.icon
                             }`}
                           />
                           <b className="ml-1">
                             {
-                              defns!.DestinyRecordDefinition[
+                              manifest.DestinyRecordDefinition[
                                 char.titleRecordHash
                               ]?.displayProperties.name
                             }
@@ -169,8 +152,9 @@ const ProfileCard: React.FC<{
                       <HoverCard.Dropdown>
                         <Text weight={400}>
                           {
-                            defns!.DestinyRecordDefinition[char.titleRecordHash]
-                              ?.displayProperties.description
+                            manifest.DestinyRecordDefinition[
+                              char.titleRecordHash
+                            ]?.displayProperties.description
                           }
                         </Text>
                       </HoverCard.Dropdown>
@@ -208,7 +192,7 @@ const ProfileCard: React.FC<{
     return DateTime.now().minus(diff).toRelative();
   };
 
-  if (defns) {
+  if (manifest) {
     return (
       <>
         <div className="flex items-center gap-2">
@@ -223,7 +207,7 @@ const ProfileCard: React.FC<{
         <div className="mt-4 flex gap-4">
           {charactersData.map((char) => char)}
         </div>
-        {<DataTreeView data={defns} />}
+        {<DataTreeView data={manifest} />}
       </>
     );
   }

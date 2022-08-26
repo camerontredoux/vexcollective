@@ -16,7 +16,6 @@ const Report: NextPageWithLayout = () => {
 
   const [profile, setProfile] = useState<any | null>(null);
   const [collapsed, setCollapsed] = useState(false);
-  const [characters, setCharacters] = useState<string[]>([]);
 
   const [manifest, setManifest] = useState<any | null>(null);
 
@@ -42,7 +41,7 @@ const Report: NextPageWithLayout = () => {
       setProfile(profileQuery.data.json);
     }
     if (manifestQuery.data) {
-      setManifest(manifestQuery.data.json);
+      setManifest(manifestQuery.data);
     }
   }, [profileQuery.data, manifestQuery.data]);
 

@@ -4,6 +4,18 @@ import { createRouter } from "./context";
 
 const BungieAPI = new Bungie(process.env.X_API_KEY!);
 
+import {
+  getDestinyManifest,
+  getDestinyManifestSlice,
+  HttpClientConfig,
+} from "bungie-api-ts/destiny2";
+
+const httpClient = async (config: HttpClientConfig) => {
+  return fetch(config.url, config)
+    .then((res) => res.json())
+    .catch((e) => console.log(e));
+};
+
 export const destinyRouter = createRouter()
   .mutation("get", {
     input: z.object({
@@ -68,12 +80,19 @@ export const destinyRouter = createRouter()
   })
   .query("manifest", {
     async resolve() {
-      const data = await BungieAPI.getManifest();
+      const manifest = (await getDestinyManifest(httpClient)).Response;
 
-      const json = await data.json();
+      const partialManifest = await getDestinyManifestSlice(httpClient, {
+        destinyManifest: manifest,
+        tableNames: [
+          "DestinyRaceDefinition",
+          "DestinyClassDefinition",
+          "DestinyStatDefinition",
+          "DestinyRecordDefinition",
+        ],
+        language: "en",
+      });
 
-      return {
-        json,
-      };
+      return partialManifest;
     },
   });
