@@ -1,8 +1,8 @@
 /* eslint-disable @next/next/no-img-element */
 
+import { partialManifest } from "@/utils/definitions";
 import { MembershipTypeIcon } from "@/utils/stats/profile";
 import {
-  Anchor,
   Avatar,
   BackgroundImage,
   Badge,
@@ -12,70 +12,139 @@ import {
   Text,
   Tooltip,
 } from "@mantine/core";
+import { DestinyManifestSlice } from "bungie-api-ts/destiny2/manifest";
 import { DateTime } from "luxon";
+import { useEffect, useState } from "react";
+import { GiDiamonds } from "react-icons/gi";
 import _ from "underscore";
+import DataTreeView from "../DataTreeView";
 
 const ProfileCard: React.FC<{
   profile: any;
   characters: any;
   manifest: any;
 }> = ({ profile, characters, manifest }) => {
+  const [defns, setDefns] = useState<DestinyManifestSlice<
+    (
+      | "DestinyRaceDefinition"
+      | "DestinyClassDefinition"
+      | "DestinyStatDefinition"
+    )[]
+  > | null>(null);
+
+  useEffect(() => {
+    (async () => {
+      const definitions = await partialManifest();
+      setDefns(definitions);
+    })();
+  }, []);
+
   const charactersData: React.ReactNode[] = _.map(characters, (char) => {
-    return (
-      <div key={char.characterId}>
-        <HoverCard width={400} withArrow openDelay={100} closeDelay={100}>
-          <HoverCard.Target>
-            <Avatar
-              className="cursor-pointer"
-              size={"lg"}
-              src={`https://bungie.net${char.emblemPath}`}
-            />
-          </HoverCard.Target>
-          <HoverCard.Dropdown>
-            <Group>
-              <BackgroundImage
-                radius={"sm"}
-                p={21}
-                src={`https://bungie.net${char.emblemBackgroundPath}`}
-              >
-                <Stack ml={50} spacing={5}>
-                  <Text
-                    color={"white"}
-                    size="sm"
-                    weight={700}
-                    sx={{ lineHeight: 1 }}
-                  >
-                    Mantine
-                  </Text>
-                  <Anchor
-                    href="https://twitter.com/mantinedev"
-                    color="dimmed"
-                    size="xs"
-                    sx={{ lineHeight: 1 }}
-                  >
-                    @mantinedev
-                  </Anchor>
-                </Stack>
-              </BackgroundImage>
-            </Group>
+    if (defns) {
+      return (
+        <div key={char.characterId}>
+          <HoverCard width={400} withArrow openDelay={100} closeDelay={100}>
+            <HoverCard.Target>
+              <Avatar
+                className="cursor-pointer"
+                size={"xl"}
+                src={`https://bungie.net${char.emblemPath}`}
+              />
+            </HoverCard.Target>
+            <HoverCard.Dropdown>
+              <Group>
+                <BackgroundImage
+                  radius={"sm"}
+                  p={21}
+                  src={`https://bungie.net${char.emblemBackgroundPath}`}
+                >
+                  <Stack ml={50} spacing={5}>
+                    <Text
+                      color={"white"}
+                      size="sm"
+                      weight={700}
+                      sx={{ lineHeight: 1 }}
+                    >
+                      <div className="flex">
+                        {defns &&
+                          defns.DestinyClassDefinition[char.classHash]
+                            ?.displayProperties.name}
+                        <span className="flex ml-2 text-orange-300 drop-shadow-md">
+                          <GiDiamonds /> {char.light}
+                        </span>
+                      </div>
+                    </Text>
+                    <Text
+                      color={"white"}
+                      size="xs"
+                      weight={400}
+                      sx={{ lineHeight: 1 }}
+                    >
+                      {defns &&
+                        defns.DestinyRaceDefinition[char.raceHash]
+                          ?.genderedRaceNamesByGenderHash[char.genderHash]}
+                    </Text>
+                  </Stack>
+                </BackgroundImage>
+              </Group>
 
-            <Text size="sm" mt="md">
-              Customizable React components and hooks library with focus on
-              usability, accessibility and developer experience
-            </Text>
+              <Text size="sm" mt="md" weight={600}>
+                <div className="flex gap-2">
+                  {Object.keys(char.stats).map((key, index) => {
+                    if (Number(key) !== 1935470627) {
+                      return (
+                        <HoverCard
+                          width={200}
+                          withArrow
+                          closeDelay={50}
+                          openDelay={0}
+                        >
+                          <HoverCard.Target>
+                            <div
+                              key={index}
+                              className="flex gap-1 items-center"
+                            >
+                              <img
+                                width={25}
+                                alt="test"
+                                src={`https://bungie.net${
+                                  defns!.DestinyStatDefinition[Number(key)]
+                                    ?.displayProperties.icon
+                                }`}
+                              />{" "}
+                              {char.stats[key]}
+                            </div>
+                          </HoverCard.Target>
+                          <HoverCard.Dropdown>
+                            <Text weight={400}>
+                              {
+                                defns!.DestinyStatDefinition[Number(key)]
+                                  ?.displayProperties.description
+                              }
+                            </Text>
+                          </HoverCard.Dropdown>
+                        </HoverCard>
+                      );
+                    }
+                  })}
+                </div>
+              </Text>
 
-            <Group mt="md" spacing="xl">
-              <Text size="sm">
-                <b>0</b> Following
-              </Text>
-              <Text size="sm">
-                <b>1,174</b> Followers
-              </Text>
-            </Group>
-          </HoverCard.Dropdown>
-        </HoverCard>
-      </div>
-    );
+              <Group mt="md" spacing="xl">
+                <Text size="sm">
+                  <b>0</b> Following
+                </Text>
+                <Text size="sm">
+                  <b>1,174</b> Followers
+                </Text>
+              </Group>
+            </HoverCard.Dropdown>
+          </HoverCard>
+        </div>
+      );
+    }
+
+    return null;
   });
 
   const PlatformIcon =
@@ -92,22 +161,27 @@ const ProfileCard: React.FC<{
     return DateTime.now().minus(diff).toRelative();
   };
 
-  return (
-    <>
-      <div className="flex items-center gap-2">
-        <div className="text-xl">{profile.userInfo.displayName}</div>
-        <PlatformIcon size={20} />
-        <Tooltip position="bottom" label={profile.dateLastPlayed}>
-          <Badge>
-            <span>Last seen {lastSeen()}</span>
-          </Badge>
-        </Tooltip>
-      </div>
-      <div className="mt-4 flex gap-4">
-        {charactersData.map((char) => char)}
-      </div>
-    </>
-  );
+  if (defns) {
+    return (
+      <>
+        <div className="flex items-center gap-2">
+          <div className="text-xl">{profile.userInfo.displayName}</div>
+          <PlatformIcon size={20} />
+          <Tooltip position="bottom" label={profile.dateLastPlayed}>
+            <Badge>
+              <span>Last seen {lastSeen()}</span>
+            </Badge>
+          </Tooltip>
+        </div>
+        <div className="mt-4 flex gap-4">
+          {charactersData.map((char) => char)}
+        </div>
+        {<DataTreeView data={defns} />}
+      </>
+    );
+  }
+
+  return null;
 };
 
 export default ProfileCard;

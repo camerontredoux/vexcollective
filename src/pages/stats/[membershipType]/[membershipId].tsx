@@ -2,7 +2,6 @@ import DataTreeView from "@/components/DataTreeView";
 import SearchLayout from "@/components/layouts/SearchLayout";
 import ProfileCard from "@/components/stats/ProfileCard";
 import { stringOrNull } from "@/utils/misc";
-import { dateLastPlayed } from "@/utils/stats/profile";
 import { trpc } from "@/utils/trpc";
 import { Button, Collapse, Loader } from "@mantine/core";
 import { useRouter } from "next/router";
@@ -48,24 +47,24 @@ const Report: NextPageWithLayout = () => {
   }, [profileQuery.data, manifestQuery.data]);
 
   if (profileQuery.isLoading) {
-    return <Loader />;
+    return (
+      <div className="flex justify-center">
+        <Loader />
+      </div>
+    );
   }
 
   if (profile && manifest) {
     if (profile.ErrorCode === 1) {
       return (
         <>
-          <div className="relative z-10 mt-6 sm:mt-0 drop-shadow-md bg-gray-mantine-light border border-gray-mantine-dark rounded-md">
+          <div className="relative z-10 drop-shadow-md bg-gray-mantine-light border border-gray-mantine-dark rounded-md">
             <div className="backdrop-brightness-75 p-8 rounded-md">
               <ProfileCard
                 profile={profile.Response.profile.data}
                 characters={profile.Response.characters.data}
                 manifest={manifest.Response}
               />
-              <p className="text-xl mt-1">
-                Date Last Played:{" "}
-                {profile.Response ? dateLastPlayed(profile.Response) : null}
-              </p>
             </div>
           </div>
           <Button variant="outline" onClick={() => setCollapsed((o) => !o)}>
@@ -81,7 +80,7 @@ const Report: NextPageWithLayout = () => {
     return <div className="flex justify-center">Error fetching account</div>;
   }
 
-  return <div>Error</div>;
+  return null;
 };
 
 Report.getLayout = (page) => {
