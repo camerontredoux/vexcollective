@@ -12,7 +12,7 @@ import { IconAlertCircle, IconSearch } from "@tabler/icons";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useState } from "react";
-import { RiPlaystationLine, RiSteamLine, RiXboxLine } from "react-icons/ri";
+import { FaPlaystation, FaSteam, FaXbox } from "react-icons/fa";
 import { NextPageWithLayout } from "./_app";
 
 const features = [
@@ -62,9 +62,9 @@ const Home: NextPageWithLayout = () => {
         onChange={setMembershipType}
         value={membershipType}
         data={[
-          { label: <RiXboxLine size={18} />, value: "1" },
-          { label: <RiPlaystationLine size={18} />, value: "2" },
-          { label: <RiSteamLine size={18} />, value: "3" },
+          { label: <FaXbox size={18} />, value: "1" },
+          { label: <FaPlaystation size={18} />, value: "2" },
+          { label: <FaSteam size={18} />, value: "3" },
         ]}
       />
       <ActionIcon type="submit">

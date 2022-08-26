@@ -1,1 +1,5 @@
-export interface CharacterDefinitions {}
+export interface CharacterDefinitions {
+  RaceHash: number;
+  GenderHash: number;
+  ClassHash: number;
+}
