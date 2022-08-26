@@ -65,4 +65,15 @@ export const destinyRouter = createRouter()
         json,
       };
     },
+  })
+  .query("manifest", {
+    async resolve() {
+      const data = await BungieAPI.getManifest();
+
+      const json = await data.json();
+
+      return {
+        json,
+      };
+    },
   });

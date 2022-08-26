@@ -23,4 +23,8 @@ export default class Bungie {
 
     return await fetch(url, init);
   }
+
+  async getManifest() {
+    return await this.fetchAPI("/Destiny2/Manifest", false);
+  }
 }

@@ -1,4 +1,5 @@
 import DataTreeView from "@/components/DataTreeView";
+import ProfileCard from "@/components/stats/ProfileCard";
 import { stringOrNull } from "@/utils/misc";
 import { dateLastPlayed } from "@/utils/stats/profile";
 import { trpc } from "@/utils/trpc";
@@ -15,6 +16,10 @@ const Report: NextPageWithLayout = () => {
 
   const [profile, setProfile] = useState<any | null>(null);
   const [collapsed, setCollapsed] = useState(false);
+  const [characters, setCharacters] = useState<string[]>([]);
+
+  const [manifest, setManifest] = useState<any | null>(null);
+
   const profileQuery = trpc.useQuery(
     ["destiny.profile", { membershipId, membershipType }],
     {
@@ -24,11 +29,22 @@ const Report: NextPageWithLayout = () => {
     }
   );
 
+  const manifestQuery = trpc.useQuery(["destiny.manifest"], {
+    refetchOnMount: false,
+    refetchOnReconnect: false,
+    refetchOnWindowFocus: false,
+    retry: false,
+    staleTime: 1000 * 60 * 60 * 24,
+  });
+
   useEffect(() => {
     if (profileQuery.data) {
       setProfile(profileQuery.data.json);
     }
-  }, [profileQuery.data]);
+    if (manifestQuery.data) {
+      setManifest(manifestQuery.data.json);
+    }
+  }, [profileQuery.data, manifestQuery.data]);
 
   if (profileQuery.isLoading) {
     return <Loader />;
@@ -40,7 +56,11 @@ const Report: NextPageWithLayout = () => {
         <>
           <div className="mt-6 sm:mt-0 drop-shadow-md bg-gray-mantine-light border border-gray-mantine-dark rounded-md">
             <div className="backdrop-brightness-75 p-8 rounded-md">
-              <h1 className="text-4xl font-bold"></h1>
+              <ProfileCard
+                profile={profile.Response.profile.data}
+                characters={profile.Response.characters.data}
+                manifest={manifest.Response}
+              />
               <p className="text-xl mt-1">
                 Date Last Played:{" "}
                 {profile.Response ? dateLastPlayed(profile.Response) : null}
