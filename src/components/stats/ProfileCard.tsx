@@ -95,16 +95,14 @@ const ProfileCard: React.FC<{
                     if (Number(key) !== 1935470627) {
                       return (
                         <HoverCard
+                          key={index}
                           width={200}
                           withArrow
                           closeDelay={50}
                           openDelay={250}
                         >
                           <HoverCard.Target>
-                            <div
-                              key={index}
-                              className="flex gap-1 items-center cursor-pointer"
-                            >
+                            <div className="flex gap-1 items-center cursor-pointer">
                               <img
                                 width={25}
                                 alt="test"
