@@ -1,4 +1,5 @@
 import DataTreeView from "@/components/DataTreeView";
+import SearchLayout from "@/components/layouts/SearchLayout";
 import ProfileCard from "@/components/stats/ProfileCard";
 import { stringOrNull } from "@/utils/misc";
 import { dateLastPlayed } from "@/utils/stats/profile";
@@ -81,6 +82,10 @@ const Report: NextPageWithLayout = () => {
   }
 
   return <div>Error</div>;
+};
+
+Report.getLayout = (page) => {
+  return <SearchLayout>{page}</SearchLayout>;
 };
 
 export default Report;

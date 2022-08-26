@@ -10,6 +10,7 @@ import {
   HoverCard,
   Stack,
   Text,
+  Tooltip,
 } from "@mantine/core";
 import { DateTime } from "luxon";
 import _ from "underscore";
@@ -96,9 +97,11 @@ const ProfileCard: React.FC<{
       <div className="flex items-center gap-2">
         <div className="text-xl">{profile.userInfo.displayName}</div>
         <PlatformIcon size={20} />
-        <Badge>
-          <span>Last seen {lastSeen()}</span>
-        </Badge>
+        <Tooltip position="bottom" label={profile.dateLastPlayed}>
+          <Badge>
+            <span>Last seen {lastSeen()}</span>
+          </Badge>
+        </Tooltip>
       </div>
       <div className="mt-4 flex gap-4">
         {charactersData.map((char) => char)}

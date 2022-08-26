@@ -1,18 +1,8 @@
-import { trpc } from "@/utils/trpc";
-import {
-  ActionIcon,
-  Alert,
-  Button,
-  Code,
-  SegmentedControl,
-  TextInput,
-  useMantineTheme,
-} from "@mantine/core";
-import { IconAlertCircle, IconSearch } from "@tabler/icons";
+import SearchLayout from "@/components/layouts/SearchLayout";
+import { Alert, Button, Code } from "@mantine/core";
+import { IconAlertCircle } from "@tabler/icons";
 import Link from "next/link";
-import { useRouter } from "next/router";
 import { useState } from "react";
-import { FaPlaystation, FaSteam, FaXbox } from "react-icons/fa";
 import { NextPageWithLayout } from "./_app";
 
 const features = [
@@ -25,68 +15,9 @@ const features = [
 
 const Home: NextPageWithLayout = () => {
   const [feature, setFeature] = useState("Radar Charts");
-  const [account, setAccount] = useState("");
-  const [membershipType, setMembershipType] = useState("1");
-
-  const searchMutation = trpc.useMutation("destiny.search");
-
-  const theme = useMantineTheme();
-  const router = useRouter();
-
-  const handleSearch = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    if (account) {
-      const [displayName, displayNameCode] = account.split("#");
-
-      if (displayName && displayNameCode) {
-        const { json } = await searchMutation.mutateAsync({
-          displayNameCode,
-          displayName,
-          membershipType,
-        });
-
-        if (json.Response.length > 0) {
-          router.push(
-            `/stats/${membershipType}/${json.Response[0].membershipId}`
-          );
-        }
-      }
-    }
-  };
-
-  const rightSection = (
-    <div style={{ display: "flex", gap: "5px", alignItems: "center" }}>
-      <SegmentedControl
-        size="xs"
-        onChange={setMembershipType}
-        value={membershipType}
-        data={[
-          { label: <FaXbox size={18} />, value: "1" },
-          { label: <FaPlaystation size={18} />, value: "2" },
-          { label: <FaSteam size={18} />, value: "3" },
-        ]}
-      />
-      <ActionIcon type="submit">
-        <IconSearch color={theme.colors.gray[4]} size={16} />
-      </ActionIcon>
-    </div>
-  );
 
   return (
     <>
-      <div className="w-full rounded-md mt-6 sm:mt-0">
-        <form onSubmit={handleSearch}>
-          <TextInput
-            onChange={(e) => setAccount(e.target.value)}
-            radius={"sm"}
-            size="md"
-            placeholder="Cameron#0370"
-            rightSectionWidth={145}
-            rightSection={rightSection}
-          />
-        </form>
-      </div>
       <div>
         <Alert
           icon={<IconAlertCircle size={18} />}
@@ -100,9 +31,11 @@ const Home: NextPageWithLayout = () => {
             </Code>{" "}
             or press the button below.
           </p>
-          <Button className="mb-1" color="indigo" variant="outline" size="xs">
-            <Link href={"/stats/3/4611686018480403495"}>Search</Link>
-          </Button>
+          <Link href={"/stats/3/4611686018480403495"}>
+            <Button className="mb-1" color="indigo" variant="outline" size="xs">
+              Search
+            </Button>
+          </Link>
         </Alert>
       </div>
       <div className="drop-shadow-md bg-black bg-center bg-cover bg-[url('/hero-wallpaper.jpg')] w-full rounded-md">
@@ -144,6 +77,10 @@ const Home: NextPageWithLayout = () => {
       </div>
     </>
   );
+};
+
+Home.getLayout = (page) => {
+  return <SearchLayout>{page}</SearchLayout>;
 };
 
 export default Home;
