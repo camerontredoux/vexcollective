@@ -54,7 +54,7 @@ const Report: NextPageWithLayout = () => {
     if (profile.ErrorCode === 1) {
       return (
         <>
-          <div className="relative z-[999] mt-6 sm:mt-0 drop-shadow-md bg-gray-mantine-light border border-gray-mantine-dark rounded-md">
+          <div className="relative z-10 mt-6 sm:mt-0 drop-shadow-md bg-gray-mantine-light border border-gray-mantine-dark rounded-md">
             <div className="backdrop-brightness-75 p-8 rounded-md">
               <ProfileCard
                 profile={profile.Response.profile.data}

@@ -5,11 +5,13 @@ import {
   Anchor,
   Avatar,
   BackgroundImage,
+  Badge,
   Group,
   HoverCard,
   Stack,
   Text,
 } from "@mantine/core";
+import { DateTime } from "luxon";
 import _ from "underscore";
 
 const ProfileCard: React.FC<{
@@ -80,11 +82,23 @@ const ProfileCard: React.FC<{
       profile.userInfo.membershipType as keyof typeof MembershipTypeIcon
     ];
 
+  const lastSeen = () => {
+    const lastSeen = DateTime.fromISO(profile.dateLastPlayed);
+    const now = DateTime.now();
+
+    const diff = now.diff(lastSeen);
+
+    return DateTime.now().minus(diff).toRelative();
+  };
+
   return (
     <>
       <div className="flex items-center gap-2">
         <div className="text-xl">{profile.userInfo.displayName}</div>
         <PlatformIcon size={20} />
+        <Badge>
+          <span>Last seen {lastSeen()}</span>
+        </Badge>
       </div>
       <div className="mt-4 flex gap-4">
         {charactersData.map((char) => char)}

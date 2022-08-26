@@ -21,6 +21,7 @@
     "@trpc/server": "^9.26.2",
     "bungie-api-ts": "^4.18.0",
     "framer-motion": "^6.5.1",
+    "luxon": "^3.0.1",
     "next": "12.2.3",
     "openapi3-ts": "^3.0.0",
     "react": "18.2.0",
@@ -34,6 +35,7 @@
     "zustand": "^4.0.0"
   },
   "devDependencies": {
+    "@types/luxon": "^3.0.0",
     "@types/node": "18.0.0",
     "@types/react": "18.0.14",
     "@types/react-dom": "18.0.5",
