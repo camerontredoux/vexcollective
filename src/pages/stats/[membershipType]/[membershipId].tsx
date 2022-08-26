@@ -25,7 +25,7 @@ const Report: NextPageWithLayout = () => {
     {
       enabled: Boolean(membershipId && membershipType),
       refetchOnWindowFocus: false,
-      refetchIntervalInBackground: true,
+      retry: false,
     }
   );
 
@@ -77,10 +77,17 @@ const Report: NextPageWithLayout = () => {
       );
     }
 
-    return <div className="flex justify-center">Error fetching account</div>;
+    return (
+      <div className="flex justify-center text-red-400">
+        Bungie.net Server Error - Bungie Services are potentially offline, or
+        account does not exist.
+      </div>
+    );
   }
 
-  return null;
+  return (
+    <div>Bungie.net Server Error - Bungie Services are potentially offline</div>
+  );
 };
 
 Report.getLayout = (page) => {
