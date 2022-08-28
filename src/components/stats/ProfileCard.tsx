@@ -29,8 +29,6 @@ const ProfileCard: React.FC<{
     )[]
   >;
 }> = ({ profile, characters, manifest }) => {
-  console.log(manifest);
-
   const charactersData: React.ReactNode[] = _.map(characters, (char) => {
     if (manifest) {
       return (

@@ -2,7 +2,7 @@ import Bungie from "@/utils/bungie";
 import z from "zod";
 import { createRouter } from "./context";
 
-const BungieAPI = new Bungie(process.env.X_API_KEY!);
+export const BungieAPI = new Bungie(process.env.X_API_KEY!);
 
 import {
   getDestinyManifest,

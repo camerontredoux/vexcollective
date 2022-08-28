@@ -1,16 +1,17 @@
 // src/pages/_app.tsx
 import Layout from "@/components/layouts/Layout";
-import { MantineProvider } from "@mantine/core";
+import { Loader, MantineProvider } from "@mantine/core";
 import { withTRPC } from "@trpc/next";
 import { NextPage } from "next";
 import { AppProps } from "next/app";
 import Head from "next/head";
-import { ReactElement, ReactNode } from "react";
+import Router from "next/router";
+import { ReactElement, ReactNode, useEffect, useState } from "react";
 import { AppRouter } from "src/server/router";
 import superjson from "superjson";
 import "../styles/globals.css";
 
-export type NextPageWithLayout = NextPage & {
+export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement) => ReactNode;
 };
 
@@ -20,6 +21,25 @@ type AppPropsWithLayout = AppProps & {
 
 function MyApp({ Component, pageProps }: AppPropsWithLayout) {
   const getLayout = Component.getLayout ?? ((page: ReactElement) => page);
+  const [loading, setLoading] = useState(false);
+  useEffect(() => {
+    const start = () => {
+      console.log("start");
+      setLoading(true);
+    };
+    const end = () => {
+      console.log("findished");
+      setLoading(false);
+    };
+    Router.events.on("routeChangeStart", start);
+    Router.events.on("routeChangeComplete", end);
+    Router.events.on("routeChangeError", end);
+    return () => {
+      Router.events.off("routeChangeStart", start);
+      Router.events.off("routeChangeComplete", end);
+      Router.events.off("routeChangeError", end);
+    };
+  }, []);
 
   return (
     <MantineProvider
@@ -33,7 +53,15 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
       <Head>
         <title>Vex Collective</title>
       </Head>
-      <Layout>{getLayout(<Component {...pageProps} />)}</Layout>
+      <Layout>
+        {loading ? (
+          <div className="mt-6 sm:mt-0 flex justify-center">
+            <Loader variant="dots" />
+          </div>
+        ) : (
+          getLayout(<Component {...pageProps} />)
+        )}
+      </Layout>
     </MantineProvider>
   );
 }
