@@ -4,6 +4,7 @@ import ProfileCard from "@/components/stats/ProfileCard";
 import { stringOrNull } from "@/utils/misc";
 import { trpc } from "@/utils/trpc";
 import { Button, Collapse, Loader } from "@mantine/core";
+import { DestinyManifestSlice } from "bungie-api-ts/destiny2/manifest";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { NextPageWithLayout } from "../../_app";
@@ -17,7 +18,14 @@ const Report: NextPageWithLayout = () => {
   const [profile, setProfile] = useState<any | null>(null);
   const [collapsed, setCollapsed] = useState(false);
 
-  const [manifest, setManifest] = useState<any | null>(null);
+  const [manifest, setManifest] = useState<DestinyManifestSlice<
+    (
+      | "DestinyRaceDefinition"
+      | "DestinyClassDefinition"
+      | "DestinyStatDefinition"
+      | "DestinyRecordDefinition"
+    )[]
+  > | null>(null);
 
   const profileQuery = trpc.useQuery(
     ["destiny.profile", { membershipId, membershipType }],
@@ -62,7 +70,7 @@ const Report: NextPageWithLayout = () => {
               <ProfileCard
                 profile={profile.Response.profile.data}
                 characters={profile.Response.characters.data}
-                manifest={manifest.Response}
+                manifest={manifest}
               />
             </div>
           </div>

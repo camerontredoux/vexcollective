@@ -11,6 +11,7 @@ import {
   Text,
   Tooltip,
 } from "@mantine/core";
+import { DestinyManifestSlice } from "bungie-api-ts/destiny2/manifest";
 import { DateTime, Duration } from "luxon";
 import { GiDiamonds } from "react-icons/gi";
 import _ from "underscore";
@@ -19,8 +20,17 @@ import DataTreeView from "../DataTreeView";
 const ProfileCard: React.FC<{
   profile: any;
   characters: any;
-  manifest: any;
+  manifest: DestinyManifestSlice<
+    (
+      | "DestinyRaceDefinition"
+      | "DestinyClassDefinition"
+      | "DestinyStatDefinition"
+      | "DestinyRecordDefinition"
+    )[]
+  >;
 }> = ({ profile, characters, manifest }) => {
+  console.log(manifest);
+
   const charactersData: React.ReactNode[] = _.map(characters, (char) => {
     if (manifest) {
       return (
