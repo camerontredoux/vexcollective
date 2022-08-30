@@ -5,10 +5,12 @@ import {
   TextInput,
   useMantineTheme,
 } from "@mantine/core";
+import { FaPlaystation } from "@react-icons/all-files/fa/FaPlaystation";
+import { FaSteam } from "@react-icons/all-files/fa/FaSteam";
+import { FaXbox } from "@react-icons/all-files/fa/FaXbox";
 import { IconSend } from "@tabler/icons";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
-import { FaPlaystation, FaSteam, FaXbox } from "react-icons/fa";
 
 const SearchLayout: React.FC<{ children: React.ReactElement }> = ({
   children,

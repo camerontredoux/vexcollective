@@ -1,10 +1,9 @@
 import DataTreeView from "@/components/DataTreeView";
 import DataLayout from "@/components/layouts/DataLayout";
-import { getParamType, PathDefinitions } from "@/utils/endpoints";
+import { PathDefinitions } from "@/utils/endpoints";
 import { useDataStore } from "@/utils/stores";
 import { trpc } from "@/utils/trpc";
-import { ActionIcon, Collapse, Loader, TextInput } from "@mantine/core";
-import { useDebouncedValue } from "@mantine/hooks";
+import { ActionIcon, Loader } from "@mantine/core";
 import {
   Icon3dCubeSphere,
   IconChevronDown,
@@ -12,11 +11,21 @@ import {
   IconSend,
 } from "@tabler/icons";
 import { AnimatePresence, motion } from "framer-motion";
+import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
-import { ParameterObject, SchemaObject } from "openapi3-ts";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import _ from "underscore";
 import { NextPageWithLayout } from "../_app";
+
+const ParameterInput = dynamic(
+  () => import("@/components/data/ParameterInput"),
+  { ssr: false }
+);
+
+const RequestBodyInput = dynamic(
+  () => import("@/components/data/RequestBodyInput"),
+  { ssr: false }
+);
 
 const Endpoint: NextPageWithLayout = () => {
   const [hideDescription, setHideDescription] = useState(false);
@@ -191,90 +200,6 @@ const Endpoint: NextPageWithLayout = () => {
         <DataTreeView data={data} />
       ) : null}
     </>
-  );
-};
-
-const ParameterInput: React.FC<{
-  param: ParameterObject;
-  setParams: Dispatch<SetStateAction<{ [key: string]: string } | null>>;
-  setQueries: Dispatch<SetStateAction<{ [key: string]: string } | null>>;
-}> = ({ param, setParams, setQueries }) => {
-  const [opened, setOpened] = useState(false);
-  const [value, setValue] = useState("");
-  const [debounced] = useDebouncedValue(value, 200);
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setValue(e.target.value);
-  };
-
-  useEffect(() => {
-    if (param.in === "path") {
-      setParams((old: any) => ({ ...old, [param.name]: debounced }));
-    } else {
-      setQueries((old: any) => ({ ...old, [param.name]: debounced }));
-    }
-  }, [debounced, param, setParams, setQueries]);
-
-  return (
-    <div className="flex flex-col gap-2 w-full">
-      <TextInput
-        rightSection={
-          <ActionIcon onClick={() => setOpened((o) => !o)}>
-            <Icon3dCubeSphere size={18} strokeWidth={1.5} />
-          </ActionIcon>
-        }
-        onChange={handleChange}
-        required={param.required}
-        label={param.name}
-        placeholder={getParamType(param)}
-      />
-      <Collapse in={opened}>
-        <div className="text-start text-sm">{param.description}</div>
-      </Collapse>
-    </div>
-  );
-};
-
-const RequestBodyInput: React.FC<{
-  param: [string, SchemaObject];
-  setBody: Dispatch<SetStateAction<{ [key: string]: string } | null>>;
-}> = ({ param, setBody }) => {
-  const [opened, setOpened] = useState(false);
-  const [value, setValue] = useState("");
-  const [debounced] = useDebouncedValue(value, 200);
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setValue(e.target.value);
-  };
-
-  useEffect(() => {
-    setBody((old: any) => ({ ...old, [param[0]]: debounced }));
-  }, [debounced, setBody, param]);
-
-  const name = param[0];
-  const schema = param[1];
-
-  return (
-    <div className="flex flex-col gap-2 w-full">
-      <TextInput
-        rightSection={
-          schema.description && (
-            <ActionIcon onClick={() => setOpened((o) => !o)}>
-              <Icon3dCubeSphere size={18} strokeWidth={1.5} />
-            </ActionIcon>
-          )
-        }
-        onChange={handleChange}
-        required={schema.required ? true : false}
-        label={name}
-        placeholder={schema.type}
-      />
-      {schema.description && (
-        <Collapse in={opened}>
-          <div className="text-start text-sm">{schema.description}</div>
-        </Collapse>
-      )}
-    </div>
   );
 };
 

@@ -1,9 +1,9 @@
 import DataTreeView from "@/components/DataTreeView";
 import SearchLayout from "@/components/layouts/SearchLayout";
-import ProfileCard from "@/components/stats/ProfileCard";
 import { BungieAPI } from "@/server/router/destiny";
 import { Button, Collapse } from "@mantine/core";
 import { GetServerSideProps, GetServerSidePropsContext } from "next";
+import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { NextPageWithLayout } from "../../_app";
@@ -11,6 +11,10 @@ import { NextPageWithLayout } from "../../_app";
 interface ReportProps {
   profile: any;
 }
+
+const ProfileCard = dynamic(() => import("@/components/stats/ProfileCard"), {
+  ssr: false,
+});
 
 const Report: NextPageWithLayout<ReportProps> = ({ profile }) => {
   const router = useRouter();
@@ -55,7 +59,8 @@ export const getServerSideProps: GetServerSideProps = async (
   const { membershipType, destinyMembershipId } = ctx.query;
 
   const data = await BungieAPI.fetchAPI(
-    `/Destiny2/${membershipType}/Profile/${destinyMembershipId}?components=100,104,200,202,205,305,306,900,1100`,
+    // `/Destiny2/${membershipType}/Profile/${destinyMembershipId}?components=100,104,200,202,205,305,306,900,1100`,
+    `/Destiny2/${membershipType}/Profile/${destinyMembershipId}?components=100,200`,
     false
   );
 

@@ -1,4 +1,8 @@
-import { env } from "./src/env/server.mjs";
+import NextBundleAnalyzer from "@next/bundle-analyzer";
+
+const withBundleAnalyzer = NextBundleAnalyzer({
+  enabled: process.env.ANALYZE === "true",
+});
 
 /**
  * Don't be scared of the generics here.
@@ -12,7 +16,9 @@ function defineNextConfig(config) {
   return config;
 }
 
-export default defineNextConfig({
-  reactStrictMode: true,
-  swcMinify: true,
-});
+export default withBundleAnalyzer(
+  defineNextConfig({
+    reactStrictMode: true,
+    swcMinify: true,
+  })
+);
