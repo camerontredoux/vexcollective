@@ -8,7 +8,7 @@ import { httpClient } from "./misc";
 
 interface IManifest {
   hash: string;
-  value: any;
+  [key: string]: any;
 }
 
 interface IManifestVersion {
@@ -16,18 +16,18 @@ interface IManifestVersion {
 }
 
 export class Manifest extends Dexie {
-  stats!: Table<IManifest, string>;
-  records!: Table<IManifest, string>;
+  stat!: Table<IManifest, string>;
+  record!: Table<IManifest, string>;
   race!: Table<IManifest, string>;
-  gender!: Table<IManifest, string>;
+  class!: Table<IManifest, string>;
 
   constructor() {
     super("Manifest");
     this.version(1).stores({
-      stats: "hash",
-      records: "hash",
+      stat: "hash",
+      record: "hash",
       race: "hash",
-      gender: "hash",
+      class: "hash",
     });
   }
 }
@@ -44,14 +44,11 @@ export class ManifestVersion extends Dexie {
 }
 
 export const manifestDb = new Manifest();
-const manifestVersion = new ManifestVersion();
 
 manifestDb.on("ready", async () => {
   const manifest = (await getDestinyManifest(httpClient)).Response;
 
-  const version = manifest.version;
-
-  return manifestDb.stats.count((count) => {
+  return manifestDb.stat.count((count) => {
     if (count > 0) {
       console.log("Manifest exists for stats");
     } else {
@@ -78,12 +75,12 @@ manifestDb.on("ready", async () => {
           ).map((key) => {
             return {
               hash: key,
-              value:
-                statsDefinitions.DestinyStatDefinition[+key]?.displayProperties,
+              ...statsDefinitions.DestinyStatDefinition[+key]
+                ?.displayProperties,
             };
           });
 
-          return manifestDb.stats.bulkAdd(stats);
+          return manifestDb.stat.bulkAdd(stats);
         })
         .then(() => {
           console.log("Done populating manifest database");

@@ -21,6 +21,7 @@
     "@trpc/server": "^9.26.2",
     "bungie-api-ts": "^4.18.0",
     "dexie": "^3.2.2",
+    "dexie-react-hooks": "^1.1.1",
     "framer-motion": "^6.5.1",
     "luxon": "^3.0.1",
     "next": "12.2.3",

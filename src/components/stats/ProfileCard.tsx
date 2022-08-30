@@ -1,6 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 
 import { MembershipTypeIcon } from "@/utils/stats/profile";
+import { useManifestStore } from "@/utils/stores";
 import {
   Avatar,
   BackgroundImage,
@@ -11,8 +12,8 @@ import {
   Text,
   Tooltip,
 } from "@mantine/core";
-import { DestinyManifestSlice } from "bungie-api-ts/destiny2/manifest";
 import { DateTime, Duration } from "luxon";
+import { useEffect } from "react";
 import { GiDiamonds } from "react-icons/gi";
 import _ from "underscore";
 import DataTreeView from "../DataTreeView";
@@ -20,15 +21,15 @@ import DataTreeView from "../DataTreeView";
 const ProfileCard: React.FC<{
   profile: any;
   characters: any;
-  manifest: DestinyManifestSlice<
-    (
-      | "DestinyRaceDefinition"
-      | "DestinyClassDefinition"
-      | "DestinyStatDefinition"
-      | "DestinyRecordDefinition"
-    )[]
-  >;
-}> = ({ profile, characters, manifest }) => {
+}> = ({ profile, characters }) => {
+  const manifest = useManifestStore((state) => state.manifest);
+
+  useEffect(() => {
+    if (manifest) {
+      console.log(manifest);
+    }
+  }, [manifest]);
+
   const charactersData: React.ReactNode[] = _.map(characters, (char) => {
     if (manifest) {
       return (

@@ -1,9 +1,11 @@
 import SearchLayout from "@/components/layouts/SearchLayout";
 import { manifestDb } from "@/utils/indexeddb";
+import { useManifestStore } from "@/utils/stores";
 import { Alert, Button } from "@mantine/core";
 import { IconAlertCircle } from "@tabler/icons";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import _ from "underscore";
 import { NextPageWithLayout } from "./_app";
 
 const features = [
@@ -17,19 +19,24 @@ const features = [
 const Home: NextPageWithLayout = () => {
   const [feature, setFeature] = useState("Radar Charts");
 
+  const setManifest = useManifestStore((state) => state.setManifest);
+
   useEffect(() => {
-    async function buildManifestDB() {
+    (async () => {
       await manifestDb.open().catch((err) => console.error(err.stack || err));
 
-      // const partialManifest = await getDestinyManifestSlice(httpClient, {
-      //   destinyManifest: manifest,
-      //   language: "en",
-      //   tableNames: ["DestinyClassDefinition"],
-      // });
-    }
+      if (manifestDb.stat) {
+        const stat = await manifestDb.stat.toArray();
 
-    buildManifestDB();
-  }, []);
+        const statMap = _.reduce(stat, (map, obj) => {
+          map[obj.hash] = obj;
+          return map;
+        });
+
+        setManifest(statMap);
+      }
+    })();
+  }, [setManifest]);
 
   return (
     <>

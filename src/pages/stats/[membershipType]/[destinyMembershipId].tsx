@@ -2,12 +2,7 @@ import DataTreeView from "@/components/DataTreeView";
 import SearchLayout from "@/components/layouts/SearchLayout";
 import ProfileCard from "@/components/stats/ProfileCard";
 import { BungieAPI } from "@/server/router/destiny";
-import { httpClient } from "@/utils/misc";
 import { Button, Collapse } from "@mantine/core";
-import {
-  getDestinyManifest,
-  getDestinyManifestSlice,
-} from "bungie-api-ts/destiny2";
 import { GetServerSideProps, GetServerSidePropsContext } from "next";
 import { useRouter } from "next/router";
 import { useState } from "react";
@@ -15,10 +10,9 @@ import { NextPageWithLayout } from "../../_app";
 
 interface ReportProps {
   profile: any;
-  manifest: any;
 }
 
-const Report: NextPageWithLayout<ReportProps> = ({ manifest, profile }) => {
+const Report: NextPageWithLayout<ReportProps> = ({ profile }) => {
   const router = useRouter();
   const [collapsed, setCollapsed] = useState(true);
 
@@ -30,7 +24,6 @@ const Report: NextPageWithLayout<ReportProps> = ({ manifest, profile }) => {
             <ProfileCard
               profile={profile.Response.profile.data}
               characters={profile.Response.characters.data}
-              manifest={manifest}
             />
           </div>
         </div>
@@ -61,19 +54,6 @@ export const getServerSideProps: GetServerSideProps = async (
 ) => {
   const { membershipType, destinyMembershipId } = ctx.query;
 
-  const manifest = (await getDestinyManifest(httpClient)).Response;
-
-  const partialManifest = await getDestinyManifestSlice(httpClient, {
-    destinyManifest: manifest,
-    tableNames: [
-      "DestinyRaceDefinition",
-      "DestinyClassDefinition",
-      "DestinyStatDefinition",
-      "DestinyRecordDefinition",
-    ],
-    language: "en",
-  });
-
   const data = await BungieAPI.fetchAPI(
     `/Destiny2/${membershipType}/Profile/${destinyMembershipId}?components=100,104,200,202,205,305,306,900,1100`,
     false
@@ -84,7 +64,6 @@ export const getServerSideProps: GetServerSideProps = async (
   return {
     props: {
       profile: json,
-      manifest: partialManifest,
     },
   };
 };

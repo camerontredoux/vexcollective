@@ -13,3 +13,13 @@ export const useDataStore = create<DataState>()((set) => ({
   setData: (data) => set((state) => ({ ...state, data })),
   setValue: (value) => set((state) => ({ ...state, value })),
 }));
+
+interface ManifestState {
+  manifest: any | null;
+  setManifest: (manifest: any) => void;
+}
+
+export const useManifestStore = create<ManifestState>()((set) => ({
+  manifest: null,
+  setManifest: (manifest) => set((state) => ({ ...state, manifest })),
+}));
