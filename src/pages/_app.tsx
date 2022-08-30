@@ -64,8 +64,11 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
       </Head>
       <Layout>
         {pageLoading ? (
-          <div className="flex justify-center">
+          <div className="mt:6 sm:mt-0 flex justify-center items-center flex-col gap-3">
             <Loader variant="oval" />
+            <div className="text-gray-400">
+              Note - This could take a while to load from Bungie
+            </div>
           </div>
         ) : (
           getLayout(<Component {...pageProps} />)

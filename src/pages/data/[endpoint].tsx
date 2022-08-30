@@ -197,7 +197,7 @@ const Endpoint: NextPageWithLayout = () => {
           <Loader />
         </div>
       ) : data ? (
-        <DataTreeView data={data} />
+        <DataTreeView data={data} expand={true} />
       ) : null}
     </>
   );

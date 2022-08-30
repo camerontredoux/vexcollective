@@ -57,7 +57,7 @@ const ProfileCard: React.FC<{
               <Character key={idx} char={char} manifest={manifest} />
             ))}
         </div>
-        {<DataTreeView data={manifest} />}
+        {<DataTreeView data={manifest} expand={false} />}
       </>
     );
   }

@@ -3,6 +3,7 @@ import { JSONTree, StylingValue } from "react-json-tree";
 
 interface DataTreeViewProps {
   data: any;
+  expand: boolean;
 }
 
 const theme = {
@@ -32,7 +33,7 @@ const getLabelStyle: StylingValue = ({ style }) => ({
   },
 });
 
-const DataTreeView: React.FC<DataTreeViewProps> = ({ data }) => {
+const DataTreeView: React.FC<DataTreeViewProps> = ({ data, expand }) => {
   return (
     <div className="rounded-sm overflow-y-auto font-ubuntu flex-1">
       <JSONTree
@@ -42,7 +43,9 @@ const DataTreeView: React.FC<DataTreeViewProps> = ({ data }) => {
           nestedNodeLabel: getLabelStyle,
         }}
         hideRoot={true}
-        shouldExpandNode={(_, __, level) => (level === 1 ? true : false)}
+        shouldExpandNode={(_, __, level) =>
+          !expand ? false : level === 1 ? true : false
+        }
         invertTheme={false}
         valueRenderer={(raw) => {
           if (typeof raw === "string") {
