@@ -2,13 +2,12 @@
 import Layout from "@/components/layouts/Layout";
 import { manifestDb } from "@/utils/indexeddb";
 import { useManifestStore } from "@/utils/stores";
-import { Loader, MantineProvider } from "@mantine/core";
+import { MantineProvider } from "@mantine/core";
 import { withTRPC } from "@trpc/next";
 import { NextPage } from "next";
 import { AppProps } from "next/app";
 import Head from "next/head";
-import Router from "next/router";
-import { ReactElement, ReactNode, useEffect, useState } from "react";
+import { ReactElement, ReactNode, useEffect } from "react";
 import { AppRouter } from "src/server/router";
 import superjson from "superjson";
 import "../styles/globals.css";
@@ -25,7 +24,6 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
   const getLayout = Component.getLayout ?? ((page: ReactElement) => page);
   const setManifest = useManifestStore((state) => state.setManifest);
 
-  const [loading, setLoading] = useState(false);
   useEffect(() => {
     (async () => {
       await manifestDb.open().catch((err) => console.error(err.stack || err));
@@ -36,22 +34,7 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
         setManifest(manifest[0]?.definitions);
       }
     })();
-
-    const start = () => {
-      setLoading(true);
-    };
-    const end = () => {
-      setLoading(false);
-    };
-    Router.events.on("routeChangeStart", start);
-    Router.events.on("routeChangeComplete", end);
-    Router.events.on("routeChangeError", end);
-    return () => {
-      Router.events.off("routeChangeStart", start);
-      Router.events.off("routeChangeComplete", end);
-      Router.events.off("routeChangeError", end);
-    };
-  }, []);
+  }, [setManifest]);
 
   return (
     <MantineProvider
@@ -65,15 +48,7 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
       <Head>
         <title>Vex Collective</title>
       </Head>
-      <Layout>
-        {loading ? (
-          <div className="mt-6 sm:mt-0 flex justify-center">
-            <Loader variant="dots" />
-          </div>
-        ) : (
-          getLayout(<Component {...pageProps} />)
-        )}
-      </Layout>
+      <Layout>{getLayout(<Component {...pageProps} />)}</Layout>
     </MantineProvider>
   );
 }

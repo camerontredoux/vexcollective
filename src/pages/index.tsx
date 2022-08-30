@@ -16,27 +16,6 @@ const features = [
 const Home: NextPageWithLayout = () => {
   const [feature, setFeature] = useState("Radar Charts");
 
-  // const setManifest = useManifestStore((state) => state.setManifest);
-
-  // useEffect(() => {
-  //   (async () => {
-  //     await manifestDbOld
-  //       .open()
-  //       .catch((err) => console.error(err.stack || err));
-
-  //     if (manifestDbOld.stat) {
-  //       const stat = await manifestDbOld.stat.toArray();
-
-  //       const statMap = _.reduce(stat, (map, obj) => {
-  //         map[obj.hash] = obj;
-  //         return map;
-  //       });
-
-  //       setManifest(statMap);
-  //     }
-  //   })();
-  // }, [setManifest]);
-
   return (
     <>
       <div>
@@ -117,14 +96,5 @@ const Home: NextPageWithLayout = () => {
 Home.getLayout = (page) => {
   return <SearchLayout>{page}</SearchLayout>;
 };
-
-// export const getServerSideProps: GetServerSideProps = async (
-//   ctx: GetServerSidePropsContext
-// ) => {
-
-//   return {
-//     props: {},
-//   };
-// };
 
 export default Home;

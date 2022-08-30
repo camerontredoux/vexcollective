@@ -19,7 +19,7 @@ export default createNextApiHandler({
       const FIVE_MINUTES = 60 * 5;
       return {
         headers: {
-          "cache-control": `s-maxage=1, stale-while-revalidate=${FIVE_MINUTES}`,
+          "cache-control": `s-maxage=60, stale-while-revalidate=${FIVE_MINUTES}`,
         },
       };
     }

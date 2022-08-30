@@ -1,5 +1,3 @@
-/* eslint-disable @next/next/no-img-element */
-
 import { MembershipTypeIcon } from "@/utils/stats/profile";
 import { useManifestStore } from "@/utils/stores";
 import { Badge, Loader, Tooltip } from "@mantine/core";
