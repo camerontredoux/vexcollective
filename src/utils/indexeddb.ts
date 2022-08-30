@@ -1,10 +1,27 @@
 import {
+  AllDestinyManifestComponents,
   DestinyManifest,
   getDestinyManifest,
   getDestinyManifestSlice,
 } from "bungie-api-ts/destiny2";
 import Dexie, { Table } from "dexie";
 import { httpClient } from "./misc";
+
+interface IManifestDb {
+  version: string;
+  definitions: AllDestinyManifestComponents;
+}
+
+export class ManifestDb extends Dexie {
+  manifest!: Table<IManifestDb, string>;
+
+  constructor() {
+    super("ManifestDb");
+    this.version(1).stores({
+      manifest: "version",
+    });
+  }
+}
 
 interface IManifest {
   hash: string;
