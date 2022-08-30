@@ -1,4 +1,5 @@
 import create from "zustand";
+import { ManifestDefinitions } from "./indexeddb";
 
 interface DataState {
   data: any | null;
@@ -15,7 +16,7 @@ export const useDataStore = create<DataState>()((set) => ({
 }));
 
 interface ManifestState {
-  manifest: any | null;
+  manifest: ManifestDefinitions | null;
   setManifest: (manifest: any) => void;
 }
 

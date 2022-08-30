@@ -1,11 +1,8 @@
 import SearchLayout from "@/components/layouts/SearchLayout";
-import { manifestDb } from "@/utils/indexeddb";
-import { useManifestStore } from "@/utils/stores";
 import { Alert, Button } from "@mantine/core";
 import { IconAlertCircle } from "@tabler/icons";
 import Link from "next/link";
-import { useEffect, useState } from "react";
-import _ from "underscore";
+import { useState } from "react";
 import { NextPageWithLayout } from "./_app";
 
 const features = [
@@ -19,24 +16,26 @@ const features = [
 const Home: NextPageWithLayout = () => {
   const [feature, setFeature] = useState("Radar Charts");
 
-  const setManifest = useManifestStore((state) => state.setManifest);
+  // const setManifest = useManifestStore((state) => state.setManifest);
 
-  useEffect(() => {
-    (async () => {
-      await manifestDb.open().catch((err) => console.error(err.stack || err));
+  // useEffect(() => {
+  //   (async () => {
+  //     await manifestDbOld
+  //       .open()
+  //       .catch((err) => console.error(err.stack || err));
 
-      if (manifestDb.stat) {
-        const stat = await manifestDb.stat.toArray();
+  //     if (manifestDbOld.stat) {
+  //       const stat = await manifestDbOld.stat.toArray();
 
-        const statMap = _.reduce(stat, (map, obj) => {
-          map[obj.hash] = obj;
-          return map;
-        });
+  //       const statMap = _.reduce(stat, (map, obj) => {
+  //         map[obj.hash] = obj;
+  //         return map;
+  //       });
 
-        setManifest(statMap);
-      }
-    })();
-  }, [setManifest]);
+  //       setManifest(statMap);
+  //     }
+  //   })();
+  // }, [setManifest]);
 
   return (
     <>

@@ -1,15 +1,23 @@
 import {
-  AllDestinyManifestComponents,
-  DestinyManifest,
+  DestinyManifestSlice,
   getDestinyManifest,
   getDestinyManifestSlice,
 } from "bungie-api-ts/destiny2";
 import Dexie, { Table } from "dexie";
 import { httpClient } from "./misc";
 
+export type ManifestDefinitions = DestinyManifestSlice<
+  (
+    | "DestinyStatDefinition"
+    | "DestinyClassDefinition"
+    | "DestinyRecordDefinition"
+    | "DestinyRaceDefinition"
+  )[]
+>;
+
 interface IManifestDb {
   version: string;
-  definitions: AllDestinyManifestComponents;
+  definitions: DestinyManifestSlice<any>;
 }
 
 export class ManifestDb extends Dexie {
@@ -23,85 +31,40 @@ export class ManifestDb extends Dexie {
   }
 }
 
-interface IManifest {
-  hash: string;
-  [key: string]: any;
-}
-
-interface IManifestVersion {
-  manifestVersion: string;
-}
-
-export class Manifest extends Dexie {
-  stat!: Table<IManifest, string>;
-  record!: Table<IManifest, string>;
-  race!: Table<IManifest, string>;
-  class!: Table<IManifest, string>;
-
-  constructor() {
-    super("Manifest");
-    this.version(1).stores({
-      stat: "hash",
-      record: "hash",
-      race: "hash",
-      class: "hash",
-    });
-  }
-}
-
-export class ManifestVersion extends Dexie {
-  manifestVersion!: Table<IManifestVersion, string>;
-
-  constructor() {
-    super("ManifestVersion");
-    this.version(1).stores({
-      manifestVersion: "manifestVersion",
-    });
-  }
-}
-
-export const manifestDb = new Manifest();
+export const manifestDb = new ManifestDb();
 
 manifestDb.on("ready", async () => {
   const manifest = (await getDestinyManifest(httpClient)).Response;
+  const version = manifest.version;
 
-  return manifestDb.stat.count((count) => {
-    if (count > 0) {
-      console.log("Manifest exists for stats");
+  await manifestDb.manifest.get(version).then((m) => {
+    if (m?.version === version) {
+      console.log(`Manifest exists for version ${version}`);
     } else {
       console.log(
-        "Manifest is empty. Populating stats from Destiny Manifest..."
+        `Manifest version ${version} is new. Download manifest from Bungie...`
       );
 
-      return new Promise(async (resolve, reject) => {
-        getDestinyManifest(httpClient)
-          .then((man) => resolve(man.Response))
+      return new Promise<ManifestDefinitions>(async (resolve, reject) => {
+        getDestinyManifestSlice(httpClient, {
+          destinyManifest: manifest,
+          language: "en",
+          tableNames: [
+            "DestinyStatDefinition",
+            "DestinyClassDefinition",
+            "DestinyRecordDefinition",
+            "DestinyRaceDefinition",
+          ],
+        })
+          .then((res) => resolve(res))
           .catch((err) => reject(err));
       })
-        .then(async (data) => {
-          console.log("Received Manifest, pulling stats definitions...");
+        .then((data) => {
+          console.log("Manifest found. Populating database...");
 
-          const statsDefinitions = await getDestinyManifestSlice(httpClient, {
-            destinyManifest: data as DestinyManifest,
-            language: "en",
-            tableNames: ["DestinyStatDefinition"],
-          });
-
-          const stats: IManifest[] = Object.keys(
-            statsDefinitions.DestinyStatDefinition
-          ).map((key) => {
-            return {
-              hash: key,
-              ...statsDefinitions.DestinyStatDefinition[+key]
-                ?.displayProperties,
-            };
-          });
-
-          return manifestDb.stat.bulkAdd(stats);
+          return manifestDb.manifest.add({ version, definitions: data });
         })
-        .then(() => {
-          console.log("Done populating manifest database");
-        });
+        .then(() => console.log("Finished populating database with manifest."));
     }
   });
 });

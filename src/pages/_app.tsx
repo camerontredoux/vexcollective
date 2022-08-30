@@ -1,5 +1,7 @@
 // src/pages/_app.tsx
 import Layout from "@/components/layouts/Layout";
+import { manifestDb } from "@/utils/indexeddb";
+import { useManifestStore } from "@/utils/stores";
 import { Loader, MantineProvider } from "@mantine/core";
 import { withTRPC } from "@trpc/next";
 import { NextPage } from "next";
@@ -21,8 +23,20 @@ type AppPropsWithLayout = AppProps & {
 
 function MyApp({ Component, pageProps }: AppPropsWithLayout) {
   const getLayout = Component.getLayout ?? ((page: ReactElement) => page);
+  const setManifest = useManifestStore((state) => state.setManifest);
+
   const [loading, setLoading] = useState(false);
   useEffect(() => {
+    (async () => {
+      await manifestDb.open().catch((err) => console.error(err.stack || err));
+
+      const manifest = await manifestDb.manifest.toArray();
+
+      if (manifest) {
+        setManifest(manifest[0]?.definitions);
+      }
+    })();
+
     const start = () => {
       setLoading(true);
     };
