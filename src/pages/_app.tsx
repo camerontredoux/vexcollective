@@ -2,12 +2,13 @@
 import Layout from "@/components/layouts/Layout";
 import { manifestDb } from "@/utils/indexeddb";
 import { useManifestStore } from "@/utils/stores";
-import { MantineProvider } from "@mantine/core";
+import { Loader, MantineProvider } from "@mantine/core";
 import { withTRPC } from "@trpc/next";
 import { NextPage } from "next";
 import { AppProps } from "next/app";
 import Head from "next/head";
-import { ReactElement, ReactNode, useEffect } from "react";
+import { useRouter } from "next/router";
+import { ReactElement, ReactNode, useEffect, useState } from "react";
 import { AppRouter } from "src/server/router";
 import superjson from "superjson";
 import "../styles/globals.css";
@@ -23,6 +24,8 @@ type AppPropsWithLayout = AppProps & {
 function MyApp({ Component, pageProps }: AppPropsWithLayout) {
   const getLayout = Component.getLayout ?? ((page: ReactElement) => page);
   const setManifest = useManifestStore((state) => state.setManifest);
+  const [pageLoading, setPageLoading] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
     (async () => {
@@ -34,7 +37,18 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
         setManifest(manifest[0]?.definitions);
       }
     })();
-  }, [setManifest]);
+
+    const handleStart = () => {
+      setPageLoading(true);
+    };
+    const handleComplete = () => {
+      setPageLoading(false);
+    };
+
+    router.events.on("routeChangeStart", handleStart);
+    router.events.on("routeChangeComplete", handleComplete);
+    router.events.on("routeChangeError", handleComplete);
+  }, [setManifest, router.events]);
 
   return (
     <MantineProvider
@@ -48,7 +62,15 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
       <Head>
         <title>Vex Collective</title>
       </Head>
-      <Layout>{getLayout(<Component {...pageProps} />)}</Layout>
+      <Layout>
+        {pageLoading ? (
+          <div className="flex justify-center">
+            <Loader variant="oval" />
+          </div>
+        ) : (
+          getLayout(<Component {...pageProps} />)
+        )}
+      </Layout>
     </MantineProvider>
   );
 }

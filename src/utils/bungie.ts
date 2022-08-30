@@ -11,6 +11,7 @@ export default class Bungie {
     const init: RequestInit = {
       headers: {
         "X-API-Key": this.apiKey,
+        "cache-control": `s-maxage=60, stale-while-revalidate=${60 * 5}`,
       },
     };
 
