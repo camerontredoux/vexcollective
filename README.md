@@ -15,8 +15,6 @@ A collection of data is pulled from the Destiny API and made available for easie
 
 Vex Collective is a tool I created to explore the Destiny API and potentially provide some useful information for myself and anyone else.
 
-<br>
-
 <h1></h1>
 
 ### Features
