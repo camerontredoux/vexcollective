@@ -36,7 +36,7 @@ picture {
   background: #555;
 }
 
-input[type="text"] {
+input[type="search"] {
   -webkit-appearance: none !important;
   border-radius: 4px !important;
 }
