@@ -7,13 +7,15 @@ import Dexie, { Table } from "dexie";
 import _ from "underscore";
 import { httpClient } from "./misc";
 
+const manifestDefinitions = [
+  "DestinyStatDefinition",
+  "DestinyClassDefinition",
+  "DestinyRecordDefinition",
+  "DestinyRaceDefinition",
+] as const;
+
 export type ManifestDefinitions = DestinyManifestSlice<
-  (
-    | "DestinyStatDefinition"
-    | "DestinyClassDefinition"
-    | "DestinyRecordDefinition"
-    | "DestinyRaceDefinition"
-  )[]
+  typeof manifestDefinitions[number][]
 >;
 
 interface IManifestDb {
@@ -59,14 +61,7 @@ manifestDb.on("ready", async () => {
         .then((data) => {
           console.log("Manifest found. Populating database...");
 
-          const requiredDefinitions = [
-            "DestinyStatDefinition",
-            "DestinyClassDefinition",
-            "DestinyRecordDefinition",
-            "DestinyRaceDefinition",
-          ];
-
-          const definitions = _.pick(data, requiredDefinitions);
+          const definitions = _.pick(data, [...manifestDefinitions]);
 
           return manifestDb.manifest.add({
             version: version!,

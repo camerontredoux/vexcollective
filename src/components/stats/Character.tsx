@@ -1,5 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 
+import { ManifestDefinitions } from "@/utils/indexeddb";
 import {
   Avatar,
   BackgroundImage,
@@ -11,7 +12,7 @@ import {
 import { GiDiamonds } from "@react-icons/all-files/gi/GiDiamonds";
 import { Duration } from "luxon";
 
-const Character: React.FC<{ char: any; manifest: any }> = ({
+const Character: React.FC<{ char: any; manifest: ManifestDefinitions }> = ({
   char,
   manifest,
 }) => {

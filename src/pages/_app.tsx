@@ -25,11 +25,15 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
   const getLayout = Component.getLayout ?? ((page: ReactElement) => page);
   const setManifest = useManifestStore((state) => state.setManifest);
   const [pageLoading, setPageLoading] = useState(false);
+  const [manifestLoading, setManifestLoading] = useState(true);
   const router = useRouter();
 
   useEffect(() => {
     (async () => {
-      await manifestDb.open().catch((err) => console.error(err.stack || err));
+      manifestDb
+        .open()
+        .catch((err) => console.error(err.stack || err))
+        .then(() => setManifestLoading(false));
 
       const manifest = await manifestDb.manifest.toArray();
 
@@ -49,6 +53,21 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
     router.events.on("routeChangeComplete", handleComplete);
     router.events.on("routeChangeError", handleComplete);
   }, [setManifest, router.events]);
+
+  if (manifestLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="flex flex-col items-center justify-center gap-2">
+          <h1 className="text-lg font-bold text-gray-500">
+            Loading Destiny Manifest
+          </h1>
+          <p className="text-gray-600">
+            This could take a while the first time...
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <MantineProvider

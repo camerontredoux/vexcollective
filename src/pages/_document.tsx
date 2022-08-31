@@ -28,7 +28,7 @@ export default class _Document extends Document {
             content="Visualize statistics for your Destiny 2 characters"
           />
         </Head>
-        <body className="scroll-smooth selection:bg-sky-50 selection:text-blue-400 font-inter bg-zinc-900 text-white max-w-6xl mx-auto">
+        <body className="scroll-smooth selection:bg-sky-50 selection:text-blue-400 font-inter bg-zinc-900 text-white max-w-7xl mx-auto">
           <Main />
           <NextScript />
         </body>
