@@ -23,5 +23,14 @@ Vex Collective is a tool I created to explore the Destiny API and potentially pr
   - Send GET and POST requests to every _Destiny 2_ endpoint from the Bungie API.
   - Explore the Destiny 2 Manifest and get more detailed data about characters, activities, items, etc.
 - Character Statistics
+
   - View your characters equipped inventory and weapon/armor stats.
   - View your accounts Crucible stats and character stats such as time played, earned Triumphs, etc.
+
+- [ ] Add feature to view lore books, similar to in-game
+
+### Todo
+
+- [ ] Make image links clickable in data explorer
+- [ ] Add button to show profile JSON tree in stats page
+- [ ] Redesign stats page to show currently equipped gear

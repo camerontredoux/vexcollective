@@ -96,7 +96,10 @@ const Navbar: React.FC = () => {
         <Drawer
           title={
             <Link href="/">
-              <a className="flex items-center sm:mb-8">
+              <a
+                className="flex items-center sm:mb-8"
+                onClick={() => setOpened(false)}
+              >
                 <Logo width={27} />
                 <h1 className="ml-2 font-bold uppercase text-gray-500">
                   Vex Collective
