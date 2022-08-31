@@ -21,7 +21,7 @@ const Character: React.FC<{ char: any; manifest: any }> = ({
         <HoverCard.Target>
           <Avatar
             className="cursor-pointer"
-            size={"xl"}
+            size={"lg"}
             src={`https://bungie.net${char.emblemPath}`}
           />
         </HoverCard.Target>
