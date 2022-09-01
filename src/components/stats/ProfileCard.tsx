@@ -1,29 +1,34 @@
 import { MembershipTypeIcon } from "@/utils/stats/profile";
 import { useManifestStore } from "@/utils/stores";
-import { Badge, Loader, Tooltip } from "@mantine/core";
-import { DateTime } from "luxon";
-import dynamic from "next/dynamic";
+import {
+  Avatar,
+  Badge,
+  Group,
+  HoverCard,
+  Stack,
+  Text,
+  Tooltip,
+} from "@mantine/core";
+import { GiDiamonds } from "@react-icons/all-files/gi/GiDiamonds";
+import { DateTime, Duration } from "luxon";
 import { useEffect } from "react";
 
 import _ from "underscore";
-import DataTreeView from "../DataTreeView";
 
-const Character = dynamic(() => import("./Character"), {
-  ssr: false,
-  loading: () => <Loader variant="oval" />,
-});
-
-const ProfileCard: React.FC<{
+interface ProfileCardProps {
   profile: any;
   characters: any;
-}> = ({ profile, characters }) => {
-  const manifest = useManifestStore((state) => state.manifest);
+  character: string;
+  setCharacter: (char: string) => void;
+}
 
-  useEffect(() => {
-    if (manifest) {
-      console.log(manifest);
-    }
-  }, [manifest]);
+const ProfileCard: React.FC<ProfileCardProps> = ({
+  profile,
+  characters,
+  character,
+  setCharacter,
+}) => {
+  const manifest = useManifestStore((state) => state.manifest);
 
   const PlatformIcon =
     MembershipTypeIcon[
@@ -38,6 +43,8 @@ const ProfileCard: React.FC<{
 
     return DateTime.now().minus(diff).toRelative();
   };
+
+  useEffect(() => {}, [character]);
 
   if (manifest) {
     return (
@@ -54,10 +61,183 @@ const ProfileCard: React.FC<{
         <div className="mt-4 flex gap-4">
           {manifest &&
             _.map(characters, (char, idx) => (
-              <Character key={idx} char={char} manifest={manifest} />
+              <Avatar
+                style={{
+                  boxShadow: `0px 5px 0px -1px ${
+                    char.characterId === character
+                      ? "rgb(253, 186, 116,0.8)"
+                      : "rgba(0,0,0,0)"
+                  }`,
+                }}
+                key={idx}
+                onClick={() => setCharacter(char.characterId)}
+                className="cursor-pointer"
+                size={"lg"}
+                src={`https://bungie.net${char.emblemPath}`}
+              />
             ))}
         </div>
-        {<DataTreeView data={manifest} expand={false} />}
+        {character && (
+          <>
+            <Group mt={"lg"}>
+              <div
+                className="w-full max-w-[461.58px] rounded-md"
+                style={{
+                  backgroundImage: `url(https://bungie.net${characters[character].emblemBackgroundPath}`,
+                  backgroundSize: "cover",
+                  height: "94px",
+                  overflow: "hidden",
+                }}
+              >
+                <Stack ml={100} mt={30} spacing={5}>
+                  <Text
+                    color={"white"}
+                    size="sm"
+                    weight={700}
+                    sx={{ lineHeight: 1 }}
+                  >
+                    <div className="flex">
+                      {
+                        manifest.DestinyClassDefinition[
+                          characters[character].classHash
+                        ]?.displayProperties.name
+                      }
+                      <span className="flex ml-2 text-orange-300 drop-shadow-md">
+                        <GiDiamonds /> {characters[character].light}
+                      </span>
+                    </div>
+                  </Text>
+                  <Text
+                    color={"white"}
+                    size="xs"
+                    weight={400}
+                    sx={{ lineHeight: 1 }}
+                  >
+                    {manifest.DestinyRaceDefinition
+                      ? manifest.DestinyRaceDefinition[
+                          characters[character].raceHash
+                        ]?.genderedRaceNamesByGenderHash[
+                          characters[character].genderHash
+                        ]
+                      : "Unknown"}
+                  </Text>
+                </Stack>
+              </div>
+            </Group>
+
+            <div className="h-[93.48px] flex flex-col justify-center mt-4 px-3 pb-3 pt-4 bg-gray-mantine-light rounded-md border border-gray-mantine-dark">
+              <Text size="sm" weight={600}>
+                <div className="flex gap-2">
+                  {Object.keys(characters[character].stats).map(
+                    (key, index) => {
+                      if (Number(key) !== 1935470627) {
+                        return (
+                          <HoverCard
+                            key={index}
+                            width={200}
+                            withArrow
+                            closeDelay={50}
+                            openDelay={250}
+                          >
+                            <HoverCard.Target>
+                              <div className="flex gap-1 items-center cursor-pointer">
+                                <img
+                                  width={22}
+                                  alt="test"
+                                  src={`https://bungie.net${
+                                    manifest.DestinyStatDefinition[Number(key)]
+                                      ?.displayProperties.icon
+                                  }`}
+                                />{" "}
+                                {characters[character].stats[key]}
+                              </div>
+                            </HoverCard.Target>
+                            <HoverCard.Dropdown>
+                              <Group>
+                                <Text weight={700}>
+                                  {
+                                    manifest.DestinyStatDefinition[Number(key)]
+                                      ?.displayProperties.name
+                                  }
+                                </Text>
+                                <Text weight={400}>
+                                  {
+                                    manifest.DestinyStatDefinition[Number(key)]
+                                      ?.displayProperties.description
+                                  }
+                                </Text>
+                              </Group>
+                            </HoverCard.Dropdown>
+                          </HoverCard>
+                        );
+                      }
+                    }
+                  )}
+                </div>
+              </Text>
+
+              <Group
+                spacing={"xl"}
+                mt="md"
+                className="whitespace-nowrap flex-nowrap"
+              >
+                {characters[character].titleRecordHash && (
+                  <Text size="sm">
+                    <HoverCard
+                      width={200}
+                      withArrow
+                      closeDelay={50}
+                      openDelay={0}
+                    >
+                      <HoverCard.Target>
+                        <div className="flex gap-1 items-center">
+                          <img
+                            width={20}
+                            alt="test"
+                            src={`https://bungie.net${
+                              manifest.DestinyRecordDefinition[
+                                characters[character].titleRecordHash
+                              ]?.displayProperties.icon
+                            }`}
+                          />
+                          <b className="ml-1">
+                            {
+                              manifest.DestinyRecordDefinition[
+                                characters[character].titleRecordHash
+                              ]?.displayProperties.name
+                            }
+                          </b>
+                        </div>
+                      </HoverCard.Target>
+                      <HoverCard.Dropdown>
+                        <Text weight={400} className="whitespace-normal">
+                          {
+                            manifest.DestinyRecordDefinition[
+                              characters[character].titleRecordHash
+                            ]?.displayProperties.description
+                          }
+                        </Text>
+                      </HoverCard.Dropdown>
+                    </HoverCard>
+                  </Text>
+                )}
+                <Text
+                  size="sm"
+                  sx={{ textOverflow: "ellipsis", overflow: "hidden" }}
+                >
+                  <b>
+                    {Duration.fromObject({
+                      minutes: characters[character].minutesPlayedTotal,
+                    })
+                      .shiftTo("hour", "minutes")
+                      .toHuman()}{" "}
+                    played
+                  </b>
+                </Text>
+              </Group>
+            </div>
+          </>
+        )}
       </>
     );
   }

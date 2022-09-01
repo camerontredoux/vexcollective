@@ -10,6 +10,7 @@ module.exports = {
       colors: {
         "gray-mantine-dark": "#373A40",
         "gray-mantine-light": "#25262b",
+        "gray-mantine-dark-100": "#1c1c20",
       },
       screens: {
         xs: "425px",

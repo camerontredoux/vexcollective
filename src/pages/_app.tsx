@@ -30,16 +30,16 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
 
   useEffect(() => {
     (async () => {
-      manifestDb
-        .open()
-        .catch((err) => console.error(err.stack || err))
-        .then(() => setManifestLoading(false));
+      manifestDb.open();
 
-      const manifest = await manifestDb.manifest.toArray();
+      const manifest = await manifestDb.manifest.toCollection().toArray();
 
-      if (manifest) {
-        setManifest(manifest[0]?.definitions);
-      }
+      const test = manifestDb.transaction("r", manifestDb.manifest, () => {
+        manifestDb.manifest.toArray().then((man) => {
+          setManifest(man[0]?.definitions);
+          setManifestLoading(false);
+        });
+      });
     })();
 
     const handleStart = () => {
@@ -83,7 +83,7 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
       </Head>
       <Layout>
         {pageLoading ? (
-          <div className="mt:6 sm:mt-0 flex justify-center items-center flex-col gap-3">
+          <div className="mt-6 sm:mt-0 flex justify-center items-center flex-col gap-3">
             <Loader variant="oval" />
             <div className="text-gray-400">
               Note - This could take a while to load from Bungie
