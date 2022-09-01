@@ -8,10 +8,11 @@ import {
   Stack,
   Text,
   Tooltip,
+  useMantineTheme,
 } from "@mantine/core";
 import { GiDiamonds } from "@react-icons/all-files/gi/GiDiamonds";
+import { DestinyItemResponse } from "bungie-api-ts/destiny2";
 import { DateTime, Duration } from "luxon";
-import { useEffect } from "react";
 
 import _ from "underscore";
 
@@ -20,6 +21,7 @@ interface ProfileCardProps {
   characters: any;
   character: string;
   setCharacter: (char: string) => void;
+  currentItem: DestinyItemResponse | null;
 }
 
 const ProfileCard: React.FC<ProfileCardProps> = ({
@@ -27,6 +29,7 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
   characters,
   character,
   setCharacter,
+  currentItem,
 }) => {
   const manifest = useManifestStore((state) => state.manifest);
 
@@ -44,7 +47,7 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
     return DateTime.now().minus(diff).toRelative();
   };
 
-  useEffect(() => {}, [character]);
+  const theme = useMantineTheme();
 
   if (manifest) {
     return (
@@ -235,6 +238,22 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
                   </b>
                 </Text>
               </Group>
+
+              <div className="mt-2 flex flex-col gap-2">
+                {currentItem && currentItem.stats.data
+                  ? _.map(currentItem.stats.data.stats, (stat, idx) => {
+                      return (
+                        <div key={idx}>
+                          {
+                            manifest?.DestinyStatDefinition[stat.statHash]
+                              ?.displayProperties.name
+                          }
+                          {stat.value}
+                        </div>
+                      );
+                    })
+                  : null}
+              </div>
             </div>
           </>
         )}
