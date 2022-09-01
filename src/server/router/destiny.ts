@@ -1,20 +1,10 @@
 import Bungie from "@/utils/bungie";
+import { ServerResponse } from "bungie-api-ts/common";
+import { DestinyItemResponse } from "bungie-api-ts/destiny2";
 import z from "zod";
 import { createRouter } from "./context";
 
 export const BungieAPI = new Bungie(process.env.X_API_KEY!);
-
-import {
-  getDestinyManifest,
-  getDestinyManifestSlice,
-  HttpClientConfig,
-} from "bungie-api-ts/destiny2";
-
-const httpClient = async (config: HttpClientConfig) => {
-  return fetch(config.url, config)
-    .then((res) => res.json())
-    .catch((e) => console.log(e));
-};
 
 export const destinyRouter = createRouter()
   .mutation("get", {
@@ -78,21 +68,20 @@ export const destinyRouter = createRouter()
       };
     },
   })
-  .query("manifest", {
-    async resolve() {
-      const manifest = (await getDestinyManifest(httpClient)).Response;
+  .query("item", {
+    input: z.object({
+      destinyMembershipId: z.string(),
+      itemInstanceId: z.string(),
+      membershipType: z.string(),
+    }),
+    async resolve({ input }) {
+      const data = await BungieAPI.fetchAPI(
+        `/Destiny2/${input.membershipType}/Profile/${input.destinyMembershipId}/Item/${input.itemInstanceId}?components=302,304`,
+        false
+      );
 
-      const partialManifest = await getDestinyManifestSlice(httpClient, {
-        destinyManifest: manifest,
-        tableNames: [
-          "DestinyRaceDefinition",
-          "DestinyClassDefinition",
-          "DestinyStatDefinition",
-          "DestinyRecordDefinition",
-        ],
-        language: "en",
-      });
+      const itemStats: ServerResponse<DestinyItemResponse> = await data.json();
 
-      return partialManifest;
+      return { itemStats: itemStats.Response };
     },
   });
