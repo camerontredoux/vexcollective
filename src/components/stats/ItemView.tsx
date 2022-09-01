@@ -1,16 +1,15 @@
-import { useManifestStore } from "@/utils/stores";
+import { ManifestDefinitions } from "@/utils/indexeddb";
 import { Badge } from "@mantine/core";
 import { DestinyItemComponent } from "bungie-api-ts/destiny2";
 
 interface ItemViewProps {
   item: DestinyItemComponent;
+  manifest: ManifestDefinitions | null;
 }
 
-const ItemView: React.FC<ItemViewProps> = ({ item }) => {
-  const manifest = useManifestStore((state) => state.manifest);
-
+const ItemView: React.FC<ItemViewProps> = ({ item, manifest }) => {
   return (
-    <div className="flex gap-2">
+    <div className="flex items-start gap-2">
       <img
         width={50}
         className="rounded-md"
@@ -23,13 +22,20 @@ const ItemView: React.FC<ItemViewProps> = ({ item }) => {
             ?.displayProperties.icon
         }`}
       />
-      {
-        manifest?.DestinyInventoryItemDefinition[item.itemHash]
-          ?.displayProperties.name
-      }
-      <Badge>
-        {manifest?.DestinyInventoryItemDefinition[item.itemHash]?.flavorText}
-      </Badge>
+      <div className="flex gap-2 items-center">
+        <div>
+          {
+            manifest?.DestinyInventoryItemDefinition[item.itemHash]
+              ?.displayProperties.name
+          }
+        </div>
+        <Badge size="xs">
+          {
+            manifest?.DestinyInventoryItemDefinition[item.itemHash]
+              ?.itemTypeDisplayName
+          }
+        </Badge>
+      </div>
     </div>
   );
 };

@@ -2,8 +2,10 @@ import DataTreeView from "@/components/DataTreeView";
 import SearchLayout from "@/components/layouts/SearchLayout";
 import ItemView from "@/components/stats/ItemView";
 import { BungieAPI } from "@/server/router/destiny";
+import { useManifestStore } from "@/utils/stores";
 import { trpc } from "@/utils/trpc";
 import { Button, Collapse } from "@mantine/core";
+import { DestinyItemComponent } from "bungie-api-ts/destiny2";
 import {
   GetServerSideProps,
   GetServerSidePropsContext,
@@ -19,10 +21,14 @@ const ProfileCard = dynamic(() => import("@/components/stats/ProfileCard"), {
   ssr: false,
 });
 
+const includedItemTypes = [2, 3, 16, 21, 22, 24];
+
 const Report: NextPageWithLayout = ({
   profile,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const router = useRouter();
+
+  const manifest = useManifestStore((state) => state.manifest);
 
   const { membershipType, destinyMembershipId } = router.query;
 
@@ -74,8 +80,24 @@ const Report: NextPageWithLayout = ({
             <div>
               {_.map(
                 profile.Response.characterEquipment.data[character].items,
-                (item, idx) => {
-                  return <ItemView key={idx} item={item} />;
+                (item: DestinyItemComponent, idx) => {
+                  console.log(
+                    manifest?.DestinyInventoryItemDefinition[item.itemHash]
+                  );
+
+                  if (
+                    includedItemTypes.includes(
+                      manifest?.DestinyInventoryItemDefinition[item.itemHash]
+                        ?.itemType as number
+                    ) ||
+                    manifest?.DestinyInventoryItemDefinition[
+                      item.itemHash
+                    ]?.itemTypeDisplayName.includes("Subclass")
+                  ) {
+                    return (
+                      <ItemView manifest={manifest} key={idx} item={item} />
+                    );
+                  }
                 }
               )}
             </div>

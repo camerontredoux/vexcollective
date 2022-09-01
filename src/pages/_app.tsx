@@ -32,9 +32,7 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
     (async () => {
       manifestDb.open();
 
-      const manifest = await manifestDb.manifest.toCollection().toArray();
-
-      const test = manifestDb.transaction("r", manifestDb.manifest, () => {
+      manifestDb.transaction("r", manifestDb.manifest, () => {
         manifestDb.manifest.toArray().then((man) => {
           setManifest(man[0]?.definitions);
           setManifestLoading(false);
