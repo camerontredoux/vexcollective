@@ -1,6 +1,7 @@
 import { ManifestDefinitions } from "@/utils/indexeddb";
 import { trpc } from "@/utils/trpc";
 import {
+  Badge,
   Blockquote,
   Modal,
   ScrollArea,
@@ -70,22 +71,22 @@ const ItemView: React.FC<ItemViewProps> = ({
         size={800}
         title={
           <div className="font-bold flex items-center gap-2">
-            {ItemDefinition(item.itemHash)?.displayProperties.name}{" "}
-            <span
-              className={`text-sm ${
+            {ItemDefinition(item.itemHash)?.displayProperties.name}
+            <Badge
+              color={
                 ItemDefinition(
                   item.itemHash
                 )?.itemTypeAndTierDisplayName.includes("Exotic")
-                  ? "text-orange-300"
+                  ? "orange"
                   : ItemDefinition(
                       item.itemHash
                     )?.itemTypeAndTierDisplayName.includes("Legendary")
-                  ? "text-purple-600"
-                  : "text-gray-300"
-              } `}
+                  ? "grape"
+                  : "gray"
+              }
             >
-              ({ItemDefinition(item.itemHash)?.itemTypeAndTierDisplayName})
-            </span>
+              {ItemDefinition(item.itemHash)?.itemTypeAndTierDisplayName}
+            </Badge>
           </div>
         }
         opened={opened}

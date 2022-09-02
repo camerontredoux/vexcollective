@@ -100,7 +100,7 @@ const Report: NextPageWithLayout<ReportProps> = ({
               <span className="ml-2">
                 <Tooltip
                   color={theme.colors.gray[8]}
-                  label={"Hover over gear to view more information"}
+                  label={"Click on gear to view more information"}
                   position={"bottom"}
                 >
                   <ActionIcon>
