@@ -73,7 +73,7 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
       theme={{
         colorScheme: "dark",
         breakpoints: {
-          xs: 640,
+          xs: 639,
         },
       }}
     >

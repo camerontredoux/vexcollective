@@ -13,7 +13,7 @@ module.exports = {
         "gray-mantine-dark-100": "#1c1c20",
       },
       screens: {
-        xs: "425px",
+        xs: "426px",
       },
       borderRadius: {
         md: "4px",
