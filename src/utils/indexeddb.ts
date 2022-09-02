@@ -8,11 +8,11 @@ import _ from "underscore";
 import { httpClient } from "./misc";
 
 const manifestDefinitions = [
+  "DestinyStatDefinition",
   "DestinyClassDefinition",
   "DestinyRecordDefinition",
   "DestinyRaceDefinition",
   "DestinyInventoryItemDefinition",
-  "DestinySandboxPerkDefinition",
   "DestinyLoreDefinition",
 ] as const;
 
