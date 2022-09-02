@@ -1,7 +1,7 @@
 import { ManifestDefinitions } from "@/utils/indexeddb";
 import { trpc } from "@/utils/trpc";
 import {
-  Badge,
+  Blockquote,
   Modal,
   ScrollArea,
   Tooltip,
@@ -68,16 +68,48 @@ const ItemView: React.FC<ItemViewProps> = ({
     <div className="flex items-center gap-2">
       <Modal
         size={800}
-        title={ItemDefinition(item.itemHash)?.displayProperties.name}
+        title={
+          <div className="font-bold flex items-center gap-2">
+            {ItemDefinition(item.itemHash)?.displayProperties.name}{" "}
+            <span
+              className={`text-sm ${
+                ItemDefinition(
+                  item.itemHash
+                )?.itemTypeAndTierDisplayName.includes("Exotic")
+                  ? "text-orange-300"
+                  : ItemDefinition(
+                      item.itemHash
+                    )?.itemTypeAndTierDisplayName.includes("Legendary")
+                  ? "text-purple-600"
+                  : "text-gray-300"
+              } `}
+            >
+              ({ItemDefinition(item.itemHash)?.itemTypeAndTierDisplayName})
+            </span>
+          </div>
+        }
         opened={opened}
         onClose={() => setOpened(false)}
       >
         <ScrollArea>
           <div
+            className="mr-5"
             style={{
               height: "calc(100vh - 175px)",
             }}
           >
+            <img
+              alt={"Screenshot"}
+              src={`https://bungie.net${
+                ItemDefinition(item.itemHash)?.screenshot
+              }`}
+              className="rounded-md drop-shadow-md mx-auto"
+            />
+            <div className="mt-2">
+              <Blockquote>
+                {ItemDefinition(item.itemHash)?.flavorText}
+              </Blockquote>
+            </div>
             <DataTreeView data={ItemDefinition(item.itemHash)} expand={false} />
             <DataTreeView data={itemComponents} expand={false} />
           </div>
@@ -92,53 +124,50 @@ const ItemView: React.FC<ItemViewProps> = ({
           ItemDefinition(item.itemHash)?.displayProperties.icon
         }`}
       />
-      <div>
+      <div className="flex gap-1 flex-col justify-center">
         <div>
           {
             manifest?.DestinyInventoryItemDefinition[item.itemHash]
               ?.displayProperties.name
           }
         </div>
-        <Badge size="xs">
-          {
-            manifest?.DestinyInventoryItemDefinition[item.itemHash]
-              ?.itemTypeDisplayName
-          }
-        </Badge>
+
         {itemStats && (
-          <>
-            <div className="mt-2 flex gap-2">
-              {_.map(itemStats.perks.data!.perks, (perk, idx) => {
-                return perk.visible ? (
-                  <div
-                    key={idx}
-                    className={`bg-blue-400 ${"rounded-full"} p-1`}
+          <div className="flex gap-2">
+            {_.map(itemStats.perks.data!.perks, (perk, idx) => {
+              return perk.visible ? (
+                <div
+                  key={idx}
+                  style={{
+                    backgroundColor: theme.colors.gray[8],
+                    padding: "2px",
+                    borderRadius: "5px",
+                  }}
+                >
+                  <Tooltip
+                    position="bottom"
+                    color={theme.colors.gray[8]}
+                    label={
+                      manifest?.DestinySandboxPerkDefinition[perk.perkHash]
+                        ?.displayProperties.name
+                    }
                   >
-                    <Tooltip
-                      position="bottom"
-                      color={theme.colors.gray[8]}
-                      label={
+                    <img
+                      width={18}
+                      alt={
                         manifest?.DestinySandboxPerkDefinition[perk.perkHash]
                           ?.displayProperties.name
                       }
-                    >
-                      <img
-                        width={20}
-                        alt={
-                          manifest?.DestinySandboxPerkDefinition[perk.perkHash]
-                            ?.displayProperties.name
-                        }
-                        src={`https://bungie.net${
-                          manifest?.DestinySandboxPerkDefinition[perk.perkHash]
-                            ?.displayProperties.icon
-                        }`}
-                      />
-                    </Tooltip>
-                  </div>
-                ) : null;
-              })}
-            </div>
-          </>
+                      src={`https://bungie.net${
+                        manifest?.DestinySandboxPerkDefinition[perk.perkHash]
+                          ?.displayProperties.icon
+                      }`}
+                    />
+                  </Tooltip>
+                </div>
+              ) : null;
+            })}
+          </div>
         )}
       </div>
     </div>

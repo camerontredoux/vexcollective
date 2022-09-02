@@ -36,7 +36,7 @@ const DataLayout: React.FC<{ children: React.ReactElement }> = ({
           searchable
         />
       </div>
-      {children}
+      <div className="flex-grow">{children}</div>
     </>
   );
 };
