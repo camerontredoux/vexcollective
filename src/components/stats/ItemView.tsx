@@ -5,6 +5,7 @@ import {
   Blockquote,
   Modal,
   ScrollArea,
+  Tooltip,
   useMantineTheme,
 } from "@mantine/core";
 import {
@@ -144,7 +145,7 @@ const ItemView: React.FC<ItemViewProps> = ({
                     borderRadius: "5px",
                   }}
                 >
-                  {/* <Tooltip
+                  <Tooltip
                     position="bottom"
                     color={theme.colors.gray![8]}
                     label={
@@ -163,7 +164,7 @@ const ItemView: React.FC<ItemViewProps> = ({
                           ?.displayProperties.icon
                       }`}
                     />
-                  </Tooltip> */}
+                  </Tooltip>
                 </div>
               ) : null;
             })}

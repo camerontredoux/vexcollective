@@ -13,6 +13,7 @@ const manifestDefinitions = [
   "DestinyRecordDefinition",
   "DestinyRaceDefinition",
   "DestinyInventoryItemDefinition",
+  "DestinySandboxPerkDefinition",
   "DestinyLoreDefinition",
 ] as const;
 
