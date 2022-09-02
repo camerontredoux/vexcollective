@@ -99,7 +99,7 @@ const Report: NextPageWithLayout<ReportProps> = ({
               Equipped Gear{" "}
               <span className="ml-2">
                 <Tooltip
-                  color={theme.colors.gray[8]}
+                  color={theme.colors.gray![8]}
                   label={"Click on gear to view more information"}
                   position={"bottom"}
                 >

@@ -1,4 +1,5 @@
 // src/pages/_app.tsx
+import ErrorBoundary from "@/components/ErrorBoundary";
 import Layout from "@/components/layouts/Layout";
 import { manifestDb } from "@/utils/indexeddb";
 import { useManifestStore } from "@/utils/stores";
@@ -88,7 +89,11 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
             </div>
           </div>
         ) : (
-          getLayout(<Component {...pageProps} />)
+          getLayout(
+            <ErrorBoundary>
+              <Component {...pageProps} />
+            </ErrorBoundary>
+          )
         )}
       </Layout>
     </MantineProvider>

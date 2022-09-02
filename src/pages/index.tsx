@@ -9,7 +9,7 @@ import { ResponsiveRadar } from "@nivo/radar";
 
 const features = {
   "Radar Charts": (
-    <div className="text-black h-96">
+    <div className="text-black h-full w-full flex-1 absolute">
       <ResponsiveRadar
         data={[
           {
@@ -56,69 +56,7 @@ const features = {
         colors={{ scheme: "pastel1" }}
         blendMode="multiply"
         motionConfig="wobbly"
-        legends={[
-          {
-            anchor: "top-left",
-            direction: "column",
-            translateX: -50,
-            translateY: -40,
-            itemWidth: 80,
-            itemHeight: 20,
-            itemTextColor: "#999",
-            symbolSize: 12,
-            symbolShape: "circle",
-            effects: [
-              {
-                on: "hover",
-                style: {
-                  itemTextColor: "#777",
-                },
-              },
-            ],
-          },
-        ]}
       />
-      {/* <Radar
-        margin={{ bottom: 30, top: 30, left: 30, right: 30 }}
-        colors={{ scheme: "pastel1" }}
-        height={300}
-        width={300}
-        gridShape="linear"
-        keys={["chardonay", "carmenere", "syrah"]}
-        indexBy="taste"
-        data={[
-          {
-            taste: "fruity",
-            chardonay: 39,
-            carmenere: 109,
-            syrah: 112,
-          },
-          {
-            taste: "bitter",
-            chardonay: 37,
-            carmenere: 111,
-            syrah: 75,
-          },
-          {
-            taste: "heavy",
-            chardonay: 28,
-            carmenere: 74,
-            syrah: 96,
-          },
-          {
-            taste: "strong",
-            chardonay: 27,
-            carmenere: 89,
-            syrah: 88,
-          },
-          {
-            taste: "sunny",
-            chardonay: 29,
-            carmenere: 35,
-            syrah: 34,
-          },
-        ]}
-      /> */}
     </div>
   ),
   "Activity Heatmaps": <div>Test</div>,
@@ -190,7 +128,9 @@ const Home: NextPageWithLayout = () => {
         <div className="backdrop-brightness-75 p-8 rounded-md">
           <h1 className="text-4xl font-bold">{feature}</h1>
           <p className="text-xl mt-1">Tools at your disposal</p>
-          <div className="mt-4">{features[feature as Features]}</div>
+          <div className="mt-4 h-96 relative">
+            {features[feature as Features]}
+          </div>
         </div>
       </div>
     </>

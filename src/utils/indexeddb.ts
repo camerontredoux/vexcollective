@@ -13,8 +13,8 @@ const manifestDefinitions = [
   "DestinyRecordDefinition",
   "DestinyRaceDefinition",
   "DestinyInventoryItemDefinition",
-  "DestinyStatDefinition",
   "DestinySandboxPerkDefinition",
+  "DestinyLoreDefinition",
 ] as const;
 
 export type ManifestDefinitions = DestinyManifestSlice<
