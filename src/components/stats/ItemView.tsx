@@ -140,14 +140,14 @@ const ItemView: React.FC<ItemViewProps> = ({
                 <div
                   key={idx}
                   style={{
-                    backgroundColor: theme.colors.gray[8],
+                    backgroundColor: theme.colors.gray![8],
                     padding: "2px",
                     borderRadius: "5px",
                   }}
                 >
                   <Tooltip
                     position="bottom"
-                    color={theme.colors.gray[8]}
+                    color={theme.colors.gray![8]}
                     label={
                       manifest?.DestinySandboxPerkDefinition[perk.perkHash]
                         ?.displayProperties.name

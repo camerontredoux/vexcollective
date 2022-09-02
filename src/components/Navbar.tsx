@@ -19,16 +19,12 @@ const links = [
     href: "/authorize",
     text: "Authorize",
   },
+];
+
+const more = [
   {
     href: "/about",
     text: "About",
-  },
-];
-
-const socials = [
-  {
-    href: "https://",
-    text: "Discord",
   },
   {
     href: "https://github.com/camerontredoux/vexcollective",
@@ -63,7 +59,15 @@ const Navbar: React.FC = () => {
           </motion.li>
           {links.map((link, index) => (
             <NavLink key={index} href={link.href} index={index}>
-              {link.text}
+              <div
+                className={`${
+                  link.text === "Data Explorer"
+                    ? "font-bold text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 hover:brightness-125"
+                    : ""
+                }`}
+              >
+                {link.text}
+              </div>
             </NavLink>
           ))}
         </ul>
@@ -74,9 +78,9 @@ const Navbar: React.FC = () => {
             transition={{ delay: 0.1, duration: 0.5 }}
             className="text-white"
           >
-            Socials
+            More
           </motion.li>
-          {socials.map((link, index) => (
+          {more.map((link, index) => (
             <NavLink key={index} href={link.href} index={index}>
               {link.text}
             </NavLink>
@@ -84,7 +88,7 @@ const Navbar: React.FC = () => {
         </ul>
         <MediaQuery largerThan="xs" styles={{ display: "none" }}>
           <Burger
-            color={theme.colors.gray[5]}
+            color={theme.colors.gray![5]}
             size={14}
             opened={opened}
             onClick={() => setOpened(true)}
@@ -126,7 +130,7 @@ const Navbar: React.FC = () => {
                 </Link>
               </li>
             ))}
-            {socials.map((link, index) => (
+            {more.map((link, index) => (
               <li key={index}>
                 <Link href={link.href}>
                   <UnstyledButton
@@ -159,13 +163,7 @@ const NavLink: React.FC<LinkProps> = ({ href, children, index }) => {
       transition={{ delay: index * 0.25, duration: 0.5 }}
     >
       <Link href={href}>
-        <motion.a
-          whileHover={{ color: "rgb(115,125,139)" }}
-          transition={{ duration: 0.15, ease: "easeInOut" }}
-          className="cursor-pointer"
-        >
-          {children}
-        </motion.a>
+        <a className="cursor-pointer">{children}</a>
       </Link>
     </motion.li>
   );
