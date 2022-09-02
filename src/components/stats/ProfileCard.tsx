@@ -128,9 +128,9 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
               </div>
             </Group>
 
-            <div className="h-[93.48px] flex flex-col justify-center mt-4 px-3 pb-3 pt-4 bg-gray-mantine-light rounded-md border border-gray-mantine-dark">
+            <div className="min-h-[93.48px] flex flex-col justify-center mt-4 px-3 pb-3 pt-6 bg-gray-mantine-light rounded-md border border-gray-mantine-dark">
               <Text size="sm" weight={600}>
-                <div className="flex gap-2">
+                <div className="flex gap-2 flex-wrap">
                   {Object.keys(characters[character].stats).map(
                     (key, index) => {
                       if (Number(key) !== 1935470627) {
@@ -180,8 +180,8 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
               </Text>
 
               <Group
+                mt={"sm"}
                 spacing={"xl"}
-                mt="md"
                 className="whitespace-nowrap flex-nowrap"
               >
                 {characters[character].titleRecordHash && (

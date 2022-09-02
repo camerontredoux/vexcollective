@@ -134,7 +134,7 @@ const ItemView: React.FC<ItemViewProps> = ({
         </div>
 
         {itemStats && (
-          <div className="flex gap-2">
+          <div className="flex gap-2 flex-wrap">
             {_.map(itemStats.perks.data!.perks, (perk, idx) => {
               return perk.visible ? (
                 <div
