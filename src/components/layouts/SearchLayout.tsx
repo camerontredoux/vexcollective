@@ -55,7 +55,7 @@ const SearchLayout: React.FC<{ children: React.ReactElement }> = ({
           { label: <FaSteam size={18} />, value: "3" },
         ]}
       />
-      <ActionIcon color={theme.colors.blue[2]} type="submit">
+      <ActionIcon color={theme.colors.blue![2]} type="submit">
         {/* <IconSearch size={18} /> */}
         <IconSend size={18} />
       </ActionIcon>

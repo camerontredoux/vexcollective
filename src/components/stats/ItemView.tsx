@@ -4,9 +4,11 @@ import {
   Blockquote,
   Modal,
   ScrollArea,
+  Tabs,
   Tooltip,
   useMantineTheme,
 } from "@mantine/core";
+import { IconBook, IconDatabase } from "@tabler/icons";
 import {
   DestinyItemComponent,
   DestinyItemResponse,
@@ -39,6 +41,10 @@ const ItemView: React.FC<ItemViewProps> = ({
 
   const ItemDefinition = (hash: number) =>
     manifest?.DestinyInventoryItemDefinition[hash];
+
+  const lore =
+    manifest?.DestinyLoreDefinition[ItemDefinition(item.itemHash)?.loreHash!]
+      ?.displayProperties.description;
 
   return (
     <div className="flex items-center gap-2">
@@ -85,9 +91,34 @@ const ItemView: React.FC<ItemViewProps> = ({
               <Blockquote>
                 {ItemDefinition(item.itemHash)?.flavorText}
               </Blockquote>
+              <Tabs defaultValue={lore ? "lore" : "json"}>
+                <Tabs.List>
+                  {lore && (
+                    <Tabs.Tab icon={<IconBook size={14} />} value="lore">
+                      Lore
+                    </Tabs.Tab>
+                  )}
+                  <Tabs.Tab icon={<IconDatabase size={14} />} value="json">
+                    Data
+                  </Tabs.Tab>
+                </Tabs.List>
+                <Tabs.Panel value="lore">
+                  <div
+                    className="p-2 text-gray-400"
+                    style={{ whiteSpace: "pre-line" }}
+                  >
+                    {lore}
+                  </div>
+                </Tabs.Panel>
+                <Tabs.Panel value="json">
+                  <DataTreeView
+                    data={ItemDefinition(item.itemHash)}
+                    expand={false}
+                  />
+                  <DataTreeView data={profile.itemComponents} expand={false} />
+                </Tabs.Panel>
+              </Tabs>
             </div>
-            <DataTreeView data={ItemDefinition(item.itemHash)} expand={false} />
-            <DataTreeView data={profile.itemComponents} expand={false} />
           </div>
         </ScrollArea>
       </Modal>
