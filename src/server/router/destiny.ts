@@ -1,6 +1,4 @@
 import Bungie from "@/utils/bungie";
-import { ServerResponse } from "bungie-api-ts/common";
-import { DestinyItemResponse } from "bungie-api-ts/destiny2";
 import z from "zod";
 import { createRouter } from "./context";
 
@@ -66,22 +64,5 @@ export const destinyRouter = createRouter()
       return {
         json,
       };
-    },
-  })
-  .query("item", {
-    input: z.object({
-      destinyMembershipId: z.string(),
-      itemInstanceId: z.string(),
-      membershipType: z.string(),
-    }),
-    async resolve({ input }) {
-      const data = await BungieAPI.fetchAPI(
-        `/Destiny2/${input.membershipType}/Profile/${input.destinyMembershipId}/Item/${input.itemInstanceId}?components=302,304`,
-        false
-      );
-
-      const itemStats: ServerResponse<DestinyItemResponse> = await data.json();
-
-      return { itemStats: itemStats.Response };
     },
   });

@@ -71,8 +71,7 @@ const Report: NextPageWithLayout<ReportProps> = ({
   useEffect(() => {
     (async () => {
       if (membershipType && destinyMembershipId) {
-        // setExtraProfile(profileQuery.data?.json);
-        // setExtraProfile(nu)
+        setExtraProfile(profileQuery.data?.json);
       }
     })();
   }, [profileQuery.data?.json, membershipType, destinyMembershipId]);
@@ -127,7 +126,7 @@ const Report: NextPageWithLayout<ReportProps> = ({
                         manifest={manifest}
                         key={idx}
                         item={item}
-                        itemComponents={profileResponse.itemComponents}
+                        profile={profileResponse}
                         setCurrentItem={setCurrentItem}
                       />
                     );
@@ -152,7 +151,7 @@ const Report: NextPageWithLayout<ReportProps> = ({
                         manifest={manifest}
                         key={idx}
                         item={item}
-                        itemComponents={profileResponse.itemComponents}
+                        profile={profileResponse}
                         setCurrentItem={setCurrentItem}
                       />
                     );
@@ -183,7 +182,7 @@ const Report: NextPageWithLayout<ReportProps> = ({
                         manifest={manifest}
                         key={idx}
                         item={item}
-                        itemComponents={profileResponse.itemComponents}
+                        profile={profileResponse}
                         setCurrentItem={setCurrentItem}
                       />
                     );
@@ -222,7 +221,7 @@ export const getServerSideProps: GetServerSideProps = async (
   const { membershipType, destinyMembershipId } = ctx.query;
 
   const data = await BungieAPI.fetchAPI(
-    `/Destiny2/${membershipType}/Profile/${destinyMembershipId}?components=100,102,200,201,205,300`,
+    `/Destiny2/${membershipType}/Profile/${destinyMembershipId}?components=100,102,200,201,205,300,302,304`,
     false
   );
 

@@ -1,5 +1,4 @@
 import { ManifestDefinitions } from "@/utils/indexeddb";
-import { trpc } from "@/utils/trpc";
 import {
   Badge,
   Blockquote,
@@ -10,16 +9,16 @@ import {
 } from "@mantine/core";
 import {
   DestinyItemComponent,
-  DestinyItemComponentSetOfint64,
   DestinyItemResponse,
+  DestinyProfileResponse,
 } from "bungie-api-ts/destiny2";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import _ from "underscore";
 import DataTreeView from "../DataTreeView";
 
 interface ItemViewProps {
   item: DestinyItemComponent;
-  itemComponents: DestinyItemComponentSetOfint64;
+  profile: DestinyProfileResponse;
   manifest: ManifestDefinitions | null;
   destinyMembershipId: string;
   membershipType: string;
@@ -28,39 +27,15 @@ interface ItemViewProps {
 
 const ItemView: React.FC<ItemViewProps> = ({
   item,
-  itemComponents,
+  profile,
   manifest,
   destinyMembershipId,
   membershipType,
   setCurrentItem,
 }) => {
-  const [itemStats, setItemStats] = useState<DestinyItemResponse | null>(null);
-
   const [opened, setOpened] = useState(false);
 
   const theme = useMantineTheme();
-
-  const instancedItemQuery = trpc.useQuery(
-    [
-      "destiny.item",
-      {
-        destinyMembershipId,
-        itemInstanceId: item.itemInstanceId!,
-        membershipType,
-      },
-    ],
-    {
-      refetchOnMount: false,
-      refetchOnReconnect: false,
-      refetchOnWindowFocus: false,
-    }
-  );
-
-  useEffect(() => {
-    if (instancedItemQuery.data) {
-      setItemStats(instancedItemQuery.data.itemStats);
-    }
-  }, [instancedItemQuery.data]);
 
   const ItemDefinition = (hash: number) =>
     manifest?.DestinyInventoryItemDefinition[hash];
@@ -112,7 +87,7 @@ const ItemView: React.FC<ItemViewProps> = ({
               </Blockquote>
             </div>
             <DataTreeView data={ItemDefinition(item.itemHash)} expand={false} />
-            <DataTreeView data={itemComponents} expand={false} />
+            <DataTreeView data={profile.itemComponents} expand={false} />
           </div>
         </ScrollArea>
       </Modal>
@@ -133,41 +108,44 @@ const ItemView: React.FC<ItemViewProps> = ({
           }
         </div>
 
-        {itemStats?.perks.data && (
+        {profile.itemComponents.perks?.data && (
           <div className="flex gap-2 flex-wrap">
-            {_.map(itemStats.perks.data.perks, (perk, idx) => {
-              return perk.visible ? (
-                <div
-                  key={idx}
-                  style={{
-                    backgroundColor: theme.colors.gray![8],
-                    padding: "2px",
-                    borderRadius: "5px",
-                  }}
-                >
-                  <Tooltip
-                    position="bottom"
-                    color={theme.colors.gray![8]}
-                    label={
-                      manifest?.DestinySandboxPerkDefinition[perk.perkHash]
-                        ?.displayProperties.name
-                    }
+            {_.map(
+              profile.itemComponents?.perks.data[item.itemInstanceId!]?.perks!,
+              (perk, idx) => {
+                return perk.visible ? (
+                  <div
+                    key={idx}
+                    style={{
+                      backgroundColor: theme.colors.gray![8],
+                      padding: "2px",
+                      borderRadius: "5px",
+                    }}
                   >
-                    <img
-                      width={18}
-                      alt={
+                    <Tooltip
+                      position="bottom"
+                      color={theme.colors.gray![8]}
+                      label={
                         manifest?.DestinySandboxPerkDefinition[perk.perkHash]
                           ?.displayProperties.name
                       }
-                      src={`https://bungie.net${
-                        manifest?.DestinySandboxPerkDefinition[perk.perkHash]
-                          ?.displayProperties.icon
-                      }`}
-                    />
-                  </Tooltip>
-                </div>
-              ) : null;
-            })}
+                    >
+                      <img
+                        width={18}
+                        alt={
+                          manifest?.DestinySandboxPerkDefinition[perk.perkHash]
+                            ?.displayProperties.name
+                        }
+                        src={`https://bungie.net${
+                          manifest?.DestinySandboxPerkDefinition[perk.perkHash]
+                            ?.displayProperties.icon
+                        }`}
+                      />
+                    </Tooltip>
+                  </div>
+                ) : null;
+              }
+            )}
           </div>
         )}
       </div>
