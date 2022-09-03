@@ -2,10 +2,12 @@ import { ManifestDefinitions } from "@/utils/indexeddb";
 import {
   Badge,
   Blockquote,
+  Group,
+  HoverCard,
   Modal,
   ScrollArea,
   Tabs,
-  Tooltip,
+  Text,
   useMantineTheme,
 } from "@mantine/core";
 import { Icon3dCubeSphere, IconBook, IconDatabase } from "@tabler/icons";
@@ -247,26 +249,46 @@ const ItemView: React.FC<ItemViewProps> = ({
                       borderRadius: "5px",
                     }}
                   >
-                    <Tooltip
-                      position="bottom"
-                      color={theme.colors.gray![8]}
-                      label={
-                        manifest?.DestinySandboxPerkDefinition[perk.perkHash]
-                          ?.displayProperties.name
-                      }
+                    <HoverCard
+                      width={200}
+                      withArrow
+                      closeDelay={50}
+                      openDelay={250}
                     >
-                      <img
-                        width={18}
-                        alt={
-                          manifest?.DestinySandboxPerkDefinition[perk.perkHash]
-                            ?.displayProperties.name
-                        }
-                        src={`https://bungie.net${
-                          manifest?.DestinySandboxPerkDefinition[perk.perkHash]
-                            ?.displayProperties.icon
-                        }`}
-                      />
-                    </Tooltip>
+                      <HoverCard.Target>
+                        <img
+                          width={18}
+                          alt={
+                            manifest?.DestinySandboxPerkDefinition[
+                              perk.perkHash
+                            ]?.displayProperties.name
+                          }
+                          src={`https://bungie.net${
+                            manifest?.DestinySandboxPerkDefinition[
+                              perk.perkHash
+                            ]?.displayProperties.icon
+                          }`}
+                        />
+                      </HoverCard.Target>
+                      <HoverCard.Dropdown>
+                        <Group>
+                          <Text weight={700} size={"xs"}>
+                            {
+                              manifest?.DestinySandboxPerkDefinition[
+                                perk.perkHash
+                              ]?.displayProperties.name
+                            }
+                          </Text>
+                          <Text weight={400} size={"xs"}>
+                            {
+                              manifest?.DestinySandboxPerkDefinition[
+                                perk.perkHash
+                              ]?.displayProperties.description
+                            }
+                          </Text>
+                        </Group>
+                      </HoverCard.Dropdown>
+                    </HoverCard>
                   </div>
                 ) : null;
               }
