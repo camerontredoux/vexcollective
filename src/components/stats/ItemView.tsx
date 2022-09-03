@@ -8,7 +8,7 @@ import {
   Tooltip,
   useMantineTheme,
 } from "@mantine/core";
-import { IconBook, IconDatabase } from "@tabler/icons";
+import { Icon3dCubeSphere, IconBook, IconDatabase } from "@tabler/icons";
 import {
   DestinyItemComponent,
   DestinyItemResponse,
@@ -26,6 +26,8 @@ interface ItemViewProps {
   membershipType: string;
   setCurrentItem: (item: DestinyItemResponse | null) => void;
 }
+
+const specialStats = [4284893193, 3871231066, 2715839340];
 
 const ItemView: React.FC<ItemViewProps> = ({
   item,
@@ -45,6 +47,71 @@ const ItemView: React.FC<ItemViewProps> = ({
   const lore =
     manifest?.DestinyLoreDefinition[ItemDefinition(item.itemHash)?.loreHash!]
       ?.displayProperties.description;
+
+  const instancedItems = profile.itemComponents.stats.data!;
+
+  let totalStat = 0;
+  const instancedItemStats = _.map(
+    instancedItems[item.itemInstanceId!]?.stats!,
+    (instancedItem, idx) => {
+      totalStat += instancedItem.value;
+
+      return (
+        <div key={idx}>
+          <div className="flex gap-2 items-center">
+            {manifest?.DestinyStatDefinition[instancedItem.statHash]
+              ?.displayProperties.hasIcon && (
+              <img
+                width={20}
+                alt={
+                  manifest?.DestinyStatDefinition[instancedItem.statHash]
+                    ?.displayProperties.name
+                }
+                src={`https://bungie.net${
+                  manifest?.DestinyStatDefinition[instancedItem.statHash]
+                    ?.displayProperties.icon
+                }`}
+              />
+            )}
+            {
+              manifest?.DestinyStatDefinition[instancedItem.statHash]
+                ?.displayProperties.name
+            }
+          </div>
+
+          {specialStats.includes(instancedItem.statHash) ? (
+            <div className="text-sm text-white">{instancedItem.value}</div>
+          ) : (
+            <div className="bg-gray-mantine-dark relative w-full h-4 rounded-sm overflow-hidden">
+              {ItemDefinition(item.itemHash)?.itemType === 3 ? (
+                <div
+                  style={{
+                    fontSize: "0.7rem",
+                    width: `calc(100% - ${100 - instancedItem.value}%)`,
+                  }}
+                  className={`bg-neutral-900 text-white flex items-center justify-center absolute top-0 left-0 h-4`}
+                >
+                  {instancedItem.value > 1 && instancedItem.value}
+                </div>
+              ) : (
+                <div
+                  style={{
+                    fontSize: "0.7rem",
+                    width: `calc(calc(100% - ${
+                      100 - instancedItem.value
+                    }%) * 2.5)`,
+                  }}
+                  className={`bg-neutral-900 text-white flex items-center justify-center absolute top-0 left-0 h-4`}
+                >
+                  {instancedItem.value > 1 && instancedItem.value}
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+      );
+    }
+  );
 
   return (
     <div className="flex items-center gap-2">
@@ -88,11 +155,23 @@ const ItemView: React.FC<ItemViewProps> = ({
               className="rounded-md drop-shadow-md mx-auto"
             />
             <div className="mt-2">
-              <Blockquote>
-                {ItemDefinition(item.itemHash)?.flavorText}
-              </Blockquote>
-              <Tabs defaultValue={lore ? "lore" : "json"}>
+              {ItemDefinition(item.itemHash)?.flavorText && (
+                <Blockquote>
+                  {ItemDefinition(item.itemHash)?.flavorText}
+                </Blockquote>
+              )}
+              <Tabs
+                defaultValue={instancedItemStats.length > 0 ? "stats" : "json"}
+              >
                 <Tabs.List>
+                  {instancedItemStats.length > 0 && (
+                    <Tabs.Tab
+                      icon={<Icon3dCubeSphere size={14} />}
+                      value="stats"
+                    >
+                      Stats
+                    </Tabs.Tab>
+                  )}
                   {lore && (
                     <Tabs.Tab icon={<IconBook size={14} />} value="lore">
                       Lore
@@ -102,6 +181,21 @@ const ItemView: React.FC<ItemViewProps> = ({
                     Data
                   </Tabs.Tab>
                 </Tabs.List>
+                <Tabs.Panel value="stats">
+                  <div className="p-2" style={{ whiteSpace: "pre-line" }}>
+                    {item.itemInstanceId && (
+                      <div className="flex flex-col gap-1">
+                        {instancedItemStats}
+                      </div>
+                    )}
+                    {ItemDefinition(item.itemHash)?.itemType === 2 && (
+                      <div className="mt-2">
+                        Total:{" "}
+                        <span className="text-white">{totalStat}/100</span>
+                      </div>
+                    )}
+                  </div>
+                </Tabs.Panel>
                 <Tabs.Panel value="lore">
                   <div
                     className="p-2 text-gray-400"
