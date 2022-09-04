@@ -57,7 +57,7 @@ const DataTreeView: React.FC<DataTreeViewProps> = ({ data, expand }) => {
                   rel="noreferrer"
                   target="_blank"
                   className="underline hover:text-[#565c64]"
-                  href={`https://bungie.net/${text}`}
+                  href={`https://www.bungie.net/${text}`}
                 >
                   {raw}
                 </a>

@@ -1,6 +1,7 @@
 import DataTreeView from "@/components/DataTreeView";
 import SearchLayout from "@/components/layouts/SearchLayout";
 import ItemView from "@/components/stats/ItemView";
+import ProfileCard from "@/components/stats/ProfileCard";
 import { BungieAPI } from "@/server/router/destiny";
 import { useManifestStore } from "@/utils/stores";
 import { trpc } from "@/utils/trpc";
@@ -18,16 +19,10 @@ import {
   DestinyProfileResponse,
 } from "bungie-api-ts/destiny2";
 import { GetServerSideProps, GetServerSidePropsContext } from "next";
-import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import _ from "underscore";
 import { NextPageWithLayout } from "../../_app";
-
-const ProfileCard = dynamic(() => import("@/components/stats/ProfileCard"), {
-  ssr: false,
-});
-
 const includedItemTypes = [16, 21, 22, 24];
 
 interface ReportProps {
@@ -86,8 +81,8 @@ const Report: NextPageWithLayout<ReportProps> = ({
         <div className="flex flex-col lg:flex-row relative z-10 drop-shadow-md bg-gray-mantine-dark-100 border border-gray-mantine-dark rounded-md">
           <div className="lg:w-1/2 m-4">
             <ProfileCard
-              profile={profileResponse.profile.data}
-              characters={profileResponse.characters.data}
+              profile={profileResponse.profile.data!}
+              characters={profileResponse.characters.data!}
               character={character!}
               setCharacter={setCharacter}
               currentItem={currentItem}

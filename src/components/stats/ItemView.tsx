@@ -69,7 +69,7 @@ const ItemView: React.FC<ItemViewProps> = ({
                   manifest?.DestinyStatDefinition[instancedItem.statHash]
                     ?.displayProperties.name
                 }
-                src={`https://bungie.net${
+                src={`https://www.bungie.net${
                   manifest?.DestinyStatDefinition[instancedItem.statHash]
                     ?.displayProperties.icon
                 }`}
@@ -151,7 +151,7 @@ const ItemView: React.FC<ItemViewProps> = ({
           >
             <img
               alt={"Screenshot"}
-              src={`https://bungie.net${
+              src={`https://www.bungie.net${
                 ItemDefinition(item.itemHash)?.screenshot
               }`}
               className="rounded-md drop-shadow-md mx-auto"
@@ -223,7 +223,7 @@ const ItemView: React.FC<ItemViewProps> = ({
         width={50}
         className="cursor-pointer rounded-md"
         alt={ItemDefinition(item.itemHash)?.displayProperties.name}
-        src={`https://bungie.net${
+        src={`https://www.bungie.net${
           ItemDefinition(item.itemHash)?.displayProperties.icon
         }`}
       />
@@ -263,7 +263,7 @@ const ItemView: React.FC<ItemViewProps> = ({
                               perk.perkHash
                             ]?.displayProperties.name
                           }
-                          src={`https://bungie.net${
+                          src={`https://www.bungie.net${
                             manifest?.DestinySandboxPerkDefinition[
                               perk.perkHash
                             ]?.displayProperties.icon

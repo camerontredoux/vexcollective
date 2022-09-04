@@ -11,14 +11,18 @@ import {
   useMantineTheme,
 } from "@mantine/core";
 import { GiDiamonds } from "@react-icons/all-files/gi/GiDiamonds";
-import { DestinyItemResponse } from "bungie-api-ts/destiny2";
+import {
+  DestinyCharacterComponent,
+  DestinyItemResponse,
+  DestinyProfileComponent,
+} from "bungie-api-ts/destiny2";
 import { DateTime, Duration } from "luxon";
 
 import _ from "underscore";
 
 interface ProfileCardProps {
-  profile: any;
-  characters: any;
+  profile: DestinyProfileComponent;
+  characters: { [key: string]: DestinyCharacterComponent };
   character: string;
   setCharacter: (char: string) => void;
   currentItem: DestinyItemResponse | null;
@@ -32,6 +36,7 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
   currentItem,
 }) => {
   const manifest = useManifestStore((state) => state.manifest);
+  // usePreloadEmblems(characters);
 
   const PlatformIcon =
     MembershipTypeIcon[
@@ -76,7 +81,7 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
                 onClick={() => setCharacter(char.characterId)}
                 className="cursor-pointer"
                 size={"lg"}
-                src={`https://bungie.net${char.emblemPath}`}
+                src={`https://www.bungie.net${char.emblemPath}`}
               />
             ))}
         </div>
@@ -86,7 +91,7 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
               <div
                 className="w-full max-w-[461.58px] rounded-md"
                 style={{
-                  backgroundImage: `url(https://bungie.net${characters[character].emblemBackgroundPath}`,
+                  backgroundImage: `url(https://www.bungie.net${characters[character]?.emblemBackgroundPath}`,
                   backgroundSize: "cover",
                   height: "94px",
                   overflow: "hidden",
@@ -102,11 +107,11 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
                     <div className="flex">
                       {
                         manifest.DestinyClassDefinition[
-                          characters[character].classHash
+                          characters[character]?.classHash!
                         ]?.displayProperties.name
                       }
                       <span className="flex ml-2 text-orange-300 drop-shadow-md">
-                        <GiDiamonds /> {characters[character].light}
+                        <GiDiamonds /> {characters[character]?.light}
                       </span>
                     </div>
                   </Text>
@@ -118,9 +123,9 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
                   >
                     {manifest.DestinyRaceDefinition
                       ? manifest.DestinyRaceDefinition[
-                          characters[character].raceHash
+                          characters[character]?.raceHash!
                         ]?.genderedRaceNamesByGenderHash[
-                          characters[character].genderHash
+                          characters[character]?.genderHash!
                         ]
                       : "Unknown"}
                   </Text>
@@ -131,7 +136,7 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
             <div className="min-h-[93.48px] flex flex-col justify-center mt-4 px-3 pb-2 pt-5 bg-gray-mantine-light rounded-md border border-gray-mantine-dark">
               <Text size="sm" weight={600}>
                 <div className="flex gap-2 flex-wrap">
-                  {Object.keys(characters[character].stats).map(
+                  {Object.keys(characters[character]?.stats!).map(
                     (key, index) => {
                       if (Number(key) !== 1935470627) {
                         return (
@@ -147,12 +152,12 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
                                 <img
                                   width={22}
                                   alt="test"
-                                  src={`https://bungie.net${
+                                  src={`https://www.bungie.net${
                                     manifest.DestinyStatDefinition[Number(key)]
                                       ?.displayProperties.icon
                                   }`}
                                 />{" "}
-                                {characters[character].stats[key]}
+                                {characters[character]?.stats[Number(key)]}
                               </div>
                             </HoverCard.Target>
                             <HoverCard.Dropdown>
@@ -184,7 +189,7 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
                 spacing={"xl"}
                 className="whitespace-nowrap flex-nowrap"
               >
-                {characters[character].titleRecordHash && (
+                {characters[character]?.titleRecordHash && (
                   <Text size="sm">
                     <HoverCard
                       width={200}
@@ -197,16 +202,16 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
                           <img
                             width={20}
                             alt="test"
-                            src={`https://bungie.net${
+                            src={`https://www.bungie.net${
                               manifest.DestinyRecordDefinition[
-                                characters[character].titleRecordHash
+                                characters[character]?.titleRecordHash!
                               ]?.displayProperties.icon
                             }`}
                           />
                           <b className="ml-1">
                             {
                               manifest.DestinyRecordDefinition[
-                                characters[character].titleRecordHash
+                                characters[character]?.titleRecordHash!
                               ]?.displayProperties.name
                             }
                           </b>
@@ -216,7 +221,7 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
                         <Text weight={400} className="whitespace-normal">
                           {
                             manifest.DestinyRecordDefinition[
-                              characters[character].titleRecordHash
+                              characters[character]?.titleRecordHash!
                             ]?.displayProperties.description
                           }
                         </Text>
@@ -230,7 +235,7 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
                 >
                   <b>
                     {Duration.fromObject({
-                      minutes: characters[character].minutesPlayedTotal,
+                      minutes: +characters[character]?.minutesPlayedTotal!,
                     })
                       .shiftTo("hour", "minutes")
                       .toHuman()}{" "}
