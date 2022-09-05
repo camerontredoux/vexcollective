@@ -16,6 +16,7 @@ import { IconInfoCircle } from "@tabler/icons";
 import {
   DestinyItemComponent,
   DestinyItemResponse,
+  DestinyItemType,
   DestinyProfileResponse,
 } from "bungie-api-ts/destiny2";
 import { GetServerSideProps, GetServerSidePropsContext } from "next";
@@ -74,6 +75,9 @@ const Report: NextPageWithLayout<ReportProps> = ({
   const [opened, setOpened] = useState(false);
 
   const theme = useMantineTheme();
+
+  // @ts-expect-error: testS
+  console.log(DestinyItemType.Armor);
 
   if (errorCode === 1) {
     return (

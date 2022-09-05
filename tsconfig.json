@@ -24,13 +24,6 @@
     "incremental": true,
     "noUncheckedIndexedAccess": true
   },
-  "include": [
-    "next-env.d.ts",
-    "**/*.ts",
-    "**/*.tsx",
-    "**/*.js",
-    "src/components/ErrorBoundary.jsx",
-    "src/components/ErrorBoundary.jsx"
-  ],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "**/*.js", "**/*.jsx"],
   "exclude": ["node_modules"]
 }

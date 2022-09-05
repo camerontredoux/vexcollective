@@ -1,4 +1,5 @@
 import { ManifestDefinitions } from "@/utils/indexeddb";
+import { isArmor, isWeapon } from "@/utils/stats/profile";
 import {
   Badge,
   Blockquote,
@@ -85,7 +86,7 @@ const ItemView: React.FC<ItemViewProps> = ({
             <div className="text-sm text-white">{instancedItem.value}</div>
           ) : (
             <div className="bg-gray-mantine-dark relative w-full h-4 rounded-sm overflow-hidden">
-              {ItemDefinition(item.itemHash)?.itemType === 3 ? (
+              {isWeapon(ItemDefinition(item.itemHash)) ? (
                 <div
                   style={{
                     fontSize: "0.7rem",
@@ -190,7 +191,7 @@ const ItemView: React.FC<ItemViewProps> = ({
                         {instancedItemStats}
                       </div>
                     )}
-                    {ItemDefinition(item.itemHash)?.itemType === 2 && (
+                    {isArmor(ItemDefinition(item.itemHash)) && (
                       <div className="mt-2">
                         Total:{" "}
                         <span className="text-white">{totalStat}/100</span>
