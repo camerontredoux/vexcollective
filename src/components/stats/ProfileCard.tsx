@@ -1,5 +1,5 @@
 import { MembershipTypeIcon } from "@/utils/stats/profile";
-import { useManifestStore } from "@/utils/stores";
+import { useCharacterStore, useManifestStore } from "@/utils/stores";
 import {
   Avatar,
   Badge,
@@ -8,7 +8,6 @@ import {
   Stack,
   Text,
   Tooltip,
-  useMantineTheme,
 } from "@mantine/core";
 import { GiDiamonds } from "@react-icons/all-files/gi/GiDiamonds";
 import {
@@ -40,7 +39,7 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
   historicalStats,
 }) => {
   const manifest = useManifestStore((state) => state.manifest);
-  // usePreloadEmblems(characters);
+  const setCharacterId = useCharacterStore((state) => state.setCharacterId);
 
   const PlatformIcon =
     MembershipTypeIcon[
@@ -55,8 +54,6 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
 
     return DateTime.now().minus(diff).toRelative();
   };
-
-  const theme = useMantineTheme();
 
   if (manifest) {
     return (
@@ -82,7 +79,10 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
                   }`,
                 }}
                 key={idx}
-                onClick={() => setCharacter(char.characterId)}
+                onClick={() => {
+                  setCharacter(char.characterId);
+                  setCharacterId(char.characterId);
+                }}
                 className="cursor-pointer"
                 size={"lg"}
                 src={`https://www.bungie.net${char.emblemPath}`}

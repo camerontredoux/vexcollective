@@ -3,7 +3,7 @@ import SearchLayout from "@/components/layouts/SearchLayout";
 import ItemView from "@/components/stats/ItemView";
 import ProfileCard from "@/components/stats/ProfileCard";
 import { BungieAPI } from "@/server/router/destiny";
-import { useManifestStore } from "@/utils/stores";
+import { useCharacterStore, useManifestStore } from "@/utils/stores";
 import { trpc } from "@/utils/trpc";
 import {
   ActionIcon,
@@ -38,6 +38,8 @@ const Report: NextPageWithLayout<ReportProps> = ({
   const router = useRouter();
 
   const manifest = useManifestStore((state) => state.manifest);
+  const { setCharacterId, setDestinyMembershipId, setMembershipType } =
+    useCharacterStore();
 
   const { membershipType, destinyMembershipId } = router.query;
 
@@ -58,7 +60,7 @@ const Report: NextPageWithLayout<ReportProps> = ({
 
   const historicalStatsQuery = trpc.useQuery(
     [
-      "destiny.stats",
+      "destiny.account-stats",
       {
         destinyMembershipId: destinyMembershipId as string,
         membershipType: membershipType as string,
@@ -75,6 +77,7 @@ const Report: NextPageWithLayout<ReportProps> = ({
   const [historicalStats, setHistoricalStats] = useState<
     DestinyHistoricalStatsAccountResult | undefined
   >(undefined);
+
   const [character, setCharacter] = useState(
     profileResponse.profile.data?.characterIds[0]
   );
@@ -83,19 +86,30 @@ const Report: NextPageWithLayout<ReportProps> = ({
   );
 
   useEffect(() => {
-    (async () => {
-      if (membershipType && destinyMembershipId) {
-        setExtraProfile(profileQuery.data?.json);
-      }
-    })();
+    if (membershipType && destinyMembershipId) {
+      setDestinyMembershipId(destinyMembershipId as string);
+      setMembershipType(membershipType as string);
+      setCharacterId(profileResponse.profile.data?.characterIds[0]!);
+    }
+  }, [
+    membershipType,
+    destinyMembershipId,
+    profileResponse.profile.data?.characterIds,
+    setDestinyMembershipId,
+    setMembershipType,
+    setCharacterId,
+  ]);
+
+  useEffect(() => {
+    if (membershipType && destinyMembershipId) {
+      setExtraProfile(profileQuery.data?.json);
+    }
   }, [profileQuery.data?.json, membershipType, destinyMembershipId]);
 
   useEffect(() => {
-    (async () => {
-      if (membershipType && destinyMembershipId) {
-        setHistoricalStats(historicalStatsQuery.data?.json.Response);
-      }
-    })();
+    if (membershipType && destinyMembershipId) {
+      setHistoricalStats(historicalStatsQuery.data?.json.Response);
+    }
   }, [historicalStatsQuery.data?.json, membershipType, destinyMembershipId]);
 
   const [opened, setOpened] = useState(false);
@@ -257,7 +271,7 @@ export const getServerSideProps: GetServerSideProps = async (
 
   return {
     props: {
-      profileResponse: profileResponse!,
+      profileResponse: profileResponse,
       errorCode: json.ErrorCode,
     },
   };

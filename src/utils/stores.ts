@@ -17,10 +17,30 @@ export const useDataStore = create<DataState>()((set) => ({
 
 interface ManifestState {
   manifest: ManifestDefinitions | null;
-  setManifest: (manifest: any) => void;
+  setManifest: (manifest: ManifestDefinitions) => void;
 }
 
 export const useManifestStore = create<ManifestState>()((set) => ({
   manifest: null,
   setManifest: (manifest) => set((state) => ({ ...state, manifest })),
+}));
+
+interface CharacterStore {
+  characterId: string | null;
+  destinyMembershipId: string | null;
+  membershipType: string | null;
+  setCharacterId: (characterId: string) => void;
+  setDestinyMembershipId: (destinyMembershipId: string) => void;
+  setMembershipType: (membershipType: string) => void;
+}
+
+export const useCharacterStore = create<CharacterStore>()((set) => ({
+  characterId: null,
+  destinyMembershipId: null,
+  membershipType: null,
+  setCharacterId: (characterId) => set((state) => ({ ...state, characterId })),
+  setDestinyMembershipId: (destinyMembershipId) =>
+    set((state) => ({ ...state, destinyMembershipId })),
+  setMembershipType: (membershipType) =>
+    set((state) => ({ ...state, membershipType })),
 }));

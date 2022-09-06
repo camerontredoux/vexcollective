@@ -2,7 +2,7 @@ import { FaPlaystation } from "@react-icons/all-files/fa/FaPlaystation";
 import { FaSteam } from "@react-icons/all-files/fa/FaSteam";
 import { FaXbox } from "@react-icons/all-files/fa/FaXbox";
 import {
-  DestinyHistoricalStatsAccountResult,
+  DestinyHistoricalStatsValue,
   DestinyInventoryItemDefinition,
 } from "bungie-api-ts/destiny2";
 import _ from "underscore";
@@ -47,30 +47,15 @@ export const isArmor = (item: DestinyInventoryItemDefinition | undefined) =>
 export const isWeapon = (item: DestinyInventoryItemDefinition | undefined) =>
   item?.itemType === DestinyItemType.Weapon;
 
-export const getHistoricalStats = (
-  historicalStats: DestinyHistoricalStatsAccountResult
-) => {
-  const mergedCharactersPvP =
-    historicalStats.mergedAllCharacters.results["allPvP"]?.allTime;
-
-  const activitiesEntered = mergedCharactersPvP?.activitiesEntered;
-  const activitiesWon = mergedCharactersPvP?.activitiesWon;
-  const assists = mergedCharactersPvP?.assists;
-  const averageDeathDistance = mergedCharactersPvP?.averageDeathDistance;
-  const averageKillDistance = mergedCharactersPvP?.averageKillDistance;
-  const totalDeathDistance = mergedCharactersPvP?.totalDeathDistance;
-  const totalKillDistance = mergedCharactersPvP?.totalKillDistance;
-  const kills = mergedCharactersPvP?.kills;
-  const deaths = mergedCharactersPvP?.deaths;
-  const efficiency = mergedCharactersPvP?.efficiency;
-  const killsDeathRatio = mergedCharactersPvP?.killsDeathRatio;
-  const killsDeathsAssists = mergedCharactersPvP?.killsDeathsAssists;
-  const precisionKills = mergedCharactersPvP?.precisionKills;
-  const suicides = mergedCharactersPvP?.suicides;
-
+export const getHistoricalStats = (historicalStats: {
+  [key: string]: DestinyHistoricalStatsValue;
+}) => {
   const sortedWeapons = _.sortBy(
-    _.filter(mergedCharactersPvP!, (statType) => {
-      return statType.statId.includes("weaponKills");
+    _.filter(historicalStats, (statType) => {
+      return (
+        statType.statId.startsWith("weaponKills") &&
+        !statType.statId.startsWith("weaponKillsPrecision")
+      );
     }),
     (weapon) => {
       return weapon.basic.value;
@@ -101,22 +86,7 @@ export const getHistoricalStats = (
   });
 
   return {
-    general: {
-      activitiesEntered,
-      activitiesWon,
-      assists,
-      averageDeathDistance,
-      averageKillDistance,
-      totalDeathDistance,
-      totalKillDistance,
-      kills,
-      deaths,
-      efficiency,
-      killsDeathRatio,
-      killsDeathsAssists,
-      precisionKills,
-      suicides,
-    },
+    historicalStats,
     weapons: {
       ...weapons,
     },

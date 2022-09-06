@@ -1,7 +1,7 @@
 // src/pages/_app.tsx
 import ErrorBoundary from "@/components/ErrorBoundary";
 import Layout from "@/components/layouts/Layout";
-import { manifestDb } from "@/utils/indexeddb";
+import { manifestDb, ManifestDefinitions } from "@/utils/indexeddb";
 import { useManifestStore } from "@/utils/stores";
 import { Loader, MantineProvider } from "@mantine/core";
 import { withTRPC } from "@trpc/next";
@@ -35,7 +35,7 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
 
       manifestDb.transaction("r", manifestDb.manifest, () => {
         manifestDb.manifest.toArray().then((man) => {
-          setManifest(man[0]?.definitions);
+          setManifest(man[0]?.definitions as ManifestDefinitions);
           setManifestLoading(false);
         });
       });

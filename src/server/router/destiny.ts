@@ -66,7 +66,7 @@ export const destinyRouter = createRouter()
       };
     },
   })
-  .query("stats", {
+  .query("account-stats", {
     input: z.object({
       membershipType: z.string(),
       destinyMembershipId: z.string(),
@@ -82,5 +82,24 @@ export const destinyRouter = createRouter()
       return {
         json,
       };
+    },
+  })
+  .query("character-stats-pvp", {
+    input: z.object({
+      membershipType: z.string(),
+      destinyMembershipId: z.string(),
+      characterId: z.string(),
+    }),
+    async resolve({
+      input: { characterId, destinyMembershipId, membershipType },
+    }) {
+      const data = await BungieAPI.fetchAPI(
+        `/Destiny2/${membershipType}/Account/${destinyMembershipId}/Character/${characterId}/Stats?modes=AllPvP&groups=General,Weapons,Medals`,
+        false
+      );
+
+      const json = await data.json();
+
+      return json;
     },
   });
