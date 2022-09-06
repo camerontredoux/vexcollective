@@ -14,7 +14,6 @@ import {
 } from "@mantine/core";
 import { IconInfoCircle } from "@tabler/icons";
 import {
-  DestinyHistoricalStatsAccountResult,
   DestinyItemComponent,
   DestinyItemResponse,
   DestinyProfileResponse,
@@ -58,25 +57,7 @@ const Report: NextPageWithLayout<ReportProps> = ({
     }
   );
 
-  const historicalStatsQuery = trpc.useQuery(
-    [
-      "destiny.account-stats",
-      {
-        destinyMembershipId: destinyMembershipId as string,
-        membershipType: membershipType as string,
-      },
-    ],
-    {
-      enabled: Boolean(membershipType && destinyMembershipId),
-      refetchOnWindowFocus: false,
-      refetchOnMount: false,
-    }
-  );
-
   const [extraProfile, setExtraProfile] = useState<any | null>(null);
-  const [historicalStats, setHistoricalStats] = useState<
-    DestinyHistoricalStatsAccountResult | undefined
-  >(undefined);
 
   const [character, setCharacter] = useState(
     profileResponse.profile.data?.characterIds[0]
@@ -106,12 +87,6 @@ const Report: NextPageWithLayout<ReportProps> = ({
     }
   }, [profileQuery.data?.json, membershipType, destinyMembershipId]);
 
-  useEffect(() => {
-    if (membershipType && destinyMembershipId) {
-      setHistoricalStats(historicalStatsQuery.data?.json.Response);
-    }
-  }, [historicalStatsQuery.data?.json, membershipType, destinyMembershipId]);
-
   const [opened, setOpened] = useState(false);
 
   const theme = useMantineTheme();
@@ -127,7 +102,6 @@ const Report: NextPageWithLayout<ReportProps> = ({
               character={character!}
               setCharacter={setCharacter}
               currentItem={currentItem}
-              historicalStats={historicalStats}
             />
           </div>
           <div className="lg:w-1/2 p-5 m-4 rounded-md border border-gray-mantine-dark bg-gray-mantine-light">
@@ -235,10 +209,6 @@ const Report: NextPageWithLayout<ReportProps> = ({
         <Modal opened={opened} onClose={() => setOpened(false)}>
           <DataTreeView data={extraProfile && extraProfile} expand={false} />
           <DataTreeView data={profileResponse} expand={false} />
-          <DataTreeView
-            data={historicalStats && historicalStats}
-            expand={false}
-          />
         </Modal>
       </>
     );

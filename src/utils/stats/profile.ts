@@ -14,6 +14,31 @@ export const MembershipTypeIcon = {
   3: FaSteam,
 };
 
+const defaultWeaponNames = [
+  "AutoRifle",
+  "BeamRifle",
+  "Bow",
+  "Glaive",
+  "FusionRifle",
+  "HandCannon",
+  "TraceRifle",
+  "MachineGun",
+  "PulseRifle",
+  "RocketLauncher",
+  "ScoutRifle",
+  "Shotgun",
+  "Sniper",
+  "Submachinegun",
+  "Relic",
+  "SideArm",
+  "Sword",
+  "Ability",
+  "Grenade",
+  "GrenadeLauncher",
+  "Super",
+  "Melee",
+];
+
 const weaponIcons = {
   Bow: "\uE099",
   "Auto Rifle": "\uE100",
@@ -39,7 +64,7 @@ const weaponIcons = {
   Glaive: "\uE156",
 } as const;
 
-type WeaponIcon = keyof typeof weaponIcons;
+type WeaponType = keyof typeof weaponIcons;
 
 export const isArmor = (item: DestinyInventoryItemDefinition | undefined) =>
   item?.itemType === DestinyItemType.Armor;
@@ -50,45 +75,44 @@ export const isWeapon = (item: DestinyInventoryItemDefinition | undefined) =>
 export const getHistoricalStats = (historicalStats: {
   [key: string]: DestinyHistoricalStatsValue;
 }) => {
-  const sortedWeapons = _.sortBy(
-    _.filter(historicalStats, (statType) => {
-      return (
-        statType.statId.startsWith("weaponKills") &&
-        !statType.statId.startsWith("weaponKillsPrecision")
+  const combinedWeaponStats = _.map(defaultWeaponNames, (name) => {
+    return _.filter(historicalStats, (stat) => {
+      const statIdWithoutPrefix = stat.statId.substring(
+        stat.statId.lastIndexOf("Kills") + 5
       );
-    }),
-    (weapon) => {
-      return weapon.basic.value;
-    }
-  ).reverse();
 
-  const weapons = _.map(sortedWeapons, (weapon) => {
+      return statIdWithoutPrefix === name;
+    });
+  });
+
+  const sortedWeaponStats = _.sortBy(combinedWeaponStats, (weapon) => {
+    return weapon[0]?.basic.value;
+  }).reverse();
+
+  const weapons = _.map(sortedWeaponStats, (weapon) => {
     // https://stackoverflow.com/a/26188945
-    let weaponName = weapon.statId
+    let name = weapon[0]?.statId
       .substring(11)
       .replace(/([A-Z][a-z])/g, " $1")
       .trim();
 
-    if (weaponName === "Submachinegun") {
-      weaponName = "Submachine Gun";
-    } else if (weaponName === "Side Arm") {
-      weaponName = "Sidearm";
+    if (name === "Submachinegun") {
+      name = "Submachine Gun";
+    } else if (name === "Side Arm") {
+      name = "Sidearm";
     }
 
-    const icon = weaponIcons[weaponName as WeaponIcon];
+    const icon = weaponIcons[name as WeaponType];
 
     return {
-      weaponName,
-      basic: weapon.basic,
-      pga: weapon.pga,
+      name,
       icon,
+      weapon,
     };
   });
 
   return {
     historicalStats,
-    weapons: {
-      ...weapons,
-    },
+    weapons,
   };
 };

@@ -12,7 +12,6 @@ import {
 import { GiDiamonds } from "@react-icons/all-files/gi/GiDiamonds";
 import {
   DestinyCharacterComponent,
-  DestinyHistoricalStatsAccountResult,
   DestinyItemResponse,
   DestinyProfileComponent,
 } from "bungie-api-ts/destiny2";
@@ -27,7 +26,6 @@ interface ProfileCardProps {
   character: string;
   setCharacter: (char: string) => void;
   currentItem: DestinyItemResponse | null;
-  historicalStats: DestinyHistoricalStatsAccountResult | undefined;
 }
 
 const ProfileCard: React.FC<ProfileCardProps> = ({
@@ -36,7 +34,6 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
   character,
   setCharacter,
   currentItem,
-  historicalStats,
 }) => {
   const manifest = useManifestStore((state) => state.manifest);
   const setCharacterId = useCharacterStore((state) => state.setCharacterId);
@@ -275,9 +272,7 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
           </>
         )}
         <div className="flex flex-col justify-center mt-4 p-3 bg-gray-mantine-light rounded-md border border-gray-mantine-dark">
-          {historicalStats && (
-            <PerformanceStats historicalStats={historicalStats} />
-          )}
+          <PerformanceStats />
         </div>
       </>
     );
