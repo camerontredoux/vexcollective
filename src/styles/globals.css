@@ -1,5 +1,9 @@
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Ubuntu+Mono:wght@400;700&display=swap");
+@font-face {
+  font-family: "Destiny Keys";
+  src: url("../../fonts/Destiny_Keys.otf");
+}
 
 @tailwind base;
 @tailwind components;

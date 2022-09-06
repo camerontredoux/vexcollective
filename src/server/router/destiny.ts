@@ -65,4 +65,22 @@ export const destinyRouter = createRouter()
         json,
       };
     },
+  })
+  .query("stats", {
+    input: z.object({
+      membershipType: z.string(),
+      destinyMembershipId: z.string(),
+    }),
+    async resolve({ input: { destinyMembershipId, membershipType } }) {
+      const data = await BungieAPI.fetchAPI(
+        `/Destiny2/${membershipType}/Account/${destinyMembershipId}/Stats?components=General,Weapons,Medals`,
+        false
+      );
+
+      const json = await data.json();
+
+      return {
+        json,
+      };
+    },
   });
