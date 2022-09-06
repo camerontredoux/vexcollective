@@ -57,8 +57,12 @@ const Endpoint: NextPageWithLayout = () => {
     }
 
     if (queries) {
-      _.forEach(Object.entries(queries), ([key, value]) => {
-        currentPath += `?${key}=${value}`;
+      _.forEach(Object.entries(queries), ([key, value], idx) => {
+        if (idx === 0) {
+          currentPath += `?${key}=${value}`;
+        } else {
+          currentPath += `&${key}=${value}`;
+        }
       });
     }
 

@@ -11,6 +11,9 @@ const features = {
   "Radar Charts": (
     <div className="text-black h-full w-full flex-1 absolute">
       <ResponsiveRadar
+        theme={{
+          textColor: "white",
+        }}
         data={[
           {
             taste: "fruity",

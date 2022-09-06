@@ -55,7 +55,7 @@ export const destinyRouter = createRouter()
     }),
     async resolve({ input: { membershipType, membershipId } }) {
       const data = await BungieAPI.fetchAPI(
-        `/Destiny2/${membershipType}/Profile/${membershipId}?components=900,1100`,
+        `/Destiny2/${membershipType}/Profile/${membershipId}?components=900,1100,104,301`,
         false
       );
 

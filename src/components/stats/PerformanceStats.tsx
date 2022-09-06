@@ -63,13 +63,7 @@ const PerformanceStats: React.FC<PerformanceStatsProps> = ({
         </Tabs.Panel>
         <Tabs.Panel value="misc">Misc</Tabs.Panel>
       </Tabs>
-      <DataTreeView
-        data={
-          historicalStats &&
-          historicalStats.mergedAllCharacters.results["allPvP"]?.allTime
-        }
-        expand={false}
-      />
+      <DataTreeView data={historicalStats && historicalStats} expand={false} />
       <DataTreeView data={stats} expand={false} />
     </>
   );
