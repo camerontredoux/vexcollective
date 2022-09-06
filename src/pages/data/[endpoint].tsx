@@ -197,7 +197,7 @@ const Endpoint: NextPageWithLayout = () => {
         </div>
       )}
       {getBungieMutation.isLoading ? (
-        <div className="flex justify-center mt-6 sm:mt-0">
+        <div className="flex justify-center mt-6">
           <Loader />
         </div>
       ) : data ? (
