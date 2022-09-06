@@ -11,6 +11,7 @@ import {
   Text,
   useMantineTheme,
 } from "@mantine/core";
+import { GiDiamonds } from "@react-icons/all-files/gi/GiDiamonds";
 import { Icon3dCubeSphere, IconBook, IconDatabase } from "@tabler/icons";
 import {
   DestinyItemComponent,
@@ -61,7 +62,7 @@ const ItemView: React.FC<ItemViewProps> = ({
 
       return (
         <div key={idx}>
-          <div className="flex gap-2 items-center">
+          <div className="flex gap-2 items-center mb-[2px]">
             {manifest?.DestinyStatDefinition[instancedItem.statHash]
               ?.displayProperties.hasIcon && (
               <img
@@ -92,7 +93,7 @@ const ItemView: React.FC<ItemViewProps> = ({
                     fontSize: "0.7rem",
                     width: `calc(100% - ${100 - instancedItem.value}%)`,
                   }}
-                  className={`bg-neutral-900 text-white flex items-center justify-center absolute top-0 left-0 h-4`}
+                  className={`bg-gray-200 text-black font-bold flex items-center justify-center absolute top-0 left-0 h-4`}
                 >
                   {instancedItem.value > 1 && instancedItem.value}
                 </div>
@@ -104,7 +105,7 @@ const ItemView: React.FC<ItemViewProps> = ({
                       100 - instancedItem.value
                     }%) * 2.5)`,
                   }}
-                  className={`bg-neutral-900 text-white flex items-center justify-center absolute top-0 left-0 h-4`}
+                  className={`bg-gray-200 text-black font-bold flex items-center justify-center absolute top-0 left-0 h-4`}
                 >
                   {instancedItem.value > 1 && instancedItem.value}
                 </div>
@@ -186,6 +187,23 @@ const ItemView: React.FC<ItemViewProps> = ({
                 </Tabs.List>
                 <Tabs.Panel value="stats">
                   <div className="p-2" style={{ whiteSpace: "pre-line" }}>
+                    {profile.itemComponents.instances.data?.[
+                      item.itemInstanceId!
+                    ]?.primaryStat && (
+                      <Badge color={"orange"} mb={10}>
+                        <div className="flex items-center">
+                          <span>Light Level</span>
+                          <span className="ml-2 flex text-orange-300 drop-shadow-md items-center">
+                            <GiDiamonds />{" "}
+                            {
+                              profile.itemComponents.instances.data?.[
+                                item.itemInstanceId!
+                              ]?.primaryStat.value!
+                            }
+                          </span>
+                        </div>
+                      </Badge>
+                    )}
                     {item.itemInstanceId && (
                       <div className="flex flex-col gap-1">
                         {instancedItemStats}

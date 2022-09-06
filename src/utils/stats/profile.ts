@@ -101,7 +101,7 @@ export const getHistoricalStats = (
   });
 
   return {
-    overall: {
+    general: {
       activitiesEntered,
       activitiesWon,
       assists,
