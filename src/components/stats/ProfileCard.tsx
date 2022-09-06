@@ -149,7 +149,7 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
                             width={200}
                             withArrow
                             closeDelay={50}
-                            openDelay={250}
+                            openDelay={200}
                           >
                             <HoverCard.Target>
                               <div className="flex gap-1 items-center cursor-pointer">
@@ -171,6 +171,14 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
                                     manifest.DestinyStatDefinition[Number(key)]
                                       ?.displayProperties.name
                                   }
+                                  <span className="ml-2 text-orange-300">
+                                    Tier{" "}
+                                    {Math.floor(
+                                      characters[character]?.stats[
+                                        Number(key)
+                                      ]! / 10
+                                    )}
+                                  </span>
                                 </Text>
                                 <Text weight={400}>
                                   {

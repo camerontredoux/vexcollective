@@ -35,7 +35,12 @@ const getLabelStyle: StylingValue = ({ style }) => ({
 
 const DataTreeView: React.FC<DataTreeViewProps> = ({ data, expand }) => {
   return (
-    <div className="rounded-sm overflow-y-auto font-ubuntu flex-1">
+    <div
+      style={{
+        fontFamily: "'Ubuntu Mono', 'Destiny Keys'",
+      }}
+      className="rounded-sm overflow-y-auto flex-1"
+    >
       <JSONTree
         data={data}
         theme={{

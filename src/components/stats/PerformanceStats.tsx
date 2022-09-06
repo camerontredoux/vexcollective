@@ -1,5 +1,5 @@
 import { getHistoricalStats } from "@/utils/stats/profile";
-import { Table, Tabs } from "@mantine/core";
+import { Table, Tabs, Tooltip } from "@mantine/core";
 import { DestinyHistoricalStatsAccountResult } from "bungie-api-ts/destiny2";
 import React from "react";
 import _ from "underscore";
@@ -16,34 +16,45 @@ const PerformanceStats: React.FC<PerformanceStatsProps> = ({
 
   return (
     <>
-      <Tabs defaultValue={"overall"}>
+      <Tabs defaultValue={"general"}>
         <Tabs.List>
-          <Tabs.Tab value="overall">Overall</Tabs.Tab>
+          <Tabs.Tab value="general">General</Tabs.Tab>
           <Tabs.Tab value="weapons">Weapon Kills</Tabs.Tab>
           <Tabs.Tab value="misc">Misc</Tabs.Tab>
         </Tabs.List>
-        <Tabs.Panel value="overall">Overall Stats</Tabs.Panel>
+        <Tabs.Panel value="general">Overall Stats</Tabs.Panel>
         <Tabs.Panel value="weapons">
-          <Table highlightOnHover className="table-fixed">
-            <col width="25%" />
-            <col width="60%" />
-            <col width="20%" />
+          <Table highlightOnHover>
             <thead>
               <tr>
-                <th>Type</th>
+                <th>Weapon</th>
                 <th></th>
                 <th>Kills</th>
+                <th>
+                  <Tooltip
+                    withArrow
+                    color={"gray"}
+                    position={"right"}
+                    label="Per Game Average"
+                  >
+                    <div>PGA</div>
+                  </Tooltip>
+                </th>
               </tr>
             </thead>
             <tbody>
               {_.map(stats.weapons, (weapon, idx) => {
                 return (
                   <tr key={idx}>
-                    <td style={{ fontFamily: "Destiny Keys" }}>
+                    <td
+                      style={{ fontFamily: "Destiny Keys" }}
+                      className="text-center"
+                    >
                       {weapon.icon}
                     </td>
                     <td>{weapon.weaponName}</td>
-                    <td>{weapon.basic.value}</td>
+                    <td>{weapon.basic.value.toLocaleString()}</td>
+                    <td>{weapon.pga.displayValue}</td>
                   </tr>
                 );
               })}

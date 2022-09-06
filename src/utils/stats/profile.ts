@@ -100,32 +100,6 @@ export const getHistoricalStats = (
     };
   });
 
-  const weaponKillsAutoRifle = mergedCharactersPvP?.weaponKillsAutoRifle;
-  const weaponKillsBeamRifle = mergedCharactersPvP?.weaponKillsBeamRifle;
-  const weaponKillsBow = mergedCharactersPvP?.weaponKillsBow;
-  const weaponKillsGlaive = mergedCharactersPvP?.weaponKillsGlaive;
-  const weaponKillsFusionRifle = mergedCharactersPvP?.weaponKillsFusionRifle;
-  const weaponKillsHandCannon = mergedCharactersPvP?.weaponKillsHandCannon;
-  const weaponKillsTraceRifle = mergedCharactersPvP?.weaponKillsTraceRifle;
-  const weaponKillsMachineGun = mergedCharactersPvP?.weaponKillsMachineGun;
-  const weaponKillsPulseRifle = mergedCharactersPvP?.weaponKillsPulseRifle;
-  const weaponKillsRocketLauncher =
-    mergedCharactersPvP?.weaponKillsRocketLauncher;
-  const weaponKillsScoutRifle = mergedCharactersPvP?.weaponKillsScoutRifle;
-  const weaponKillsShotgun = mergedCharactersPvP?.weaponKillsShotgun;
-  const weaponKillsSniper = mergedCharactersPvP?.weaponKillsSniper;
-  const weaponKillsSubmachinegun =
-    mergedCharactersPvP?.weaponKillsSubmachinegun;
-  const weaponKillsRelic = mergedCharactersPvP?.weaponKillsRelic;
-  const weaponKillsSideArm = mergedCharactersPvP?.weaponsKillsSideArm;
-  const weaponKillsSword = mergedCharactersPvP?.weaponKillsSword;
-  const weaponKillsAbility = mergedCharactersPvP?.weaponKillsAbility;
-  const weaponKillsGrenade = mergedCharactersPvP?.weaponKillsGrenade;
-  const weaponKillsGrenadeLauncher =
-    mergedCharactersPvP?.weaponKillsGrenadeLauncher;
-  const weaponKillsSuper = mergedCharactersPvP?.weaponKillsSuper;
-  const weaponKillsMelee = mergedCharactersPvP?.weaponKillsMelee;
-
   return {
     overall: {
       activitiesEntered,

@@ -246,18 +246,18 @@ const ItemView: React.FC<ItemViewProps> = ({
                     key={idx}
                     style={{
                       backgroundColor: theme.colors.gray![8],
-                      padding: "2px",
                       borderRadius: "5px",
                     }}
                   >
                     <HoverCard
                       width={200}
                       withArrow
+                      openDelay={25}
                       closeDelay={50}
-                      openDelay={250}
                     >
                       <HoverCard.Target>
                         <img
+                          className="cursor-pointer"
                           width={18}
                           alt={
                             manifest?.DestinySandboxPerkDefinition[
