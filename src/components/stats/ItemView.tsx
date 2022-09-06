@@ -240,7 +240,7 @@ const ItemView: React.FC<ItemViewProps> = ({
       <img
         onClick={() => setOpened(true)}
         width={50}
-        className="cursor-pointer rounded-md"
+        className="cursor-pointer rounded-md drop-shadow-sm"
         alt={ItemDefinition(item.itemHash)?.displayProperties.name}
         src={`https://www.bungie.net${
           ItemDefinition(item.itemHash)?.displayProperties.icon

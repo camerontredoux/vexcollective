@@ -137,7 +137,9 @@ const Navbar: React.FC = () => {
                     onClick={() => setOpened(false)}
                     className="unstyled-btn"
                   >
-                    <a>{link.text}</a>
+                    <a target={link.text === "GitHub" ? "_blank" : undefined}>
+                      {link.text}
+                    </a>
                   </UnstyledButton>
                 </Link>
               </li>
@@ -163,7 +165,12 @@ const NavLink: React.FC<LinkProps> = ({ href, children, index }) => {
       transition={{ delay: index * 0.25, duration: 0.5 }}
     >
       <Link href={href}>
-        <a className="cursor-pointer">{children}</a>
+        <a
+          target={children === "GitHub" ? "_blank" : undefined}
+          className="cursor-pointer"
+        >
+          {children}
+        </a>
       </Link>
     </motion.li>
   );
