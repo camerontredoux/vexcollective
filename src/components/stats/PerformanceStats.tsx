@@ -6,7 +6,6 @@ import { useCharacterStore } from "@/utils/stores";
 import { trpc } from "@/utils/trpc";
 import { Loader, Tabs } from "@mantine/core";
 import React, { useEffect, useState } from "react";
-import DataTreeView from "../DataTreeView";
 import GeneralStats from "./GeneralStats";
 import WeaponStatsTable from "./tables/WeaponStatsTable";
 
@@ -53,7 +52,13 @@ const PerformanceStats: React.FC<PerformanceStatsProps> = ({}) => {
           <Tabs.Tab value="misc">Misc</Tabs.Tab>
         </Tabs.List>
         <Tabs.Panel value="general">
-          <GeneralStats stats={stats} />
+          {characterStatsQuery.isLoading ? (
+            <div className="mt-4">
+              <Loader mx={"auto"} />
+            </div>
+          ) : (
+            <GeneralStats stats={stats} />
+          )}
         </Tabs.Panel>
         <Tabs.Panel value="weapons" className="relative">
           {characterStatsQuery.isLoading ? (
@@ -66,7 +71,7 @@ const PerformanceStats: React.FC<PerformanceStatsProps> = ({}) => {
         </Tabs.Panel>
         <Tabs.Panel value="misc">Misc</Tabs.Panel>
       </Tabs>
-      <DataTreeView data={stats} expand={false} />
+      {/* <DataTreeView data={stats} expand={false} /> */}
     </>
   );
 };

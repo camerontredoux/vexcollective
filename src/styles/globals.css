@@ -9,6 +9,10 @@
 @tailwind components;
 @tailwind utilities;
 
+.stat-card {
+  @apply px-4 py-3 border border-gray-mantine-dark bg-gray-mantine-dark-100 rounded-md;
+}
+
 .feature-item {
   @apply text-sm font-bold bg-zinc-800 px-2 py-1 rounded-md;
 }
