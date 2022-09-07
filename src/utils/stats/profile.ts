@@ -65,6 +65,7 @@ const weaponIcons = {
 } as const;
 
 type WeaponType = keyof typeof weaponIcons;
+type IconType = typeof weaponIcons[WeaponType];
 
 export const isArmor = (item: DestinyInventoryItemDefinition | undefined) =>
   item?.itemType === DestinyItemType.Armor;
@@ -72,9 +73,20 @@ export const isArmor = (item: DestinyInventoryItemDefinition | undefined) =>
 export const isWeapon = (item: DestinyInventoryItemDefinition | undefined) =>
   item?.itemType === DestinyItemType.Weapon;
 
+export type CustomHistoricalStats = {
+  historicalStats: {
+    [key: string]: DestinyHistoricalStatsValue;
+  };
+  weapons: {
+    name: string | undefined;
+    icon: IconType;
+    stats: DestinyHistoricalStatsValue[];
+  }[];
+};
+
 export const getHistoricalStats = (historicalStats: {
   [key: string]: DestinyHistoricalStatsValue;
-}) => {
+}): CustomHistoricalStats => {
   const combinedWeaponStats = _.map(defaultWeaponNames, (name) => {
     return _.filter(historicalStats, (stat) => {
       const statIdWithoutPrefix = stat.statId.substring(
@@ -107,7 +119,7 @@ export const getHistoricalStats = (historicalStats: {
     return {
       name,
       icon,
-      weapon,
+      stats: weapon,
     };
   });
 

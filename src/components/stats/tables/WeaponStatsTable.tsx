@@ -1,19 +1,10 @@
+import { CustomHistoricalStats } from "@/utils/stats/profile";
 import { ScrollArea, Table, Tooltip } from "@mantine/core";
-import { DestinyHistoricalStatsValue } from "bungie-api-ts/destiny2";
 import React from "react";
 import _ from "underscore";
 
 interface WeaponStatsTableProps {
-  stats: {
-    historicalStats: {
-      [key: string]: DestinyHistoricalStatsValue;
-    };
-    weapons: {
-      name: string;
-      icon: string;
-      weapon: DestinyHistoricalStatsValue[];
-    }[];
-  };
+  stats: CustomHistoricalStats | null;
 }
 
 const WeaponStatsTable: React.FC<WeaponStatsTableProps> = ({ stats }) => {
@@ -52,11 +43,11 @@ const WeaponStatsTable: React.FC<WeaponStatsTableProps> = ({ stats }) => {
                       {weapon.icon}
                     </td>
                     <td>{weapon.name}</td>
-                    <td>{weapon.weapon[0]?.basic.value.toLocaleString()}</td>
-                    <td>{weapon.weapon[0]?.pga.value.toFixed(2)}</td>
-                    <td>{weapon.weapon[1]?.basic.value.toLocaleString()}</td>
+                    <td>{weapon.stats[0]?.basic.value.toLocaleString()}</td>
+                    <td>{weapon.stats[0]?.pga.value.toFixed(2)}</td>
+                    <td>{weapon.stats[1]?.basic.value.toLocaleString()}</td>
                     <td>
-                      {weapon.weapon[2]?.basic.value.toLocaleString("en", {
+                      {weapon.stats[2]?.basic.value.toLocaleString("en", {
                         style: "percent",
                         minimumFractionDigits: 2,
                       })}
