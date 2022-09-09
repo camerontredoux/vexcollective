@@ -9,6 +9,10 @@
 @tailwind components;
 @tailwind utilities;
 
+.stat-grid {
+  @apply grid grid-cols-2 sm:grid-cols-3 gap-2 mt-2;
+}
+
 .stat-card {
   @apply px-4 py-3 border border-gray-mantine-dark bg-gray-mantine-dark-100 rounded-md;
 }

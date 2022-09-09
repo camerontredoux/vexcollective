@@ -63,7 +63,7 @@ const SearchLayout: React.FC<{ children: React.ReactElement }> = ({
   );
   return (
     <>
-      <div className="w-full rounded-md mt-6 sm:mt-0">
+      <div className="w-full rounded-md">
         <form onSubmit={handleSearch}>
           <TextInput
             spellCheck={false}

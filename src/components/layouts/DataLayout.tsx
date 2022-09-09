@@ -23,7 +23,7 @@ const DataLayout: React.FC<{ children: React.ReactElement }> = ({
 
   return (
     <>
-      <div className="sm:mt-0 mt-6">
+      <div>
         <Select
           spellCheck={false}
           radius={"sm"}

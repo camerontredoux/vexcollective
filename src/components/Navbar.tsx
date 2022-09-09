@@ -39,24 +39,16 @@ const Navbar: React.FC = () => {
 
   return (
     <>
-      <div className="flex sm:flex-col justify-between items-center sm:items-start sm:justify-start py-2 sm:w-56 text-gray-600">
+      <div className="flex justify-between py-2 text-gray-600 mb-6">
         <Link href="/">
-          <a className="flex items-center sm:mb-8">
+          <a className="flex items-center">
             <Logo width={27} />
             <h1 className="ml-2 font-bold uppercase text-gray-500">
               Vex Collective
             </h1>
           </a>
         </Link>
-        <ul className="hidden sm:flex sm:flex-col gap-4">
-          <motion.li
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.1, duration: 0.5 }}
-            className="text-white"
-          >
-            Getting Started
-          </motion.li>
+        <ul className="hidden sm:flex gap-4">
           {links.map((link, index) => (
             <NavLink key={index} href={link.href} index={index}>
               <div
@@ -71,7 +63,7 @@ const Navbar: React.FC = () => {
             </NavLink>
           ))}
         </ul>
-        <ul className="mt-9 hidden sm:flex sm:flex-col gap-4">
+        {/* <ul className="hidden sm:flex gap-4">
           <motion.li
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -85,7 +77,7 @@ const Navbar: React.FC = () => {
               {link.text}
             </NavLink>
           ))}
-        </ul>
+        </ul> */}
         <MediaQuery largerThan="xs" styles={{ display: "none" }}>
           <Burger
             color={theme.colors.gray![5]}

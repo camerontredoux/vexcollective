@@ -1,5 +1,7 @@
 import { CustomHistoricalStats } from "@/utils/stats/profile";
+import { Space } from "@mantine/core";
 import React from "react";
+import DataTreeView from "../DataTreeView";
 
 interface GeneralStatsProps {
   stats: CustomHistoricalStats | null;
@@ -9,17 +11,22 @@ interface StatCardProps {
   stats: CustomHistoricalStats | null;
   title: string;
   idx: string;
+  display?: boolean;
 }
 
-const StatCard: React.FC<StatCardProps> = ({ idx, title, stats }) => {
+const StatCard: React.FC<StatCardProps> = ({ idx, title, stats, display }) => {
   return (
-    <div className="flex-col stat-card">
+    <div className="flex-col stat-card whitespace-nowrap flex-nowrap">
       <div className="font-bold">
-        {stats?.historicalStats[idx]?.basic.value.toLocaleString("en", {
-          maximumFractionDigits: 2,
-        })}
+        {display
+          ? stats?.historicalStats[idx]?.basic.displayValue
+          : stats?.historicalStats[idx]?.basic.value.toLocaleString("en", {
+              maximumFractionDigits: 2,
+            })}
       </div>
-      <div className="text-md sm:text-xs text-slate-400">{title}</div>
+      <div className="text-md sm:text-xs text-slate-400 overflow-ellipsis overflow-hidden">
+        <span title={title}>{title}</span>
+      </div>
     </div>
   );
 };
@@ -27,16 +34,95 @@ const StatCard: React.FC<StatCardProps> = ({ idx, title, stats }) => {
 const GeneralStats: React.FC<GeneralStatsProps> = ({ stats }) => {
   return (
     <>
-      <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 sm:text-sm mt-2">
-        <StatCard stats={stats} idx={"kills"} title="Kills" />
-        <StatCard stats={stats} idx={"deaths"} title="Deaths" />
-        <StatCard stats={stats} idx={"assists"} title="Assists" />
-
-        <StatCard stats={stats} idx={"efficiency"} title="Efficiency" />
-        <StatCard stats={stats} idx={"killsDeathsRatio"} title="KDR" />
-        <StatCard stats={stats} idx={"killsDeathsAssists"} title="KDA" />
+      <div className=" sm:text-sm mt-2">
+        <div>Crucible</div>
+        <div className="stat-grid">
+          <StatCard
+            display={true}
+            stats={stats}
+            idx={"secondsPlayed"}
+            title="Time Played"
+          />
+          <StatCard
+            stats={stats}
+            idx={"activitiesEntered"}
+            title="Activities Entered"
+          />
+          <StatCard
+            stats={stats}
+            idx={"activitiesWon"}
+            title="Activities Won"
+          />
+        </div>
+        <Space h={10} />
+        <div>Combat Stats</div>
+        <div className="stat-grid">
+          <StatCard stats={stats} idx={"kills"} title="Kills" />
+          <StatCard stats={stats} idx={"deaths"} title="Deaths" />
+          <StatCard stats={stats} idx={"assists"} title="Assists" />
+          <StatCard stats={stats} idx={"efficiency"} title="Efficiency" />
+          <StatCard stats={stats} idx={"killsDeathsRatio"} title="KDR" />
+          <StatCard stats={stats} idx={"killsDeathsAssists"} title="KDA" />
+          <StatCard
+            stats={stats}
+            idx={"precisionKills"}
+            title="Precision Kills"
+          />
+          <StatCard stats={stats} idx={"suicides"} title="Suicides" />
+          <StatCard stats={stats} idx={"score"} title="Score" />
+          <StatCard
+            stats={stats}
+            idx={"bestSingleGameKills"}
+            title="Best Single Game Kills"
+          />
+          <StatCard
+            stats={stats}
+            idx={"longestKillSpree"}
+            title="Longest Kill Spree"
+          />
+        </div>
+        <Space h={10} />
+        <div>Playstyle Stats</div>
+        <div className="stat-grid">
+          <StatCard
+            stats={stats}
+            idx={"longestKillDistance"}
+            title="Longest Kill"
+          />
+          <StatCard
+            stats={stats}
+            idx={"totalKillDistance"}
+            title="Kill Distance"
+          />
+          <StatCard
+            stats={stats}
+            idx={"averageKillDistance"}
+            title="Avg. Kill Distance"
+          />
+          <StatCard
+            stats={stats}
+            idx={"objectivesCompleted"}
+            title="Objectives"
+          />
+          <StatCard
+            stats={stats}
+            idx={"resurrectionsReceived"}
+            title="Revives Given"
+          />
+          <StatCard
+            stats={stats}
+            idx={"resurrectionsPerformed"}
+            title="Revives Received"
+          />
+          <StatCard
+            display={true}
+            stats={stats}
+            idx={"averageLifespan"}
+            title="Avg. Lifespan"
+          />
+        </div>
       </div>
-      {/* <DataTreeView data={stats} expand={false} /> */}
+      <DataTreeView data={stats} expand={false} />
     </>
   );
 };
