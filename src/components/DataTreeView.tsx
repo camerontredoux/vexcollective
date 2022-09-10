@@ -39,7 +39,7 @@ const DataTreeView: React.FC<DataTreeViewProps> = ({ data, expand }) => {
       style={{
         fontFamily: "'Ubuntu Mono', 'Destiny Keys'",
       }}
-      className="rounded-sm overflow-y-auto flex-1"
+      className="rounded-sm overflow-auto flex-auto"
     >
       <JSONTree
         data={data}

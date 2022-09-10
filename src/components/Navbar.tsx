@@ -5,7 +5,6 @@ import {
   UnstyledButton,
   useMantineTheme,
 } from "@mantine/core";
-import { motion } from "framer-motion";
 import Link from "next/link";
 import { useState } from "react";
 import Logo from "./Logo";
@@ -39,7 +38,7 @@ const Navbar: React.FC = () => {
 
   return (
     <>
-      <div className="flex justify-between py-2 text-gray-600 mb-6">
+      <div className="flex justify-between text-gray-600">
         <Link href="/">
           <a className="flex items-center">
             <Logo width={27} />
@@ -151,11 +150,7 @@ interface LinkProps {
 
 const NavLink: React.FC<LinkProps> = ({ href, children, index }) => {
   return (
-    <motion.li
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ delay: index * 0.25, duration: 0.5 }}
-    >
+    <li>
       <Link href={href}>
         <a
           target={children === "GitHub" ? "_blank" : undefined}
@@ -164,7 +159,7 @@ const NavLink: React.FC<LinkProps> = ({ href, children, index }) => {
           {children}
         </a>
       </Link>
-    </motion.li>
+    </li>
   );
 };
 

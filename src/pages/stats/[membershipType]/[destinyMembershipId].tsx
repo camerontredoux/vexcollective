@@ -1,4 +1,5 @@
 import DataTreeView from "@/components/DataTreeView";
+import Layout from "@/components/layouts/Layout";
 import SearchLayout from "@/components/layouts/SearchLayout";
 import ItemView from "@/components/stats/ItemView";
 import ProfileCard from "@/components/stats/ProfileCard";
@@ -95,7 +96,7 @@ const Report: NextPageWithLayout<ReportProps> = ({
     return (
       <>
         <div className="flex flex-col lg:flex-row relative z-10 drop-shadow-md bg-gray-mantine-dark-100 border border-gray-mantine-dark rounded-md">
-          <div className="lg:w-1/2 m-4">
+          <div className="lg:w-2/3 m-4">
             <ProfileCard
               profile={profileResponse.profile.data!}
               characters={profileResponse.characters.data!}
@@ -104,7 +105,7 @@ const Report: NextPageWithLayout<ReportProps> = ({
               currentItem={currentItem}
             />
           </div>
-          <div className="lg:w-1/2 p-5 m-4 rounded-md border border-gray-mantine-dark bg-gray-mantine-light">
+          <div className="lg:w-1/3 p-5 m-4 rounded-md border border-gray-mantine-dark bg-gray-mantine-light">
             <h1 className="text-lg font-medium flex items-center">
               Equipped Gear{" "}
               <span className="ml-2">
@@ -223,7 +224,11 @@ const Report: NextPageWithLayout<ReportProps> = ({
 };
 
 Report.getLayout = (page) => {
-  return <SearchLayout>{page}</SearchLayout>;
+  return (
+    <Layout>
+      <SearchLayout>{page}</SearchLayout>
+    </Layout>
+  );
 };
 
 export const getServerSideProps: GetServerSideProps = async (

@@ -1,6 +1,5 @@
 // src/pages/_app.tsx
 import ErrorBoundary from "@/components/ErrorBoundary";
-import Layout from "@/components/layouts/Layout";
 import { manifestDb, ManifestDefinitions } from "@/utils/indexeddb";
 import { useManifestStore } from "@/utils/stores";
 import { Loader, MantineProvider } from "@mantine/core";
@@ -80,22 +79,24 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
       <Head>
         <title>Vex Collective</title>
       </Head>
-      <Layout>
-        {pageLoading ? (
-          <div className="flex justify-center items-center flex-col gap-3">
-            <Loader variant="oval" />
-            <div className="text-gray-400">
-              Note - This could take a while to load from Bungie
+      {/* <Layout> */}
+      {getLayout(
+        <ErrorBoundary>
+          {pageLoading ? (
+            <div className="flex flex-col gap-4 mt-4">
+              <div className="flex justify-center items-center flex-col gap-3">
+                <Loader variant="oval" />
+                <div className="text-gray-400">
+                  Note - This could take a while to load from Bungie
+                </div>
+              </div>
             </div>
-          </div>
-        ) : (
-          getLayout(
-            <ErrorBoundary>
-              <Component {...pageProps} />
-            </ErrorBoundary>
-          )
-        )}
-      </Layout>
+          ) : (
+            <Component {...pageProps} />
+          )}
+        </ErrorBoundary>
+      )}
+      {/* </Layout> */}
     </MantineProvider>
   );
 }

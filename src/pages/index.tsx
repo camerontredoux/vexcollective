@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { NextPageWithLayout } from "./_app";
 
+import Layout from "@/components/layouts/Layout";
 import { ResponsiveRadar } from "@nivo/radar";
 
 const features = {
@@ -141,7 +142,11 @@ const Home: NextPageWithLayout = () => {
 };
 
 Home.getLayout = (page) => {
-  return <SearchLayout>{page}</SearchLayout>;
+  return (
+    <Layout>
+      <SearchLayout>{page}</SearchLayout>
+    </Layout>
+  );
 };
 
 export default Home;
