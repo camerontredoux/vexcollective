@@ -1,5 +1,6 @@
 import Layout from "@/components/layouts/Layout";
 import SearchLayout from "@/components/layouts/SearchLayout";
+import DailyWinsCalendar from "@/components/stats/DailyWinsCalendar";
 import ItemView from "@/components/stats/ItemView";
 import ProfileCard from "@/components/stats/ProfileCard";
 import { BungieAPI } from "@/server/router/destiny";
@@ -195,6 +196,11 @@ const Report: NextPageWithLayout<ReportProps> = ({
                 }
               )}
             </div>
+          </div>
+        </div>
+        <div className="flex flex-col lg:flex-row relative z-10 drop-shadow-md bg-gray-mantine-dark-100 border border-gray-mantine-dark rounded-md">
+          <div className="m-4 z-10 w-full">
+            <DailyWinsCalendar />
           </div>
         </div>
       </>

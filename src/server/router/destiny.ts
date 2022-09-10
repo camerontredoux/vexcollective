@@ -102,4 +102,23 @@ export const destinyRouter = createRouter()
 
       return json;
     },
+  })
+  .query("pvp-activity-history", {
+    input: z.object({
+      membershipType: z.string(),
+      destinyMembershipId: z.string(),
+      characterId: z.string(),
+    }),
+    async resolve({
+      input: { characterId, destinyMembershipId, membershipType },
+    }) {
+      const data = await BungieAPI.fetchAPI(
+        `/Destiny2/${membershipType}/Account/${destinyMembershipId}/Character/${characterId}/Stats/Activities/?mode=5&count=250`,
+        false
+      );
+
+      const json = await data.json();
+
+      return json.Response.activities;
+    },
   });

@@ -2,7 +2,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Ubuntu+Mono:wght@400;700&display=swap");
 @font-face {
   font-family: "Destiny Keys";
-  src: url("../../fonts/Destiny_Keys.otf");
+  src: url("/Destiny_Keys.otf");
 }
 
 @tailwind base;
