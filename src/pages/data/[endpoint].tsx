@@ -94,8 +94,8 @@ const Endpoint: NextPageWithLayout = () => {
   return (
     <>
       {value && (
-        <div className="drop-shadow-md bg-gray-mantine-light border border-gray-mantine-dark w-full rounded-md">
-          <div className="flex flex-col p-8 backdrop-brightness-75 rounded-md">
+        <div className="drop-shadow-md bg-gray-mantine-dark-100 border border-gray-mantine-dark w-full rounded-md">
+          <div className="flex flex-col p-8 rounded-md">
             <div className="flex justify-between">
               <h1 className="text-2xl font-bold break-all mr-4">
                 {PathDefinitions[value]?.label}

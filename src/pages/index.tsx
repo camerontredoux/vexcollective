@@ -98,7 +98,7 @@ const Home: NextPageWithLayout = () => {
         </div>
       </Alert>
       <div className="drop-shadow-md bg-black bg-center bg-cover bg-[url('/hero-wallpaper.jpg')] w-full rounded-md">
-        <div className="w-full h-full flex flex-col backdrop-blur-sm p-8 drop-shadow-lg backdrop-brightness-75 rounded-md overflow-hidden">
+        <div className="w-full h-full flex flex-col p-8 drop-shadow-lg rounded-md overflow-hidden">
           <h1 className="text-4xl font-bold">The Vex Collective Mind...</h1>
           <p className="text-xl mt-1">...has some information for you...</p>
           <p className="text-gray-400 mt-10 bg-clip-text text-transparent bg-gradient-to-r from-blue-300 via-sky-300 to-sky-500 font-medium">
@@ -108,8 +108,8 @@ const Home: NextPageWithLayout = () => {
           </p>
         </div>
       </div>
-      <div className="drop-shadow-md bg-gray-mantine-light border border-gray-mantine-dark rounded-md">
-        <div className="backdrop-brightness-75 p-8 rounded-md">
+      <div className="drop-shadow-md bg-gray-mantine-dark-100 border border-gray-mantine-dark rounded-md">
+        <div className=" p-8 rounded-md">
           <h1 className="text-4xl font-bold">Features</h1>
           <p className="text-xl mt-1">Click each one to see an example</p>
 
@@ -128,11 +128,11 @@ const Home: NextPageWithLayout = () => {
           </ul>
         </div>
       </div>
-      <div className="drop-shadow-md bg-gray-mantine-light border rounded-md border-gray-mantine-dark">
-        <div className="backdrop-brightness-75 p-8 rounded-md">
+      <div className="drop-shadow-md bg-gray-mantine-dark-100 border rounded-md border-gray-mantine-dark">
+        <div className="p-8 rounded-md">
           <h1 className="text-4xl font-bold">{feature}</h1>
           <p className="text-xl mt-1">Tools at your disposal</p>
-          <div className="mt-4 h-96 relative">
+          <div className="mt-4 h-80 relative">
             {features[feature as Features]}
           </div>
         </div>
