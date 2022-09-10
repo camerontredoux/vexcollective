@@ -1,4 +1,3 @@
-import DataTreeView from "@/components/DataTreeView";
 import Layout from "@/components/layouts/Layout";
 import SearchLayout from "@/components/layouts/SearchLayout";
 import ItemView from "@/components/stats/ItemView";
@@ -6,13 +5,7 @@ import ProfileCard from "@/components/stats/ProfileCard";
 import { BungieAPI } from "@/server/router/destiny";
 import { useCharacterStore, useManifestStore } from "@/utils/stores";
 import { trpc } from "@/utils/trpc";
-import {
-  ActionIcon,
-  Button,
-  Modal,
-  Tooltip,
-  useMantineTheme,
-} from "@mantine/core";
+import { ActionIcon, Tooltip, useMantineTheme } from "@mantine/core";
 import { IconInfoCircle } from "@tabler/icons";
 import {
   DestinyItemComponent,
@@ -88,8 +81,6 @@ const Report: NextPageWithLayout<ReportProps> = ({
     }
   }, [profileQuery.data?.json, membershipType, destinyMembershipId]);
 
-  const [opened, setOpened] = useState(false);
-
   const theme = useMantineTheme();
 
   if (errorCode === 1) {
@@ -98,6 +89,8 @@ const Report: NextPageWithLayout<ReportProps> = ({
         <div className="flex flex-col lg:flex-row relative z-10 drop-shadow-md bg-gray-mantine-dark-100 border border-gray-mantine-dark rounded-md">
           <div className="lg:w-2/3 m-4">
             <ProfileCard
+              profileResponse={profileResponse}
+              extraProfile={extraProfile}
               profile={profileResponse.profile.data!}
               characters={profileResponse.characters.data!}
               character={character!}
@@ -105,7 +98,7 @@ const Report: NextPageWithLayout<ReportProps> = ({
               currentItem={currentItem}
             />
           </div>
-          <div className="lg:w-1/3 p-5 m-4 rounded-md border border-gray-mantine-dark bg-gray-mantine-light">
+          <div className="lg:w-1/3 p-5 mt-0 lg:mt-4 lg:ml-0 m-4 rounded-md border border-gray-mantine-dark bg-gray-mantine-light">
             <h1 className="text-lg font-medium flex items-center">
               Equipped Gear{" "}
               <span className="ml-2">
@@ -204,13 +197,6 @@ const Report: NextPageWithLayout<ReportProps> = ({
             </div>
           </div>
         </div>
-        <Button variant="outline" onClick={() => setOpened(true)}>
-          Show JSON
-        </Button>
-        <Modal opened={opened} onClose={() => setOpened(false)}>
-          <DataTreeView data={extraProfile && extraProfile} expand={false} />
-          <DataTreeView data={profileResponse} expand={false} />
-        </Modal>
       </>
     );
   }

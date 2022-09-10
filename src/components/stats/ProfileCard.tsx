@@ -1,26 +1,33 @@
 import { MembershipTypeIcon } from "@/utils/stats/profile";
 import { useCharacterStore, useManifestStore } from "@/utils/stores";
 import {
+  ActionIcon,
   Avatar,
   Badge,
   Group,
   HoverCard,
+  Modal,
   Stack,
   Text,
   Tooltip,
 } from "@mantine/core";
 import { GiDiamonds } from "@react-icons/all-files/gi/GiDiamonds";
+import { IconDatabase } from "@tabler/icons";
 import {
   DestinyCharacterComponent,
   DestinyItemResponse,
   DestinyProfileComponent,
 } from "bungie-api-ts/destiny2";
 import { DateTime, Duration } from "luxon";
+import { useState } from "react";
 
 import _ from "underscore";
+import DataTreeView from "../DataTreeView";
 import PerformanceStats from "./PerformanceStats";
 
 interface ProfileCardProps {
+  profileResponse: any;
+  extraProfile: any;
   profile: DestinyProfileComponent;
   characters: { [key: string]: DestinyCharacterComponent };
   character: string;
@@ -29,6 +36,8 @@ interface ProfileCardProps {
 }
 
 const ProfileCard: React.FC<ProfileCardProps> = ({
+  profileResponse,
+  extraProfile,
   profile,
   characters,
   character,
@@ -52,17 +61,36 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
     return DateTime.now().minus(diff).toRelative();
   };
 
+  const [opened, setOpened] = useState(false);
+
   if (manifest) {
     return (
       <>
-        <div className="flex items-center gap-2">
-          <div className="text-xl">{profile.userInfo.displayName}</div>
-          <PlatformIcon size={20} />
-          <Tooltip position="bottom" label={profile.dateLastPlayed}>
-            <Badge>
-              <span>Last seen {lastSeen()}</span>
-            </Badge>
-          </Tooltip>
+        <Modal
+          title={<div className="font-bold">Character Data</div>}
+          opened={opened}
+          onClose={() => setOpened(false)}
+        >
+          <DataTreeView
+            data={
+              extraProfile && { ...extraProfile.Response, ...profileResponse }
+            }
+            expand={false}
+          />
+        </Modal>
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <div className="text-xl">{profile.userInfo.displayName}</div>
+            <PlatformIcon size={20} />
+            <Tooltip position="bottom" label={profile.dateLastPlayed}>
+              <Badge>
+                <span>Last seen {lastSeen()}</span>
+              </Badge>
+            </Tooltip>
+          </div>
+          <ActionIcon variant="default" onClick={() => setOpened(true)}>
+            <IconDatabase size={18} />
+          </ActionIcon>
         </div>
         <div className="mt-4 flex gap-4">
           {manifest &&

@@ -1,7 +1,6 @@
 import { CustomHistoricalStats } from "@/utils/stats/profile";
 import { Space } from "@mantine/core";
 import React from "react";
-import DataTreeView from "../DataTreeView";
 
 interface GeneralStatsProps {
   stats: CustomHistoricalStats | null;
@@ -19,12 +18,12 @@ const StatCard: React.FC<StatCardProps> = ({ idx, title, stats, display }) => {
     <div className="flex-col stat-card whitespace-nowrap flex-nowrap">
       <div className="font-bold">
         {display
-          ? stats?.historicalStats[idx]?.basic.displayValue
-          : stats?.historicalStats[idx]?.basic.value.toLocaleString("en", {
+          ? stats?.historicalStats?.[idx]?.basic.displayValue
+          : stats?.historicalStats?.[idx]?.basic.value.toLocaleString("en", {
               maximumFractionDigits: 2,
             })}
       </div>
-      <div className="text-md sm:text-xs text-slate-400 overflow-ellipsis overflow-hidden">
+      <div className="text-xs text-slate-400 overflow-ellipsis overflow-hidden">
         <span title={title}>{title}</span>
       </div>
     </div>
@@ -32,10 +31,14 @@ const StatCard: React.FC<StatCardProps> = ({ idx, title, stats, display }) => {
 };
 
 const GeneralStats: React.FC<GeneralStatsProps> = ({ stats }) => {
+  if (!stats?.historicalStats) {
+    return <div className="sm:text-sm mt-2 p-1">No stats available.</div>;
+  }
+
   return (
     <>
-      <div className=" sm:text-sm mt-2">
-        <div>Crucible</div>
+      <div className="text-sm mt-2">
+        <div className="font-bold p-1">General</div>
         <div className="stat-grid">
           <StatCard
             display={true}
@@ -55,7 +58,7 @@ const GeneralStats: React.FC<GeneralStatsProps> = ({ stats }) => {
           />
         </div>
         <Space h={10} />
-        <div>Combat Stats</div>
+        <div className="font-bold p-1">Combat</div>
         <div className="stat-grid">
           <StatCard stats={stats} idx={"kills"} title="Kills" />
           <StatCard stats={stats} idx={"deaths"} title="Deaths" />
@@ -82,7 +85,7 @@ const GeneralStats: React.FC<GeneralStatsProps> = ({ stats }) => {
           />
         </div>
         <Space h={10} />
-        <div>Playstyle Stats</div>
+        <div className="font-bold p-1">Playstyle</div>
         <div className="stat-grid">
           <StatCard
             stats={stats}
@@ -122,7 +125,7 @@ const GeneralStats: React.FC<GeneralStatsProps> = ({ stats }) => {
           />
         </div>
       </div>
-      <DataTreeView data={stats} expand={false} />
+      {/* <DataTreeView data={stats} expand={false} /> */}
     </>
   );
 };
