@@ -34,8 +34,8 @@ Vex Collective is a tool I created to explore the Destiny API and potentially pr
 - [ ] Make image links clickable in data explorer
 - [ ] View Triumps/Records
 - [ ] See character's most recently played PvP match and statistics
-- [ ] View general overview of overall stats (KD,KDA,KAD,Total Kills/Deaths/Assists, Precision Kills, Suicides, Wins, Losses, Win/Loss Ratio, Time Played in Crucible, Score, Combat Rating, Average Lifespan, Resurrections)
-- [ ] View stats of weapon usage (accuracy, kills, precision kills)
+- [x] View general overview of overall stats (KD,KDA,KAD,Total Kills/Deaths/Assists, Precision Kills, Suicides, Wins, Losses, Win/Loss Ratio, Time Played in Crucible, Score, Combat Rating, Average Lifespan, Resurrections)
+- [x] View stats of weapon usage (accuracy, kills, precision kills)
 - [ ] View more medals earned on account, and the "golden medals"
 - [x] Add button to show profile JSON tree in stats page
 - [x] Redesign stats page to show currently equipped gear
