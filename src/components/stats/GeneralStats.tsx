@@ -51,11 +51,20 @@ const GeneralStats: React.FC<GeneralStatsProps> = ({ stats }) => {
             idx={"activitiesEntered"}
             title="Activities Entered"
           />
-          <StatCard
-            stats={stats}
-            idx={"activitiesWon"}
-            title="Activities Won"
-          />
+          {stats.historicalStats?.["activitiesCleared"] && (
+            <StatCard
+              stats={stats}
+              idx={"activitiesCleared"}
+              title="Activities Cleared"
+            />
+          )}
+          {stats.historicalStats?.["activitiesWon"] && (
+            <StatCard
+              stats={stats}
+              idx={"activitiesWon"}
+              title="Activities Won"
+            />
+          )}
         </div>
         <Space h={10} />
         <div className="font-bold p-1">Combat</div>
