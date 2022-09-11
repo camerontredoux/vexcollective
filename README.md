@@ -39,3 +39,12 @@ Vex Collective is a tool I created to explore the Destiny API and potentially pr
 - [ ] View more medals earned on account, and the "golden medals"
 - [x] Add button to show profile JSON tree in stats page
 - [x] Redesign stats page to show currently equipped gear
+
+### Tools
+
+- **IndexedDB** for storing the Destiny 2 Manifest in browser memory (reduces the number of times a user has to download the massive manifest and all its definitions)
+- [**Next.js**](https://nextjs.org/)
+- [**Zustand**](https://zustand-demo.pmnd.rs/) for state management
+- [**Mantine**](https://mantine.dev) for some UI componenets
+- [**Tailwind CSS**](https://tailwindcss.com/) for more custom CSS
+- [**tRPC**](https://trpc.io/) for handling the backend
