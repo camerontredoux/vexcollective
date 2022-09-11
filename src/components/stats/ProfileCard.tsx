@@ -78,7 +78,7 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
             expand={false}
           />
         </Modal>
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between flex-wrap">
           <div className="flex items-center gap-2">
             <div className="text-xl">{profile.userInfo.displayName}</div>
             <PlatformIcon size={20} />
