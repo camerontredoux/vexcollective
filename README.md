@@ -48,3 +48,4 @@ Vex Collective is a tool I created to explore the Destiny API and potentially pr
 - [**Mantine**](https://mantine.dev) for some UI componenets
 - [**Tailwind CSS**](https://tailwindcss.com/) for more custom CSS
 - [**tRPC**](https://trpc.io/) for handling the backend
+- [**bungie-api-ts**](https://github.com/DestinyItemManager/bungie-api-ts) for getting TypeScript types for my requests to the Destiny 2 API
