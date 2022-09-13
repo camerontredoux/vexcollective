@@ -2,15 +2,11 @@ import SearchLayout from "@/components/layouts/SearchLayout";
 import { Alert, Button } from "@mantine/core";
 import { IconAlertCircle } from "@tabler/icons";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { NextPageWithLayout } from "./_app";
 
 import Layout from "@/components/layouts/Layout";
-import { useAuthStore } from "@/utils/stores";
-import { trpc } from "@/utils/trpc";
 import { ResponsiveRadar } from "@nivo/radar";
-import { useRouter } from "next/router";
-import useSWR from "swr";
 
 const features = {
   "Radar Charts": (
@@ -76,49 +72,6 @@ type Features = keyof typeof features;
 
 const Home: NextPageWithLayout = () => {
   const [feature, setFeature] = useState("Radar Charts");
-  const router = useRouter();
-
-  const context = trpc.useContext();
-
-  const setAuthorized = useAuthStore((state) => state.setAuthorized);
-
-  const { code } = router.query;
-
-  const { data, error } = useSWR(
-    code ? `https://www.bungie.net/Platform/App/OAuth/Token` : null,
-    async (url) => {
-      const res = await fetch(url, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
-        },
-        body: `client_id=40971&grant_type=authorization_code&code=${code}`,
-      });
-
-      return res.json();
-    },
-    {
-      revalidateOnFocus: false,
-      revalidateIfStale: false,
-    }
-  );
-
-  useEffect(() => {
-    (async () => {
-      if (data) {
-        const session_state = window.sessionStorage.getItem("state");
-        const { state } = router.query;
-
-        if (state && state === session_state) {
-          setAuthorized(true);
-          window.localStorage.setItem("token", data.access_token);
-        } else {
-          context.invalidateQueries();
-          setAuthorized(false);
-        }
-      }
-    })();
-  }, [data]);
 
   return (
     <>
