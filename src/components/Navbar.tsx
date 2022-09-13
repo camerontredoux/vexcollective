@@ -113,7 +113,7 @@ const Navbar: React.FC = () => {
               </UnstyledButton>
             </NavLink>
             <NavLink
-              href={`https://www.bungie.net/en/OAuth/Authorize?client_id=40971&response_type=code&state=${state}`}
+              href={`https://www.bungie.net/en/OAuth/Authorize?client_id=${process.env.NEXT_PUBLIC_OAUTH_CLIENT_ID}&response_type=code&state=${state}`}
               target="_blank"
             >
               <UnstyledButton
