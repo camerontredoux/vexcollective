@@ -1,3 +1,5 @@
+import { useAuthStore } from "@/utils/stores";
+import { trpc } from "@/utils/trpc";
 import {
   Burger,
   Drawer,
@@ -6,35 +8,24 @@ import {
   useMantineTheme,
 } from "@mantine/core";
 import Link from "next/link";
-import { useState } from "react";
+import { useRouter } from "next/router";
+import { HTMLAttributeAnchorTarget, useEffect, useState } from "react";
 import Logo from "./Logo";
-
-const links = [
-  {
-    href: "/data",
-    text: "Data Explorer",
-  },
-  {
-    href: "https://www.bungie.net/en/OAuth/Authorize?client_id=40971&response_type=code",
-    text: "Authorize",
-  },
-];
-
-const more = [
-  {
-    href: "/about",
-    text: "About",
-  },
-  {
-    href: "https://github.com/camerontredoux/vexcollective",
-    text: "GitHub",
-  },
-];
 
 const Navbar: React.FC = () => {
   const [opened, setOpened] = useState(false);
+  const router = useRouter();
+  const context = trpc.useContext();
 
   const theme = useMantineTheme();
+
+  const [state, setState] = useState("");
+
+  const { authorized, setAuthorized } = useAuthStore();
+
+  useEffect(() => {
+    setState(window.sessionStorage.getItem("state") ?? "");
+  }, []);
 
   return (
     <>
@@ -48,35 +39,31 @@ const Navbar: React.FC = () => {
           </a>
         </Link>
         <ul className="hidden sm:flex gap-4">
-          {links.map((link, index) => (
-            <NavLink key={index} href={link.href} index={index}>
-              <div
-                className={`${
-                  link.text === "Data Explorer"
-                    ? "font-bold text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 hover:brightness-125"
-                    : ""
-                }`}
-              >
-                {link.text}
-              </div>
+          <NavLink href="/data">
+            <div className="font-bold text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 hover:brightness-125">
+              Data Explorer
+            </div>
+          </NavLink>
+          {authorized ? (
+            <li
+              className="cursor-pointer"
+              onClick={() => {
+                window.localStorage.removeItem("token");
+                setAuthorized(false);
+                context.invalidateQueries();
+                router.push("/");
+              }}
+            >
+              Logout
+            </li>
+          ) : (
+            <NavLink
+              href={`https://www.bungie.net/en/OAuth/Authorize?client_id=40971&response_type=code&state=${state}`}
+            >
+              Authorize
             </NavLink>
-          ))}
+          )}
         </ul>
-        {/* <ul className="hidden sm:flex gap-4">
-          <motion.li
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.1, duration: 0.5 }}
-            className="text-white"
-          >
-            More
-          </motion.li>
-          {more.map((link, index) => (
-            <NavLink key={index} href={link.href} index={index}>
-              {link.text}
-            </NavLink>
-          ))}
-        </ul> */}
         <MediaQuery largerThan="xs" styles={{ display: "none" }}>
           <Burger
             color={theme.colors.gray![5]}
@@ -109,32 +96,44 @@ const Navbar: React.FC = () => {
           onClose={() => setOpened(false)}
         >
           <ul className="flex flex-col gap-1">
-            {links.map((link, index) => (
-              <li key={index}>
-                <Link href={link.href}>
-                  <UnstyledButton
-                    onClick={() => setOpened(false)}
-                    className="unstyled-btn"
-                  >
-                    <a>{link.text}</a>
-                  </UnstyledButton>
-                </Link>
-              </li>
-            ))}
-            {more.map((link, index) => (
-              <li key={index}>
-                <Link href={link.href}>
-                  <UnstyledButton
-                    onClick={() => setOpened(false)}
-                    className="unstyled-btn"
-                  >
-                    <a target={link.text === "GitHub" ? "_blank" : undefined}>
-                      {link.text}
-                    </a>
-                  </UnstyledButton>
-                </Link>
-              </li>
-            ))}
+            <NavLink href="/data">
+              <UnstyledButton
+                onClick={() => setOpened(false)}
+                className="unstyled-btn"
+              >
+                Data Explorer
+              </UnstyledButton>
+            </NavLink>
+            <NavLink
+              href={`https://www.bungie.net/en/OAuth/Authorize?client_id=40971&response_type=code&state=${state}`}
+              target="_blank"
+            >
+              <UnstyledButton
+                onClick={() => setOpened(false)}
+                className="unstyled-btn"
+              >
+                {authorized ? "Logout" : "Authorize"}
+              </UnstyledButton>
+            </NavLink>
+            <NavLink href="/about">
+              <UnstyledButton
+                onClick={() => setOpened(false)}
+                className="unstyled-btn"
+              >
+                About
+              </UnstyledButton>
+            </NavLink>
+            <NavLink
+              href="https://github.com/camerontredoux/vexcollective"
+              target="_blank"
+            >
+              <UnstyledButton
+                onClick={() => setOpened(false)}
+                className="unstyled-btn"
+              >
+                GitHub
+              </UnstyledButton>
+            </NavLink>
           </ul>
         </Drawer>
       </MediaQuery>
@@ -145,17 +144,14 @@ const Navbar: React.FC = () => {
 interface LinkProps {
   href: string;
   children: React.ReactNode;
-  index: number;
+  target?: HTMLAttributeAnchorTarget;
 }
 
-const NavLink: React.FC<LinkProps> = ({ href, children, index }) => {
+const NavLink: React.FC<LinkProps> = ({ href, children, target }) => {
   return (
     <li>
       <Link href={href}>
-        <a
-          target={children === "GitHub" ? "_blank" : undefined}
-          className="cursor-pointer"
-        >
+        <a rel="noreferrer" target={target} className="cursor-pointer">
           {children}
         </a>
       </Link>

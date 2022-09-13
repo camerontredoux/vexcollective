@@ -6,6 +6,8 @@ import { useEffect, useState } from "react";
 import { NextPageWithLayout } from "./_app";
 
 import Layout from "@/components/layouts/Layout";
+import { useAuthStore } from "@/utils/stores";
+import { trpc } from "@/utils/trpc";
 import { ResponsiveRadar } from "@nivo/radar";
 import { useRouter } from "next/router";
 import useSWR from "swr";
@@ -76,6 +78,10 @@ const Home: NextPageWithLayout = () => {
   const [feature, setFeature] = useState("Radar Charts");
   const router = useRouter();
 
+  const context = trpc.useContext();
+
+  const setAuthorized = useAuthStore((state) => state.setAuthorized);
+
   const { code } = router.query;
 
   const { data, error } = useSWR(
@@ -100,8 +106,16 @@ const Home: NextPageWithLayout = () => {
   useEffect(() => {
     (async () => {
       if (data) {
-        window.localStorage.setItem("token", data.access_token);
-        router.push("");
+        const session_state = window.sessionStorage.getItem("state");
+        const { state } = router.query;
+
+        if (state && state === session_state) {
+          setAuthorized(true);
+          window.localStorage.setItem("token", data.access_token);
+        } else {
+          context.invalidateQueries();
+          setAuthorized(false);
+        }
       }
     })();
   }, [data]);

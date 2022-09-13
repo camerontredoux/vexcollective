@@ -21,8 +21,6 @@ export default class Bungie {
       },
     };
 
-    console.log(init);
-
     if (body) {
       init.method = "POST";
       init.body = JSON.stringify(body);

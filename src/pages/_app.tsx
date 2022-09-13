@@ -11,6 +11,7 @@ import { useRouter } from "next/router";
 import { ReactElement, ReactNode, useEffect, useState } from "react";
 import { AppRouter } from "src/server/router";
 import superjson from "superjson";
+import { v4 } from "uuid";
 import "../styles/globals.css";
 
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
@@ -39,6 +40,11 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
         });
       });
     })();
+
+    if (!window.sessionStorage.getItem("state")) {
+      const uuid = v4();
+      window.sessionStorage.setItem("state", uuid);
+    }
 
     const handleStart = () => {
       setPageLoading(true);

@@ -4,7 +4,11 @@ import DailyWinsCalendar from "@/components/stats/DailyWinsCalendar";
 import ItemView from "@/components/stats/ItemView";
 import ProfileCard from "@/components/stats/ProfileCard";
 import { BungieAPI } from "@/server/router/destiny";
-import { useCharacterStore, useManifestStore } from "@/utils/stores";
+import {
+  useAuthStore,
+  useCharacterStore,
+  useManifestStore,
+} from "@/utils/stores";
 import { trpc } from "@/utils/trpc";
 import { ActionIcon, Tooltip, useMantineTheme } from "@mantine/core";
 import { IconInfoCircle } from "@tabler/icons";
@@ -37,6 +41,8 @@ const Report: NextPageWithLayout<ReportProps> = ({
 
   const { membershipType, destinyMembershipId } = router.query;
 
+  const authorized = useAuthStore((state) => state.authorized);
+
   const profileQuery = trpc.useQuery(
     [
       "destiny.profile",
@@ -46,7 +52,7 @@ const Report: NextPageWithLayout<ReportProps> = ({
       },
     ],
     {
-      enabled: Boolean(membershipType && destinyMembershipId),
+      enabled: authorized,
       refetchOnWindowFocus: false,
       refetchOnMount: false,
     }
@@ -60,6 +66,12 @@ const Report: NextPageWithLayout<ReportProps> = ({
   const [currentItem, setCurrentItem] = useState<DestinyItemResponse | null>(
     null
   );
+
+  useEffect(() => {
+    if (!authorized) {
+      setExtraProfile(null);
+    }
+  }, [authorized]);
 
   useEffect(() => {
     if (membershipType && destinyMembershipId) {
@@ -77,10 +89,15 @@ const Report: NextPageWithLayout<ReportProps> = ({
   ]);
 
   useEffect(() => {
-    if (membershipType && destinyMembershipId) {
+    if (membershipType && destinyMembershipId && authorized) {
       setExtraProfile(profileQuery.data?.json);
     }
-  }, [profileQuery.data?.json, membershipType, destinyMembershipId]);
+  }, [
+    profileQuery.data?.json,
+    membershipType,
+    destinyMembershipId,
+    authorized,
+  ]);
 
   const theme = useMantineTheme();
 
@@ -199,7 +216,7 @@ const Report: NextPageWithLayout<ReportProps> = ({
           </div>
         </div>
         <div className="flex flex-col lg:flex-row relative z-10 drop-shadow-md bg-gray-mantine-dark-100 border border-gray-mantine-dark rounded-md">
-          <div className="m-4 z-10 w-full">
+          <div className="m-4 w-full">
             <DailyWinsCalendar />
           </div>
         </div>

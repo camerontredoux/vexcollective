@@ -11,5 +11,5 @@ export const stringOrNull = (str: unknown) => {
 export const httpClient = async (config: HttpClientConfig) => {
   return fetch(config.url, config)
     .then((res) => res.json())
-    .catch((e) => console.log(e));
+    .catch((e) => console.error(e));
 };

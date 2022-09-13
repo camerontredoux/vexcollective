@@ -66,9 +66,6 @@ export const destinyRouter = createRouter()
       );
 
       const json = await data.json();
-
-      console.log(json);
-
       return {
         json,
       };
@@ -145,8 +142,6 @@ export const destinyRouter = createRouter()
           body: `client_id=40971&grant_type=authorization_code&code=${authCode}`,
         }
       );
-
-      console.log(await res.json());
     },
   })
   .mutation("get-current-user", {

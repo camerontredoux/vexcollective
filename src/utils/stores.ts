@@ -44,3 +44,13 @@ export const useCharacterStore = create<CharacterStore>()((set) => ({
   setMembershipType: (membershipType) =>
     set((state) => ({ ...state, membershipType })),
 }));
+
+interface AuthStore {
+  authorized: boolean;
+  setAuthorized: (authorized: boolean) => void;
+}
+
+export const useAuthStore = create<AuthStore>()((set) => ({
+  authorized: false,
+  setAuthorized: (authorized) => set((state) => ({ ...state, authorized })),
+}));
