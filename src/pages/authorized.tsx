@@ -25,7 +25,7 @@ const Authorized: NextPageWithLayout = () => {
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
         },
-        body: `client_id=40971&grant_type=authorization_code&code=${code}`,
+        body: `client_id=${process.env.NEXT_PUBLIC_OAUTH_CLIENT_ID}&grant_type=authorization_code&code=${code}`,
       });
 
       return res.json();

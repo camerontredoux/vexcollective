@@ -126,27 +126,4 @@ export const destinyRouter = createRouter()
 
       return json.Response.activities;
     },
-  })
-  .mutation("get-oauth", {
-    input: z.object({
-      authCode: z.string(),
-    }),
-    async resolve({ input: { authCode } }) {
-      const res = await fetch(
-        `https://www.bungie.net/Platform/App/OAuth/Token`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/x-www-form-urlencoded",
-          },
-          body: `client_id=40971&grant_type=authorization_code&code=${authCode}`,
-        }
-      );
-    },
-  })
-  .mutation("get-current-user", {
-    input: z.object({}),
-    async resolve({ input }) {
-      // const;
-    },
   });
