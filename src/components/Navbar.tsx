@@ -7,6 +7,7 @@ import {
   UnstyledButton,
   useMantineTheme,
 } from "@mantine/core";
+import { IconBrandGithub } from "@tabler/icons";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { HTMLAttributeAnchorTarget, useEffect, useState } from "react";
@@ -38,9 +39,9 @@ const Navbar: React.FC = () => {
             </h1>
           </a>
         </Link>
-        <ul className="hidden sm:flex gap-4">
+        <ul className="hidden sm:flex gap-4 items-center">
           <NavLink href="/data">
-            <div className="font-bold text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 hover:brightness-125">
+            <div className="font-bold text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 hover:brightness-150">
               Data Explorer
             </div>
           </NavLink>
@@ -60,9 +61,17 @@ const Navbar: React.FC = () => {
             <NavLink
               href={`https://www.bungie.net/en/OAuth/Authorize?client_id=40971&response_type=code&state=${state}`}
             >
-              Authorize
+              <span className="hover:text-gray-200">Authorize</span>
             </NavLink>
           )}
+          <NavLink
+            href="https://github.com/camerontredoux/vexcollective"
+            target="_blank"
+          >
+            <span className="hover:text-gray-200">
+              <IconBrandGithub size={20} />
+            </span>
+          </NavLink>
         </ul>
         <MediaQuery largerThan="xs" styles={{ display: "none" }}>
           <Burger
@@ -113,14 +122,6 @@ const Navbar: React.FC = () => {
                 className="unstyled-btn"
               >
                 {authorized ? "Logout" : "Authorize"}
-              </UnstyledButton>
-            </NavLink>
-            <NavLink href="/about">
-              <UnstyledButton
-                onClick={() => setOpened(false)}
-                className="unstyled-btn"
-              >
-                About
               </UnstyledButton>
             </NavLink>
             <NavLink
