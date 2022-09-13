@@ -1,4 +1,5 @@
 import Bungie from "@/utils/bungie";
+import { TRPCError } from "@trpc/server";
 import z from "zod";
 import { createRouter } from "./context";
 
@@ -53,13 +54,20 @@ export const destinyRouter = createRouter()
       membershipType: z.string().nullish(),
       membershipId: z.string().nullish(),
     }),
-    async resolve({ input: { membershipType, membershipId } }) {
+    async resolve({ ctx, input: { membershipType, membershipId } }) {
+      if (!ctx.accessToken) {
+        throw new TRPCError({ code: "UNAUTHORIZED" });
+      }
       const data = await BungieAPI.fetchAPI(
-        `/Destiny2/${membershipType}/Profile/${membershipId}?components=900,1100,104,301`,
-        false
+        `/Destiny2/${membershipType}/Profile/${membershipId}?components=900,1100,104,201,102`,
+        false,
+        undefined,
+        ctx.accessToken
       );
 
       const json = await data.json();
+
+      console.log(json);
 
       return {
         json,
@@ -120,5 +128,30 @@ export const destinyRouter = createRouter()
       const json = await data.json();
 
       return json.Response.activities;
+    },
+  })
+  .mutation("get-oauth", {
+    input: z.object({
+      authCode: z.string(),
+    }),
+    async resolve({ input: { authCode } }) {
+      const res = await fetch(
+        `https://www.bungie.net/Platform/App/OAuth/Token`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+          },
+          body: `client_id=40971&grant_type=authorization_code&code=${authCode}`,
+        }
+      );
+
+      console.log(await res.json());
+    },
+  })
+  .mutation("get-current-user", {
+    input: z.object({}),
+    async resolve({ input }) {
+      // const;
     },
   });

@@ -110,6 +110,8 @@ const getBaseUrl = () => {
   return `http://localhost:${process.env.PORT ?? 3000}`; // dev SSR should use localhost
 };
 
+export let token: string;
+
 export default withTRPC<AppRouter>({
   config({ ctx }) {
     /**
@@ -119,6 +121,11 @@ export default withTRPC<AppRouter>({
     const url = `${getBaseUrl()}/api/trpc`;
 
     return {
+      headers() {
+        return {
+          Authorization: `Bearer ${window.localStorage.getItem("token") ?? ""}`,
+        };
+      },
       url,
       transformer: superjson,
       /**

@@ -72,9 +72,7 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
           onClose={() => setOpened(false)}
         >
           <DataTreeView
-            data={
-              extraProfile && { ...extraProfile.Response, ...profileResponse }
-            }
+            data={{ ...extraProfile?.Response, ...profileResponse }}
             expand={false}
           />
         </Modal>

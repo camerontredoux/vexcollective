@@ -229,7 +229,7 @@ export const getServerSideProps: GetServerSideProps = async (
   const { membershipType, destinyMembershipId } = ctx.query;
 
   const data = await BungieAPI.fetchAPI(
-    `/Destiny2/${membershipType}/Profile/${destinyMembershipId}?components=100,102,200,201,205,300,302,304`,
+    `/Destiny2/${membershipType}/Profile/${destinyMembershipId}?components=100,102,200,205,300,302,304`,
     false
   );
 

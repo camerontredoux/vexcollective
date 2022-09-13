@@ -7,9 +7,21 @@ export const createContext = async (
 ) => {
   const req = opts?.req;
   const res = opts?.res;
+
+  async function getAccessToken() {
+    if (req?.headers.authorization) {
+      const accessToken = req.headers.authorization.split(" ")[1];
+      return accessToken;
+    }
+    return null;
+  }
+
+  const accessToken = await getAccessToken();
+
   return {
     req,
     res,
+    accessToken,
   };
 };
 

@@ -15,7 +15,7 @@ const links = [
     text: "Data Explorer",
   },
   {
-    href: "/authorize",
+    href: "https://www.bungie.net/en/OAuth/Authorize?client_id=40971&response_type=code",
     text: "Authorize",
   },
 ];

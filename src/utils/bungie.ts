@@ -7,13 +7,21 @@ export default class Bungie {
     this.apiKey = apiKey;
   }
 
-  async fetchAPI(endpoint: string, pcgr: boolean, body?: any): Promise<any> {
+  async fetchAPI(
+    endpoint: string,
+    pcgr: boolean,
+    body?: any,
+    accessToken?: string
+  ): Promise<any> {
     const init: RequestInit = {
       headers: {
         "X-API-Key": this.apiKey,
         "cache-control": `s-maxage=60, stale-while-revalidate=${60 * 5}`,
+        ...(accessToken && { Authorization: `Bearer ${accessToken}` }),
       },
     };
+
+    console.log(init);
 
     if (body) {
       init.method = "POST";
