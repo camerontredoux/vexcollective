@@ -1,13 +1,13 @@
 import {
+  AllDestinyManifestComponents,
   DestinyManifestSlice,
-  getAllDestinyManifestComponents,
   getDestinyManifest,
+  getDestinyManifestSlice,
 } from "bungie-api-ts/destiny2";
 import Dexie, { Table } from "dexie";
-import _ from "underscore";
 import { httpClient } from "./misc";
 
-const manifestDefinitions = [
+const manifestDefinitions: (keyof AllDestinyManifestComponents)[] = [
   "DestinyStatDefinition",
   "DestinyClassDefinition",
   "DestinyRecordDefinition",
@@ -15,7 +15,7 @@ const manifestDefinitions = [
   "DestinyInventoryItemDefinition",
   "DestinySandboxPerkDefinition",
   "DestinyLoreDefinition",
-] as const;
+];
 
 export type ManifestDefinitions = DestinyManifestSlice<
   typeof manifestDefinitions[number][]
@@ -54,9 +54,10 @@ manifestDb.on("ready", async () => {
       );
 
       return new Promise<ManifestDefinitions>(async (resolve, reject) => {
-        getAllDestinyManifestComponents(httpClient, {
+        getDestinyManifestSlice(httpClient, {
           destinyManifest: manifest,
           language: "en",
+          tableNames: manifestDefinitions,
         })
           .then((res) => resolve(res))
           .catch((err) => reject(err));
@@ -64,11 +65,9 @@ manifestDb.on("ready", async () => {
         .then((data) => {
           console.log("Manifest found. Populating database...");
 
-          const definitions = _.pick(data, [...manifestDefinitions]);
-
           return manifestDb.manifest.add({
             version: version!,
-            definitions: definitions,
+            definitions: data,
           });
         })
         .then(() => console.log("Finished populating database with manifest."));
