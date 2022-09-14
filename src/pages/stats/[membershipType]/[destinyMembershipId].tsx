@@ -144,13 +144,10 @@ const Report: NextPageWithLayout<ReportProps> = ({
                   ) {
                     return (
                       <ItemView
-                        destinyMembershipId={destinyMembershipId as string}
-                        membershipType={membershipType as string}
                         manifest={manifest}
                         key={idx}
                         item={item}
                         profile={profileResponse}
-                        setCurrentItem={setCurrentItem}
                       />
                     );
                   }
@@ -169,13 +166,10 @@ const Report: NextPageWithLayout<ReportProps> = ({
                   ) {
                     return (
                       <ItemView
-                        destinyMembershipId={destinyMembershipId as string}
-                        membershipType={membershipType as string}
                         manifest={manifest}
                         key={idx}
                         item={item}
                         profile={profileResponse}
-                        setCurrentItem={setCurrentItem}
                       />
                     );
                   }
@@ -200,13 +194,10 @@ const Report: NextPageWithLayout<ReportProps> = ({
                   ) {
                     return (
                       <ItemView
-                        destinyMembershipId={destinyMembershipId as string}
-                        membershipType={membershipType as string}
                         manifest={manifest}
                         key={idx}
                         item={item}
                         profile={profileResponse}
-                        setCurrentItem={setCurrentItem}
                       />
                     );
                   }

@@ -4,6 +4,7 @@ import { FaXbox } from "@react-icons/all-files/fa/FaXbox";
 import {
   DestinyHistoricalStatsValue,
   DestinyInventoryItemDefinition,
+  DestinyItemComponent,
 } from "bungie-api-ts/destiny2";
 import _ from "underscore";
 import { DestinyItemType } from "../definitions";
@@ -72,6 +73,9 @@ export const isArmor = (item: DestinyInventoryItemDefinition | undefined) =>
 
 export const isWeapon = (item: DestinyInventoryItemDefinition | undefined) =>
   item?.itemType === DestinyItemType.Weapon;
+
+export const isMasterworked = (item: DestinyItemComponent | undefined) =>
+  item?.state === 4 || item?.state === (4 | 1);
 
 export type CustomHistoricalStats = {
   historicalStats: {

@@ -1,5 +1,5 @@
 import { ManifestDefinitions } from "@/utils/indexeddb";
-import { isArmor, isWeapon } from "@/utils/stats/profile";
+import { isArmor, isMasterworked, isWeapon } from "@/utils/stats/profile";
 import {
   Badge,
   Blockquote,
@@ -16,7 +16,6 @@ import { GiDiamonds } from "@react-icons/all-files/gi/GiDiamonds";
 import { Icon3dCubeSphere, IconBook, IconDatabase } from "@tabler/icons";
 import {
   DestinyItemComponent,
-  DestinyItemResponse,
   DestinyProfileResponse,
 } from "bungie-api-ts/destiny2";
 import { useState } from "react";
@@ -27,21 +26,11 @@ interface ItemViewProps {
   item: DestinyItemComponent;
   profile: DestinyProfileResponse;
   manifest: ManifestDefinitions | null;
-  destinyMembershipId: string;
-  membershipType: string;
-  setCurrentItem: (item: DestinyItemResponse | null) => void;
 }
 
 const specialStats = [4284893193, 3871231066, 2715839340];
 
-const ItemView: React.FC<ItemViewProps> = ({
-  item,
-  profile,
-  manifest,
-  destinyMembershipId,
-  membershipType,
-  setCurrentItem,
-}) => {
+const ItemView: React.FC<ItemViewProps> = ({ item, profile, manifest }) => {
   const [opened, setOpened] = useState(false);
 
   const theme = useMantineTheme();
@@ -122,6 +111,7 @@ const ItemView: React.FC<ItemViewProps> = ({
   return (
     <div className="flex items-center gap-2">
       <Modal
+        padding={"xl"}
         size={800}
         title={
           <div className="font-bold flex items-center gap-2">
@@ -148,18 +138,36 @@ const ItemView: React.FC<ItemViewProps> = ({
       >
         <ScrollArea>
           <div
-            className="mr-5"
+            className="mr-3"
             style={{
-              height: "calc(100vh - 175px)",
+              height: "calc(100vh - 190px)",
             }}
           >
-            <img
-              alt={"Screenshot"}
-              src={`https://www.bungie.net${
-                ItemDefinition(item.itemHash)?.screenshot
+            <div
+              className={`relative ${
+                isMasterworked(item) &&
+                "screenshot-masterwork overflow-clip rounded-md"
               }`}
-              className="rounded-md drop-shadow-md mx-auto"
-            />
+            >
+              {isMasterworked(item) && (
+                <div className="absolute left-1 top-1 italic text-sm p-1 text-yellow-500">
+                  Masterworked
+                </div>
+              )}
+              <img
+                alt={"Screenshot"}
+                src={`https://www.bungie.net${
+                  ItemDefinition(item.overrideStyleItemHash ?? item.itemHash)
+                    ?.screenshot
+                }`}
+                className={`rounded-md mx-auto ${
+                  isMasterworked(item)
+                    ? "shadow-inner-custom"
+                    : "drop-shadow-sm"
+                }`}
+              />
+            </div>
+
             <div className="mt-2">
               {ItemDefinition(item.itemHash)?.flavorText && (
                 <Blockquote>
@@ -212,9 +220,8 @@ const ItemView: React.FC<ItemViewProps> = ({
                         <Tooltip
                           label={`Damage Type: ${
                             manifest?.DestinyDamageTypeDefinition[
-                              // @ts-ignore
-                              instances[item.itemInstanceId!]?.damageTypeHash
-                            ].displayProperties.name
+                              instances[item.itemInstanceId!]?.damageTypeHash!
+                            ]?.displayProperties.name
                           } Energy`}
                         >
                           <div className="flex gap-1 items-center cursor-default">
@@ -223,17 +230,15 @@ const ItemView: React.FC<ItemViewProps> = ({
                               width={15}
                               src={`https://www.bungie.net${
                                 manifest?.DestinyDamageTypeDefinition[
-                                  // @ts-ignore
                                   instances[item.itemInstanceId!]
-                                    ?.damageTypeHash
-                                ].displayProperties.icon
+                                    ?.damageTypeHash!
+                                ]?.displayProperties.icon
                               }`}
                               alt={`Damage Type: ${
                                 manifest?.DestinyDamageTypeDefinition[
-                                  // @ts-ignore
                                   instances[item.itemInstanceId!]
-                                    ?.damageTypeHash
-                                ].displayProperties.name
+                                    ?.damageTypeHash!
+                                ]?.displayProperties.name
                               }`}
                             />
                             <span className="text-sm font-bold">Energy</span>
@@ -274,47 +279,30 @@ const ItemView: React.FC<ItemViewProps> = ({
           </div>
         </ScrollArea>
       </Modal>
-      <div className="relative">
+      <div
+        onClick={() => setOpened(true)}
+        className={`${
+          isMasterworked(item) && "item-masterwork"
+        } drop-shadow-md relative overflow-clip rounded-md cursor-pointer`}
+      >
         <img
-          onClick={() => setOpened(true)}
           width={50}
-          className="cursor-pointer rounded-md drop-shadow-sm"
+          className="rounded-md drop-shadow-sm"
           alt={ItemDefinition(item.itemHash)?.displayProperties.name}
           src={`https://www.bungie.net${
-            ItemDefinition(item.itemHash)?.displayProperties.icon
+            ItemDefinition(item.overrideStyleItemHash ?? item.itemHash)
+              ?.displayProperties.icon
           }`}
         />
         {ItemDefinition(item.itemHash)?.iconWatermark && (
           <img
-            onClick={() => setOpened(true)}
             width={50}
-            className="cursor-pointer rounded-md absolute top-0 left-0"
+            className="shadow-inner-custom cursor-pointer rounded-md absolute top-0 left-0"
             alt={ItemDefinition(item.itemHash)?.displayProperties.name}
             src={`https://www.bungie.net${
               ItemDefinition(item.itemHash)?.iconWatermark
             }`}
           />
-        )}
-        {manifest?.DestinyInventoryItemDefinition[item.itemHash]
-          ?.damageTypeHashes && (
-          <div className="w-full h-3 flex items-center justify-end absolute bottom-0 right-0 bg-slate-50/20">
-            <img
-              className="drop-shadow-md mr-[1px]"
-              width={10}
-              src={`https://www.bungie.net${
-                manifest?.DestinyDamageTypeDefinition[
-                  // @ts-ignore
-                  instances[item.itemInstanceId!]?.damageTypeHash
-                ].displayProperties.icon
-              }`}
-              alt={`Damage Type: ${
-                manifest?.DestinyDamageTypeDefinition[
-                  // @ts-ignore
-                  instances[item.itemInstanceId!]?.damageTypeHash
-                ].displayProperties.name
-              }`}
-            />
-          </div>
         )}
       </div>
       <div className="flex gap-1 flex-col justify-center">
