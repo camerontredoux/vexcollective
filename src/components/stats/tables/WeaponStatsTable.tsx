@@ -27,8 +27,8 @@ const WeaponStatsTable: React.FC<WeaponStatsTableProps> = ({ stats }) => {
                   <div>PGA</div>
                 </Tooltip>
               </th>
-              <th>Precision</th>
-              <th>Accuracy</th>
+              <th>Headshots</th>
+              <th>Headshot %</th>
             </tr>
           </thead>
           <tbody>

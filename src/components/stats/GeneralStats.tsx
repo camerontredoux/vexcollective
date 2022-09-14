@@ -69,12 +69,12 @@ const GeneralStats: React.FC<GeneralStatsProps> = ({ stats }) => {
         <Space h={10} />
         <div className="font-bold p-1">Combat</div>
         <div className="stat-grid">
-          <StatCard stats={stats} idx={"kills"} title="Kills" />
-          <StatCard stats={stats} idx={"deaths"} title="Deaths" />
-          <StatCard stats={stats} idx={"assists"} title="Assists" />
           <StatCard stats={stats} idx={"efficiency"} title="Efficiency" />
           <StatCard stats={stats} idx={"killsDeathsRatio"} title="KDR" />
           <StatCard stats={stats} idx={"killsDeathsAssists"} title="KDA" />
+          <StatCard stats={stats} idx={"kills"} title="Kills" />
+          <StatCard stats={stats} idx={"deaths"} title="Deaths" />
+          <StatCard stats={stats} idx={"assists"} title="Assists" />
           <StatCard
             stats={stats}
             idx={"precisionKills"}
