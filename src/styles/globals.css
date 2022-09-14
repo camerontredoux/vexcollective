@@ -63,7 +63,7 @@ input[type="search"] {
   content: "";
   background-image: radial-gradient(
     farthest-side at 75% 100%,
-    rgba(255, 214, 0, 0.4),
+    rgba(255, 214, 0, 0.3),
     rgba(255, 214, 0, 0)
   );
 }
@@ -84,7 +84,7 @@ input[type="search"] {
 }
 
 .shadow-inner-custom {
-  --tw-shadow: inset 0 2px 6px 0 rgb(0 0 0 / 0.5);
+  --tw-shadow: inset 0 2px 5px 0 rgb(0 0 0 / 0.5);
   --tw-shadow-colored: inset 0 2px 4px 0 var(--tw-shadow-color);
   box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000),
     var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);

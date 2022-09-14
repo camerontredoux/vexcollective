@@ -280,30 +280,38 @@ const ItemView: React.FC<ItemViewProps> = ({ item, profile, manifest }) => {
         </ScrollArea>
       </Modal>
       <div
-        onClick={() => setOpened(true)}
         className={`${
-          isMasterworked(item) && "item-masterwork"
-        } drop-shadow-md relative overflow-clip rounded-md cursor-pointer`}
+          isMasterworked(item)
+            ? "border-2 border-orange-300"
+            : "border-2 border-transparent"
+        }`}
       >
-        <img
-          width={50}
-          className="rounded-md drop-shadow-sm"
-          alt={ItemDefinition(item.itemHash)?.displayProperties.name}
-          src={`https://www.bungie.net${
-            ItemDefinition(item.overrideStyleItemHash ?? item.itemHash)
-              ?.displayProperties.icon
-          }`}
-        />
-        {ItemDefinition(item.itemHash)?.iconWatermark && (
+        <div
+          onClick={() => setOpened(true)}
+          className={`${
+            isMasterworked(item) && "item-masterwork"
+          } drop-shadow-md relative overflow-clip cursor-pointer`}
+        >
           <img
             width={50}
-            className="shadow-inner-custom cursor-pointer rounded-md absolute top-0 left-0"
+            className="drop-shadow-sm"
             alt={ItemDefinition(item.itemHash)?.displayProperties.name}
             src={`https://www.bungie.net${
-              ItemDefinition(item.itemHash)?.iconWatermark
+              ItemDefinition(item.overrideStyleItemHash ?? item.itemHash)
+                ?.displayProperties.icon
             }`}
           />
-        )}
+          {ItemDefinition(item.itemHash)?.iconWatermark && (
+            <img
+              width={50}
+              className="shadow-inner-custom cursor-pointer absolute top-0 left-0"
+              alt={ItemDefinition(item.itemHash)?.displayProperties.name}
+              src={`https://www.bungie.net${
+                ItemDefinition(item.itemHash)?.iconWatermark
+              }`}
+            />
+          )}
+        </div>
       </div>
       <div className="flex gap-1 flex-col justify-center">
         <div>
