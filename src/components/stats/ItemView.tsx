@@ -53,6 +53,7 @@ const ItemView: React.FC<ItemViewProps> = ({
       ?.displayProperties.description;
 
   const instancedItems = profile.itemComponents.stats.data!;
+  const instances = profile.itemComponents.instances.data!;
 
   let totalStat = 0;
   const instancedItemStats = _.map(
@@ -214,17 +215,13 @@ const ItemView: React.FC<ItemViewProps> = ({
                             src={`https://www.bungie.net${
                               manifest?.DestinyDamageTypeDefinition[
                                 // @ts-ignore
-                                manifest?.DestinyInventoryItemDefinition[
-                                  item.itemHash
-                                ]?.damageTypeHashes
+                                instances[item.itemInstanceId!]?.damageTypeHash
                               ].displayProperties.icon
                             }`}
                             alt={`Damage Type: ${
                               manifest?.DestinyDamageTypeDefinition[
                                 // @ts-ignore
-                                manifest?.DestinyInventoryItemDefinition[
-                                  item.itemHash
-                                ]?.damageTypeHashes
+                                instances[item.itemInstanceId!]?.damageTypeHash
                               ].displayProperties.name
                             }`}
                           />
@@ -295,15 +292,13 @@ const ItemView: React.FC<ItemViewProps> = ({
               src={`https://www.bungie.net${
                 manifest?.DestinyDamageTypeDefinition[
                   // @ts-ignore
-                  manifest?.DestinyInventoryItemDefinition[item.itemHash]
-                    ?.damageTypeHashes
+                  instances[item.itemInstanceId!]?.damageTypeHash
                 ].displayProperties.icon
               }`}
               alt={`Damage Type: ${
                 manifest?.DestinyDamageTypeDefinition[
                   // @ts-ignore
-                  manifest?.DestinyInventoryItemDefinition[item.itemHash]
-                    ?.damageTypeHashes
+                  instances[item.itemInstanceId!]?.damageTypeHash
                 ].displayProperties.name
               }`}
             />
