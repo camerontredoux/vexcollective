@@ -51,7 +51,7 @@ const Authorized: NextPageWithLayout = () => {
         }
       }
     })();
-  }, [data]);
+  }, [data, context, router.query, setAuthorized]);
 
   if (authorized)
     return (

@@ -15,6 +15,7 @@ const manifestDefinitions: (keyof AllDestinyManifestComponents)[] = [
   "DestinyInventoryItemDefinition",
   "DestinySandboxPerkDefinition",
   "DestinyLoreDefinition",
+  "DestinyDamageTypeDefinition",
 ];
 
 export type ManifestDefinitions = DestinyManifestSlice<

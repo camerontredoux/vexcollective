@@ -13,13 +13,23 @@ export const destinyRouter = createRouter()
       pcgr: z.boolean(),
       body: z.any().nullable(),
     }),
-    async resolve({ input }) {
+    async resolve({ input, ctx }) {
       let data;
 
       if (input.body) {
-        data = await BungieAPI.fetchAPI(input.path, input.pcgr, input.body);
+        data = await BungieAPI.fetchAPI(
+          input.path,
+          input.pcgr,
+          input.body,
+          ctx.accessToken ? ctx.accessToken : undefined
+        );
       } else {
-        data = await BungieAPI.fetchAPI(input.path, input.pcgr);
+        data = await BungieAPI.fetchAPI(
+          input.path,
+          input.pcgr,
+          undefined,
+          ctx.accessToken ? ctx.accessToken : undefined
+        );
       }
 
       const json = await data.json();

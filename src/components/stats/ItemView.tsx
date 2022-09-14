@@ -187,23 +187,51 @@ const ItemView: React.FC<ItemViewProps> = ({
                 </Tabs.List>
                 <Tabs.Panel value="stats">
                   <div className="p-2" style={{ whiteSpace: "pre-line" }}>
-                    {profile.itemComponents.instances.data?.[
-                      item.itemInstanceId!
-                    ]?.primaryStat && (
-                      <Badge color={"orange"} mb={10}>
-                        <div className="flex items-center">
-                          <span>Light Level</span>
-                          <span className="ml-2 flex text-orange-300 drop-shadow-md items-center">
-                            <GiDiamonds />{" "}
-                            {
-                              profile.itemComponents.instances.data?.[
-                                item.itemInstanceId!
-                              ]?.primaryStat.value!
-                            }
-                          </span>
+                    <div className="flex items-center gap-2 my-1">
+                      {profile.itemComponents.instances.data?.[
+                        item.itemInstanceId!
+                      ]?.primaryStat && (
+                        <Badge color={"orange"}>
+                          <div className="flex items-center">
+                            <span>Light Level</span>
+                            <span className="ml-2 flex text-orange-300 drop-shadow-md items-center">
+                              <GiDiamonds />{" "}
+                              {
+                                profile.itemComponents.instances.data?.[
+                                  item.itemInstanceId!
+                                ]?.primaryStat.value!
+                              }
+                            </span>
+                          </div>
+                        </Badge>
+                      )}
+                      {manifest?.DestinyInventoryItemDefinition[item.itemHash]
+                        ?.damageTypeHashes && (
+                        <div className="flex gap-1 items-center">
+                          <img
+                            className="drop-shadow-md mr-[1px]"
+                            width={15}
+                            src={`https://www.bungie.net${
+                              manifest?.DestinyDamageTypeDefinition[
+                                // @ts-ignore
+                                manifest?.DestinyInventoryItemDefinition[
+                                  item.itemHash
+                                ]?.damageTypeHashes
+                              ].displayProperties.icon
+                            }`}
+                            alt={`Damage Type: ${
+                              manifest?.DestinyDamageTypeDefinition[
+                                // @ts-ignore
+                                manifest?.DestinyInventoryItemDefinition[
+                                  item.itemHash
+                                ]?.damageTypeHashes
+                              ].displayProperties.name
+                            }`}
+                          />
+                          <span className="text-sm font-bold">Energy</span>
                         </div>
-                      </Badge>
-                    )}
+                      )}
+                    </div>
                     {item.itemInstanceId && (
                       <div className="flex flex-col gap-1">
                         {instancedItemStats}
@@ -237,15 +265,51 @@ const ItemView: React.FC<ItemViewProps> = ({
           </div>
         </ScrollArea>
       </Modal>
-      <img
-        onClick={() => setOpened(true)}
-        width={50}
-        className="cursor-pointer rounded-md drop-shadow-sm"
-        alt={ItemDefinition(item.itemHash)?.displayProperties.name}
-        src={`https://www.bungie.net${
-          ItemDefinition(item.itemHash)?.displayProperties.icon
-        }`}
-      />
+      <div className="relative">
+        <img
+          onClick={() => setOpened(true)}
+          width={50}
+          className="cursor-pointer rounded-md drop-shadow-sm"
+          alt={ItemDefinition(item.itemHash)?.displayProperties.name}
+          src={`https://www.bungie.net${
+            ItemDefinition(item.itemHash)?.displayProperties.icon
+          }`}
+        />
+        {ItemDefinition(item.itemHash)?.iconWatermark && (
+          <img
+            onClick={() => setOpened(true)}
+            width={50}
+            className="cursor-pointer rounded-md absolute top-0 left-0"
+            alt={ItemDefinition(item.itemHash)?.displayProperties.name}
+            src={`https://www.bungie.net${
+              ItemDefinition(item.itemHash)?.iconWatermark
+            }`}
+          />
+        )}
+        {manifest?.DestinyInventoryItemDefinition[item.itemHash]
+          ?.damageTypeHashes && (
+          <div className="w-full h-3 flex items-center justify-end absolute bottom-0 right-0 bg-slate-50/20">
+            <img
+              className="drop-shadow-md mr-[1px]"
+              width={10}
+              src={`https://www.bungie.net${
+                manifest?.DestinyDamageTypeDefinition[
+                  // @ts-ignore
+                  manifest?.DestinyInventoryItemDefinition[item.itemHash]
+                    ?.damageTypeHashes
+                ].displayProperties.icon
+              }`}
+              alt={`Damage Type: ${
+                manifest?.DestinyDamageTypeDefinition[
+                  // @ts-ignore
+                  manifest?.DestinyInventoryItemDefinition[item.itemHash]
+                    ?.damageTypeHashes
+                ].displayProperties.name
+              }`}
+            />
+          </div>
+        )}
+      </div>
       <div className="flex gap-1 flex-col justify-center">
         <div>
           {
