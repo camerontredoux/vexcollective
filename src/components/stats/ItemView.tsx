@@ -9,6 +9,7 @@ import {
   ScrollArea,
   Tabs,
   Text,
+  Tooltip,
   useMantineTheme,
 } from "@mantine/core";
 import { GiDiamonds } from "@react-icons/all-files/gi/GiDiamonds";
@@ -208,25 +209,36 @@ const ItemView: React.FC<ItemViewProps> = ({
                       )}
                       {manifest?.DestinyInventoryItemDefinition[item.itemHash]
                         ?.damageTypeHashes && (
-                        <div className="flex gap-1 items-center">
-                          <img
-                            className="drop-shadow-md mr-[1px]"
-                            width={15}
-                            src={`https://www.bungie.net${
-                              manifest?.DestinyDamageTypeDefinition[
-                                // @ts-ignore
-                                instances[item.itemInstanceId!]?.damageTypeHash
-                              ].displayProperties.icon
-                            }`}
-                            alt={`Damage Type: ${
-                              manifest?.DestinyDamageTypeDefinition[
-                                // @ts-ignore
-                                instances[item.itemInstanceId!]?.damageTypeHash
-                              ].displayProperties.name
-                            }`}
-                          />
-                          <span className="text-sm font-bold">Energy</span>
-                        </div>
+                        <Tooltip
+                          label={`Damage Type: ${
+                            manifest?.DestinyDamageTypeDefinition[
+                              // @ts-ignore
+                              instances[item.itemInstanceId!]?.damageTypeHash
+                            ].displayProperties.name
+                          } Energy`}
+                        >
+                          <div className="flex gap-1 items-center cursor-default">
+                            <img
+                              className="drop-shadow-md mr-[1px]"
+                              width={15}
+                              src={`https://www.bungie.net${
+                                manifest?.DestinyDamageTypeDefinition[
+                                  // @ts-ignore
+                                  instances[item.itemInstanceId!]
+                                    ?.damageTypeHash
+                                ].displayProperties.icon
+                              }`}
+                              alt={`Damage Type: ${
+                                manifest?.DestinyDamageTypeDefinition[
+                                  // @ts-ignore
+                                  instances[item.itemInstanceId!]
+                                    ?.damageTypeHash
+                                ].displayProperties.name
+                              }`}
+                            />
+                            <span className="text-sm font-bold">Energy</span>
+                          </div>
+                        </Tooltip>
                       )}
                     </div>
                     {item.itemInstanceId && (
